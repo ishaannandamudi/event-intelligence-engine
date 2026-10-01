@@ -1,4 +1,4 @@
-"""Small deterministic EIE-0 settings contract."""
+"""Small deterministic EIE settings contract."""
 
 from dataclasses import dataclass
 
@@ -11,6 +11,7 @@ from eie.core.schema import (
     require_schema,
 )
 from eie.core.time import require_ns
+from eie.scheduled.windows import ScheduledSettings
 from eie.sources.trust import SourceClass, SourcePrecedencePolicy
 
 
@@ -23,6 +24,7 @@ class Settings:
     default_staleness_ns: int = 86_400_000_000_000
     source_precedence: SourcePrecedencePolicy = SourcePrecedencePolicy()
     strict_replay_availability: bool = True
+    scheduled: ScheduledSettings = ScheduledSettings()
 
     def __post_init__(self) -> None:
         require_schema(self.schema_version, CONFIG_SCHEMA_VERSION)
@@ -36,6 +38,8 @@ class Settings:
             raise ValidationError("at least one source class required")
         if not isinstance(self.source_precedence, SourcePrecedencePolicy):
             raise ValidationError("typed immutable source precedence required")
+        if not isinstance(self.scheduled, ScheduledSettings):
+            raise ValidationError("typed immutable scheduled settings required")
         require_ns(self.default_staleness_ns, "default_staleness_ns")
         if self.strict_replay_availability is not True:
             raise ValidationError("EIE-0 cannot disable causal replay validation")

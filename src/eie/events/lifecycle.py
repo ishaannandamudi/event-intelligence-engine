@@ -27,6 +27,7 @@ class EventWindowState(StrEnum):
 TRANSITIONS: dict[LifecycleState, frozenset[LifecycleState]] = {
     LifecycleState.SCHEDULED: frozenset(
         {
+            LifecycleState.SCHEDULED,
             LifecycleState.CONFIRMED,
             LifecycleState.IMMINENT,
             LifecycleState.RELEASED,
@@ -36,6 +37,7 @@ TRANSITIONS: dict[LifecycleState, frozenset[LifecycleState]] = {
     ),
     LifecycleState.CONFIRMED: frozenset(
         {
+            LifecycleState.CONFIRMED,
             LifecycleState.IMMINENT,
             LifecycleState.RELEASED,
             LifecycleState.CANCELLED,
@@ -43,10 +45,20 @@ TRANSITIONS: dict[LifecycleState, frozenset[LifecycleState]] = {
         }
     ),
     LifecycleState.IMMINENT: frozenset(
-        {LifecycleState.RELEASED, LifecycleState.CANCELLED, LifecycleState.RESCHEDULED}
+        {
+            LifecycleState.IMMINENT,
+            LifecycleState.RELEASED,
+            LifecycleState.CANCELLED,
+            LifecycleState.RESCHEDULED,
+        }
     ),
     LifecycleState.RESCHEDULED: frozenset(
-        {LifecycleState.SCHEDULED, LifecycleState.CONFIRMED, LifecycleState.CANCELLED}
+        {
+            LifecycleState.RESCHEDULED,
+            LifecycleState.SCHEDULED,
+            LifecycleState.CONFIRMED,
+            LifecycleState.CANCELLED,
+        }
     ),
     LifecycleState.RELEASED: frozenset(
         {LifecycleState.UPDATED, LifecycleState.POST_EVENT, LifecycleState.NORMALIZED}

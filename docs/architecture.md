@@ -1,16 +1,18 @@
-# EIE-0 architecture
+# EIE architecture through EIE-1
 
 ```text
 Source adapter protocol → immutable RawSourceObservation → EventNormalizer protocol
                                                             ↓
                                     immutable CanonicalEvent revision
-                                                            ↓
-                                   append-only EventStore protocol
-                                                            ↓
-                                      as-of replay / direct applicability
+                                        ├── EIE-0 append-only EventStore → as-of replay
+                                        └── EIE-1 ScheduledEventIndex → EventStore
+                                                    ├── source coverage ledger
+                                                    └── causal schedule queries / event windows
 ```
 
 `src/eie/core` owns UTC nanoseconds, schemas, serialization, hashes, quality and errors. `sources` owns provenance, trust, health and optional-capability protocols. `events` owns taxonomy, scope, semantic identity, lifecycle and revisions. `entities` separates issuer, security and time-bounded ticker listing. `persistence` holds the append-only protocol and deterministic in-memory store. `replay` owns the explicit clock and minimal known-events view. `config` holds immutable settings.
+
+`scheduled` adds immutable schedule claims and revisions, a sorted event-time index over the canonical store, an append-only source coverage ledger, typed query results, and configurable window policies. The schedule index is the insertion entry point for scheduled events; direct underlying-store writes bypass it. Its sorted timestamps speed range and window queries without replacing historical revision resolution. Coverage records describe source-specific asserted intervals and health, and never imply completeness across unrepresented sources.
 
 The raw/canonical boundary is structural: the two immutable classes do not inherit from each other. A canonical event names one or more raw observation IDs. The store verifies that evidence exists, its ingestion precedes the event's availability, and its source classes match. No provider schema leaks into core events. A future normalizer implements the protocol and must preserve evidence IDs.
 
@@ -19,3 +21,5 @@ Canonical identity uses event type, scope and a stable source/semantic key. Sour
 Time is signed-64-bit nonnegative UTC nanoseconds. Scheduled/effective time describes the world; revision `available_from_ns` describes what EIE could know. Replay returns the latest revision available at the requested time. A later revision cannot rewrite an earlier view. Listings also have valid and available intervals. Exact listing resolution accepts a knowledge cutoff and an optional distinct valid-time query, so a ticker that was valid earlier can be resolved from information known later.
 
 Future downstream consumers should receive typed event intelligence snapshots after later phases. EIE does not import MCE or AME and does not make trading decisions.
+
+See [scheduled events](scheduled-events.md) for the full EIE-1 contract.
