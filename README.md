@@ -2,7 +2,7 @@
 
 EIE is a standalone, provider-neutral foundation for descriptive event intelligence. Its first priority is answering what was knowable at an exact time. It does not produce trade instructions.
 
-**Status:** EIE-5 expectations and surprise intelligence, version `0.6.0`, expectations schema `1.0`. Append-only estimate and actual vintages support causal consensus, component surprises, prior-only normalization, and guidance comparisons. Existing event, corporate, macro, SEC, and entity contracts remain available. Providers are disabled by default. See [expectations and consensus](docs/expectations-and-consensus.md) and [surprise intelligence](docs/surprise-intelligence.md).
+**Status:** EIE-6 live provider transport and continuous ingestion infrastructure, version `0.7.0`. Durable SQLite, atomic data/checkpoints, bounded HTTP, polling, queues, recovery and operations now complement the existing causal event and expectations engines. Runtime and providers remain disabled by default. All domain schemas remain `1.0`. See [live ingestion](docs/live-ingestion.md), [persistence](docs/persistence.md), [provider runtime](docs/provider-runtime.md) and [operations](docs/operations.md).
 
 ## Install and check
 
@@ -18,6 +18,35 @@ python3.11 -m venv .venv
 .venv/bin/ruff format --check .
 .venv/bin/mypy src
 ```
+
+## Offline durable ingestion and restart
+
+```sh
+PYTHONPATH=src python examples/runtime_replay.py
+```
+
+The [runnable example](examples/runtime_replay.py) opens SQLite, registers an
+explicit synthetic fixture source, polls once, commits data and checkpoint,
+stops/closes, reopens, queries through the existing replay API and verifies that
+a duplicate poll preserves event bytes. No internet is required.
+
+```python
+from pathlib import Path
+from tempfile import TemporaryDirectory
+from examples.runtime_replay import demo
+
+with TemporaryDirectory() as directory:
+    assert demo(Path(directory) / "events.sqlite") == {
+        "events": 1,
+        "generation": 2,
+        "duplicates": 1,
+    }
+```
+
+The foreground CLI offers `ingest-once`, `run`, `provider-health`, `checkpoint`
+and `validate-store`. Acquisition commands require explicit `--fixture` or
+`--live`. SEC live mode also requires an operator-configured contact User-Agent.
+See [operations](docs/operations.md) for commands and shutdown behavior.
 
 ## Offline expectations and surprise replay example
 

@@ -25,3 +25,13 @@ provenance prevents backtest-safe surprise. Covered empty, unknown coverage,
 failed provider, and stale consensus have distinct outcomes. Runtime latency and
 failure counters remain in diagnostics and are projected out of result fingerprints.
 See [expectations and consensus](expectations-and-consensus.md).
+
+## EIE-6 acquisition policy
+
+Live transport uses trusted configured endpoints, bounded HTTP and independent
+operational settings. Raw payload retention defaults to hash/metadata only;
+bounded bytes require explicit ALLOWED permission. UNKNOWN/RESTRICTED cannot
+enable raw retention. Quarantine suppresses repeated normalization of identical
+malformed content. Source failure never certifies event absence. SEC contact
+identity stays out of domain settings and persistence.
+See [live ingestion](live-ingestion.md) and [operations](operations.md).

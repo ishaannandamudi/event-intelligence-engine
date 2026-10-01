@@ -1,6 +1,6 @@
 # Event contracts
 
-Engine version is `0.6.0`; raw-observation, canonical-event, entity, configuration, scheduled-event, official-source extract, SEC filing, corporate-event, and expectations schemas are each `1.0`. Constructors reject unsupported schema versions.
+Engine version is `0.7.0`; raw-observation, canonical-event, entity, configuration, scheduled-event, official-source extract, SEC filing, corporate-event, and expectations schemas are each `1.0`. Constructors reject unsupported schema versions.
 
 ## Raw observation
 

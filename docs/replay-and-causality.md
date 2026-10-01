@@ -23,3 +23,13 @@ actual publication/availability anchor; later estimate or actual corrections can
 rewrite earlier views. Normalization reconstructs compatible history strictly
 before that release cutoff, excluding the current event and all same-time releases.
 Complete scale evidence and fingerprints are retained. See [surprise intelligence](surprise-intelligence.md).
+
+## EIE-6 durable acquisition
+
+SQLite and in-memory replay share insertion checks and historical resolution.
+Acquisition completion is observation time; worker preparation is ingestion
+time. A late source item appends knowledge now, preserving its earlier source
+publication/effective time. Atomic checkpoints cannot skip uncommitted data.
+Restart and overlapping polls preserve old record clocks and query fingerprints.
+Operational generations, health, rate windows and latencies are separate.
+See [persistence](persistence.md) and [live ingestion](live-ingestion.md).

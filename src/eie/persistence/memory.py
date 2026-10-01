@@ -3,10 +3,9 @@
 from eie.core.errors import PersistenceError, TemporalConsistencyError
 from eie.core.serialization import canonical_json_bytes
 from eie.core.time import require_ns
-from eie.events.lifecycle import validate_transition
 from eie.events.models import CanonicalEvent
-from eie.events.revisions import RevisionKind
 from eie.events.scope import ApplicabilityQuery, applies_directly
+from eie.persistence.validation import validate_event_append
 from eie.sources.models import RawSourceObservation
 
 
@@ -30,46 +29,8 @@ class InMemoryEventStore:
         return self._observations.get(observation_id)
 
     def append_event(self, event: CanonicalEvent) -> bool:
-        superseded_id = event.revision.supersedes_event_id
-        if superseded_id is not None:
-            if (
-                superseded_id == event.event_id
-                or self.get_event(superseded_id, event.revision.available_from_ns) is None
-            ):
-                raise PersistenceError("superseded event must be a different known event")
-        history = self._events.get(event.event_id, [])
-        if event.revision.number <= len(history):
-            previous = history[event.revision.number - 1]
-            if previous != event:
-                raise PersistenceError("revision identity collision")
+        if not validate_event_append(self, event):
             return False
-        if event.revision.number != len(history) + 1:
-            raise PersistenceError("revision gap")
-        if history:
-            previous = history[-1]
-            if event.identity != previous.identity:
-                raise PersistenceError("semantic identity changed")
-            if event.revision.available_from_ns <= previous.revision.available_from_ns:
-                raise TemporalConsistencyError("revision availability must increase")
-            validate_transition(previous.lifecycle, event.lifecycle)
-            if event.revision.kind is RevisionKind.RESCHEDULE and (
-                previous.scheduled_for_ns is None
-                or event.scheduled_for_ns is None
-                or previous.scheduled_for_ns == event.scheduled_for_ns
-            ):
-                raise PersistenceError("reschedule requires changed existing schedule")
-        elif event.revision.kind is not RevisionKind.ORIGINAL:
-            raise PersistenceError("first revision must be original")
-        source_classes = set()
-        for observation_id in event.evidence_observation_ids:
-            observation = self._observations.get(observation_id)
-            if observation is None:
-                raise PersistenceError("missing raw evidence")
-            if observation.ingested_at_ns > event.revision.available_from_ns:
-                raise TemporalConsistencyError("canonical event predates raw evidence")
-            source_classes.add(observation.source.source_class)
-        if source_classes != set(event.source_classes):
-            raise PersistenceError("event source classes disagree with evidence")
         self._events.setdefault(event.event_id, []).append(event)
         return True
 

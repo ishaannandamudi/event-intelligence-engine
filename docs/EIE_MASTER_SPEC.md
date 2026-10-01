@@ -1,6 +1,6 @@
 # Event Intelligence Engine (EIE) — Master Specification
 
-**Status:** Master design; implementation completed through EIE-5 (`0.6.0`)<br>
+**Status:** Master design; implementation completed through EIE-6 (`0.7.0`)<br>
 **Planned roadmap:** EIE-0 through EIE-17 (updated by the EIE-5 phase specification)<br>
 **Primary language:** Python<br>
 **Repository name:** `event-intelligence-engine`<br>
@@ -1306,7 +1306,13 @@ atomic writes, and continuous official/provider data acquisition.
 **Acceptance:** bounded, observable, restartable live ingestion preserving existing
 raw-first provenance, atomicity, availability, and replay contracts.
 
-This is deferred work; EIE-5 implements no live transport or persistent database.
+**Implemented:** engine `0.7.0` adds standard-library HTTPS, bounded polling and
+queues, atomic SQLite data/checkpoints, durable domain sessions, recovery,
+provider health and foreground operational controls. Current SEC submissions
+and BLS iCalendar are explicit opt-in sources. All quantitative schemas remain
+`1.0`; runtime/ingestion and persistent-store schemas start at `1.0`.
+See [EIE-6 completion](EIE-6-completion.md), [live ingestion](live-ingestion.md)
+and [persistence](persistence.md). EIE-7 and later phases remain unimplemented.
 
 ---
 

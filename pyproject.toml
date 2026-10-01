@@ -4,11 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "event-intelligence-engine"
-version = "0.6.0"
+version = "0.7.0"
 description = "Causal, replayable event intelligence contracts"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = []
+
+[project.scripts]
+eie = "eie.runtime.cli:main"
 
 [project.optional-dependencies]
 dev = ["pytest>=8,<10", "coverage>=7,<8", "ruff>=0.9,<1", "mypy>=1.10,<2"]

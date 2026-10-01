@@ -45,3 +45,12 @@ retain individual measurement IDs; agency schedules do not supply or invent mark
 consensus. The expectations engine owns a copy of the store. See
 [expectations and consensus](expectations-and-consensus.md) and
 [macro integration tests](../tests/test_expectations_integration.py).
+
+## EIE-6 runtime integration
+
+The existing BLS iCalendar parser has an explicit opt-in HTTPS polling source.
+Fed/BEA extraction remains offline/audited; EIE-6 adds no HTML scraping. All
+three adapters can use AdapterProcessor with a trusted source and a durable
+shared official namespace. Whole official batches now stage before SQLite
+commit, including their checkpoint. Existing offline APIs remain available.
+See [live ingestion](live-ingestion.md).

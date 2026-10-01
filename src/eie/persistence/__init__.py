@@ -1,1 +1,1 @@
-"""Append-only persistence contracts and in-memory implementation."""
+"""Append-only event protocols, in-memory stores and durable SQLite sessions."""

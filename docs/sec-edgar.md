@@ -27,3 +27,13 @@ Amendments have their own accession, filing ID, raw observation, and canonical e
 `filings_for_cik`, `filings_for_issuer`, `filings_for_symbol`, and `recent_filings` use explicit as-of knowledge time. Exact form, base form, amendment, and report-period filters are available through the query/store APIs. Filing results are deterministic, typed, serialized and fingerprinted with configuration. Symbol lookup requires ticker, exchange, and a distinct valid-time input; unresolved or ambiguous identity returns an explicit resolution and no issuer filing set. Historical symbols attached to a filing are checked at its acceptance time using information known by the query's as-of time. A later ticker map snapshot never becomes valid for earlier dates merely because it is the latest snapshot.
 
 Only metadata and basic provenance are in scope. EIE-3 has no filing text, sections, NLP, materiality model, EDGAR search crawler, guaranteed historical ticker reconstruction, or complete archive coverage. The SEC mapping provides observed associations, not verified security identifiers or exact start/end listing dates. See [entity identity](entity-identity.md), [source policy](source-policy.md), and [replay and causality](replay-and-causality.md).
+
+## EIE-6 current submissions polling
+
+`sec_provider` supplies disabled-by-default, bounded HTTPS acquisition of one
+configured CIK submissions resource. Contact User-Agent and rate policy live
+in operational configuration; `SecSettings.user_agent` remains None in the
+durable domain session. Recent filing, registry and canonical history commit
+with the resource checkpoint. Restart restores accession/revision/idempotency
+state. Historical references are not followed and documents are not archived.
+See [live ingestion](live-ingestion.md) and [persistence](persistence.md).

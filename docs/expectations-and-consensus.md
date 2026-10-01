@@ -158,3 +158,13 @@ The full runnable fixture example is [expectations_replay.py](../examples/expect
 Existing corporate and official ingestion can supply their canonical stores and
 verified registry to the engine; [integration tests](../tests/test_expectations_integration.py)
 exercise both paths.
+
+## EIE-6 durability
+
+Registered estimate processors can share one durable expectations namespace.
+Serialized transactions load current state before merging providers, preventing
+lost updates. Estimates, actuals, guidance, raw evidence, event/period bindings,
+coverage and adapter identity caches survive restart. Consensus/surprise queries
+use the existing immutable histories and cutoff rules. Operational transport
+settings and telemetry do not alter their fingerprints. No licensed collector
+is bundled. See [persistence](persistence.md) and [provider runtime](provider-runtime.md).

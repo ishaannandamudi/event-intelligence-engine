@@ -1,4 +1,4 @@
-# EIE architecture through EIE-5
+# EIE architecture through EIE-6
 
 ```text
 Source adapter protocol → immutable RawSourceObservation → EventNormalizer protocol
@@ -20,7 +20,7 @@ EIE-3 adds `providers/sec` for native EDGAR submissions, historical filing metad
 
 The raw/canonical boundary is structural: the two immutable classes do not inherit from each other. A canonical event names one or more raw observation IDs. The store verifies that evidence exists, its ingestion precedes the event's availability, and its source classes match. No provider schema leaks into core events. A future normalizer implements the protocol and must preserve evidence IDs.
 
-Canonical identity uses event type, scope and a stable source/semantic key. Source-specific adapters must supply stable keys such as an official release period or meeting ID; a schedule timestamp or ticker alone is unsuitable. Revision number and availability time identify knowledge changes. The in-memory store retains all revisions. The store is an offline example and protocol implementation, not durable storage or restart recovery.
+Canonical identity uses event type, scope and a stable source/semantic key. Source-specific adapters must supply stable keys such as an official release period or meeting ID; a schedule timestamp or ticker alone is unsuitable. Revision number and availability time identify knowledge changes. The in-memory store retains all revisions. The in-memory store remains a deterministic offline implementation; EIE-6 adds durable SQLite and restart recovery through the same event protocol.
 
 Time is signed-64-bit nonnegative UTC nanoseconds. Scheduled/effective time describes the world; revision `available_from_ns` describes what EIE could know. Replay returns the latest revision available at the requested time. A later revision cannot rewrite an earlier view. Listings also have valid and available intervals. Exact listing resolution accepts a knowledge cutoff and an optional distinct valid-time query, so a ticker that was valid earlier can be resolved from information known later.
 
@@ -56,3 +56,19 @@ diagnostic health. Queries reconstruct historical knowledge and scale inputs fro
 the immutable ledger, without mutable online statistics or wall-clock access.
 See [expectations and consensus](expectations-and-consensus.md) and
 [surprise intelligence](surprise-intelligence.md).
+
+## EIE-6 acquisition and persistence
+
+Dedicated `transport`, `runtime` and `ingestion` packages separate bounded HTTP,
+per-provider rate/retry policy, polling and queues from adapter normalization.
+A serialized SQLite ingestion transaction loads the latest domain session,
+stages raw/domain/canonical changes, persists them and advances the checkpoint
+together. Independent operational rows hold health, latency and quarantine.
+The existing in-memory engines are reconstructed from explicit versioned typed
+state on restart; SQL does not duplicate their quantitative rules.
+
+Runtime configuration is separate from `Settings`; HTTP contacts/timeouts and
+worker counts cannot contaminate canonical fingerprints. Current SEC submissions
+and BLS iCalendar have opt-in sources. Fed/BEA remain audited-extract adapters.
+See [live ingestion](live-ingestion.md), [persistence](persistence.md),
+[provider runtime](provider-runtime.md) and [operations](operations.md).
