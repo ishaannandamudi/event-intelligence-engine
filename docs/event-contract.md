@@ -1,6 +1,6 @@
 # Event contracts
 
-Engine version is `0.5.0`; raw-observation, canonical-event, entity, configuration, scheduled-event, official-source extract, SEC filing, and corporate-event schemas are each `1.0`. Constructors reject unsupported schema versions.
+Engine version is `0.6.0`; raw-observation, canonical-event, entity, configuration, scheduled-event, official-source extract, SEC filing, corporate-event, and expectations schemas are each `1.0`. Constructors reject unsupported schema versions.
 
 ## Raw observation
 
@@ -36,4 +36,17 @@ Canonical JSON sorts object keys and unordered sets, emits UTF-8, preserves expl
 
 ## Corporate event specialization (EIE-4)
 
-Engine version is `0.5.0` and corporate-event schema is `1.0`; prior schema versions remain unchanged. `CorporateIdentity` hashes kind, stable issuer, semantic key, and optional verified security/listing. `CorporateClaim` retains provider event ID, raw observation ID, source class, available-from, status, typed payload, distinct announcement date/timestamp and effective timestamp, and quality. `CorporateEvent` appends contiguous revisions, selected claim key, confirmation, conflicts, and all provider claims. Earnings semantic identity is its fiscal reference period. Date-only schedules never create an exact canonical scheduled time. The canonical event carries a domain-separated event ID, lifecycle, evidence IDs, sorted structured facts, and distinct publication/observation/ingestion/effective clocks. Typed query results and coverage carry as-of time and configuration fingerprints. See [corporate events](corporate-events.md) and [earnings calendar](earnings-calendar.md).
+Corporate-event schema remains `1.0`; prior schema versions remain unchanged. `CorporateIdentity` hashes kind, stable issuer, semantic key, and optional verified security/listing. `CorporateClaim` retains provider event ID, raw observation ID, source class, available-from, status, typed payload, distinct announcement date/timestamp and effective timestamp, and quality. `CorporateEvent` appends contiguous revisions, selected claim key, confirmation, conflicts, and all provider claims. Earnings semantic identity is its fiscal reference period. Date-only schedules never create an exact canonical scheduled time. The canonical event carries a domain-separated event ID, lifecycle, evidence IDs, sorted structured facts, and distinct publication/observation/ingestion/effective clocks. Typed query results and coverage carry as-of time and configuration fingerprints. See [corporate events](corporate-events.md) and [earnings calendar](earnings-calendar.md).
+
+## Expectations specialization (EIE-5)
+
+Expectations schema is `1.0`. `MeasurementContext` binds a known canonical event to
+an exact measurement, reference period, release stage, and seasonal adjustment.
+`Quantity` retains reported and canonical typed units/values. Immutable estimates,
+actuals, and guidance use raw-observation-backed provenance and existing
+`EventRevision` chains. Previous/revised previous are distinct actual roles.
+`ConsensusSnapshot`, `SurpriseObservation`, `SurpriseScale`, guidance comparisons,
+and observation histories preserve explicit availability and deterministic
+fingerprints. Domain-separated historical row fingerprints and complete scale
+inputs make normalization auditable. See [expectations and consensus](expectations-and-consensus.md)
+and [surprise intelligence](surprise-intelligence.md).

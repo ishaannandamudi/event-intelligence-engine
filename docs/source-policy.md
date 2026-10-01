@@ -15,3 +15,13 @@ EIE-2 Fed, BLS, and BEA items use `OFFICIAL_PRIMARY` for facts those agencies pu
 EIE-3 SEC metadata uses `OFFICIAL_PRIMARY` for the EDGAR source. Exact accession/CIK, accepted time, and a row hash remain in raw provenance. SEC identity ambiguity is explicit; source health and failed batches never imply a healthy empty filing history. SEC's current ticker map is an observed association and cannot certify complete historical listing validity. See [SEC EDGAR](sec-edgar.md).
 
 EIE-4 extends the same source policy to `corporate.<lowercase_kind>` claim selection. The selected claim comes from the highest-ranked source class available at the query's knowledge time; all other claims and raw observations stay attached. Disagreement adds explicit conflict flags and reason codes, even when a primary source wins. Equal-ranked disagreement is never hidden. An audited interchange extract must declare provider ID, schema, source version, item references and kind capabilities. Healthy empty coverage is a dated, provider-specific assertion; unavailable, rate limited, malformed, or stale sources do not establish absence. EIE-4 adds synthetic offline extracts only; external vendor fetchers are outside this phase. See [corporate events](corporate-events.md).
+
+EIE-5 applies precedence to `consensus.<lowercase_measurement_id>` and
+`actual.<lowercase_measurement_id>`. Provider disagreements remain explicit claims;
+no cross-provider analyst identity or automatic provider average is assumed.
+Synthetic estimate adapters declare consensus/analyst/actual/guidance/vintage
+capabilities and require raw evidence before typed observations. Missing vintage
+provenance prevents backtest-safe surprise. Covered empty, unknown coverage,
+failed provider, and stale consensus have distinct outcomes. Runtime latency and
+failure counters remain in diagnostics and are projected out of result fingerprints.
+See [expectations and consensus](expectations-and-consensus.md).

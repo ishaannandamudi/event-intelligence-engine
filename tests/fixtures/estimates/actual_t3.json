@@ -1,0 +1,35 @@
+{
+  "items": [
+    {
+      "item_id": "actual-t3",
+      "published_at_ns": null,
+      "records": [
+        {
+          "event_id": "evt_6cecfe23e24e831127e32e29ff30c7ccbf053643de9b9c8f7e7e1fcedab7cad1",
+          "measurement_id": "EARNINGS.EPS.DILUTED",
+          "observation_type": "ACTUAL",
+          "published_at_ns": 300,
+          "quantity": {
+            "unit": {
+              "currency": "USD",
+              "kind": "CURRENCY_PER_SHARE"
+            },
+            "value": 2.5
+          },
+          "record_id": "eps-actual",
+          "reference_period": {
+            "fiscal_quarter": 3,
+            "fiscal_year": 2026,
+            "period_end": "2026-09-30",
+            "type": "EARNINGS"
+          },
+          "vintage_at_ns": null
+        }
+      ],
+      "source_reference": "https://synth-a.example/actual-t3"
+    }
+  ],
+  "provider_id": "SYNTH_A",
+  "schema": "EIE_ESTIMATES_EXTRACT_V1",
+  "source_version": "synthetic-1"
+}

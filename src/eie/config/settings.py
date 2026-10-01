@@ -12,6 +12,7 @@ from eie.core.schema import (
 )
 from eie.core.time import require_ns
 from eie.corporate.settings import CorporateSettings
+from eie.expectations.settings import ExpectationsSettings
 from eie.providers.common.settings import OfficialProviderSettings
 from eie.providers.sec.settings import SecSettings
 from eie.scheduled.windows import ScheduledSettings
@@ -31,6 +32,7 @@ class Settings:
     official: OfficialProviderSettings = OfficialProviderSettings()
     sec: SecSettings = SecSettings()
     corporate: CorporateSettings = CorporateSettings()
+    expectations: ExpectationsSettings = ExpectationsSettings()
 
     def __post_init__(self) -> None:
         require_schema(self.schema_version, CONFIG_SCHEMA_VERSION)
@@ -52,6 +54,8 @@ class Settings:
             raise ValidationError("typed immutable SEC settings required")
         if not isinstance(self.corporate, CorporateSettings):
             raise ValidationError("typed immutable corporate settings required")
+        if not isinstance(self.expectations, ExpectationsSettings):
+            raise ValidationError("typed immutable expectations settings required")
         require_ns(self.default_staleness_ns, "default_staleness_ns")
         if self.strict_replay_availability is not True:
             raise ValidationError("EIE-0 cannot disable causal replay validation")

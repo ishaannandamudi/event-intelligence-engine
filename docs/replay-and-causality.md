@@ -15,3 +15,11 @@ EIE-2 official ingestion receives explicit source observation and ingestion time
 EIE-3 treats SEC acceptance as a source-time proxy, filing date and report period as separate calendar facts, source observation as caller-supplied, and local ingestion as EIE knowledge time. Filing and canonical-event queries exclude a row before ingestion even if SEC accepted it earlier. Amendments and source metadata corrections append separate causal revisions. Symbol resolution has both `as_of_ns` (what mappings were known) and `valid_at_ns` (when a listing applied). An observed ticker-map snapshot cannot be projected backward before its observation; verified listing intervals can be queried against their separate valid and knowledge clocks. See [SEC EDGAR](sec-edgar.md) and [entity identity](entity-identity.md).
 
 EIE-4 applies the same rule to corporate facts. Claim `available_from_ns` and event revision availability are knowledge time, while earnings schedules and action effective dates are world time. `known_as_of(T)` selects the latest corporate revision available by T. `upcoming_earnings`, announcement/effective interval queries, and symbol queries then filter that historical view. Civil date-only facts remain dates; BMO/AMC never acquire a made-up instant. A future company reschedule, dividend correction, deal status, or ticker change cannot alter prior result bytes. Symbol resolution also requires an explicit valid time, so a known future rename does not make the new ticker valid early. See [corporate events](corporate-events.md).
+
+EIE-5 appends estimate, actual and guidance vintages with explicit availability.
+Current consensus resolves the latest observation available by the query cutoff.
+Release surprise defaults to consensus strictly before the earliest known original
+actual publication/availability anchor; later estimate or actual corrections cannot
+rewrite earlier views. Normalization reconstructs compatible history strictly
+before that release cutoff, excluding the current event and all same-time releases.
+Complete scale evidence and fingerprints are retained. See [surprise intelligence](surprise-intelligence.md).

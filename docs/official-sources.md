@@ -35,3 +35,13 @@ A caller may assert an event-time coverage interval when ingesting a snapshot or
 `tests/fixtures/official/fed_calendar.json` transcribes only the [September 2026 FOMC meeting and SEP association](https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm) as date-only facts. `bls_schedule.json` transcribes selected [September 2026 BLS dates and Eastern times](https://www.bls.gov/schedule/2026/09_sched.htm). `bea_schedule.json` transcribes selected [BEA GDP and Personal Income and Outlays schedule rows](https://www.bea.gov/news/schedule/full). `bea_release_dates.json` is a small subset of the [native BEA JSON feed](https://apps.bea.gov/API/signup/release_dates.json). Test-generated revisions, outages, releases, corrections, and conflict times are **synthetic** and do not assert those historical changes occurred. Fixtures contain no full documents or credentials.
 
 EIE-2 does not parse the Fed's live HTML calendar or BEA's live full-schedule HTML, fetch native release articles, or extract numerical values. Its extract format requires an upstream audited extraction step. The EIE-2 in-memory ingestion path is not transaction-safe across a multi-item batch. EIE-3 adds a separate SEC EDGAR metadata path with staged in-memory batch commits; see [SEC EDGAR](sec-edgar.md). No live provider polling, event studies, statistical surprise, or trading features are included.
+
+## EIE-5 expectation binding
+
+The canonical store produced by official ingestion can initialize an
+`ExpectationsEngine`. Bind the exact existing `ReferencePeriod` and release stage
+before adding separately sourced consensus and actual observations. Components
+retain individual measurement IDs; agency schedules do not supply or invent market
+consensus. The expectations engine owns a copy of the store. See
+[expectations and consensus](expectations-and-consensus.md) and
+[macro integration tests](../tests/test_expectations_integration.py).

@@ -2,7 +2,7 @@
 
 EIE is a standalone, provider-neutral foundation for descriptive event intelligence. Its first priority is answering what was knowable at an exact time. It does not produce trade instructions.
 
-**Status:** EIE-4 corporate events and earnings calendar, version `0.5.0`. EIE-0 through EIE-3 contracts, official macro adapters, and SEC EDGAR metadata remain available. Corporate data is parsed from versioned offline extracts with causal conflict, action, and identity queries. Providers are disabled by default; live collection, earnings consensus, and filing content analysis are deferred. See [corporate events](docs/corporate-events.md) and [earnings calendar](docs/earnings-calendar.md).
+**Status:** EIE-5 expectations and surprise intelligence, version `0.6.0`, expectations schema `1.0`. Append-only estimate and actual vintages support causal consensus, component surprises, prior-only normalization, and guidance comparisons. Existing event, corporate, macro, SEC, and entity contracts remain available. Providers are disabled by default. See [expectations and consensus](docs/expectations-and-consensus.md) and [surprise intelligence](docs/surprise-intelligence.md).
 
 ## Install and check
 
@@ -18,6 +18,48 @@ python3.11 -m venv .venv
 .venv/bin/ruff format --check .
 .venv/bin/mypy src
 ```
+
+## Offline expectations and surprise replay example
+
+Run from the repository root with the package installed, or `PYTHONPATH=src`.
+The [runnable example](examples/expectations_replay.py) creates known canonical
+earnings events, binds their verified issuer/reporting periods, and uses five
+synthetic earlier releases plus the checked-in provider A/B fixtures.
+
+```sh
+PYTHONPATH=src python examples/expectations_replay.py
+```
+
+```python
+from examples.expectations_replay import build_example
+from eie.core.serialization import canonical_json_bytes
+from eie.expectations.models import EPS_DILUTED
+
+service, event_id = build_example()
+engine = service.engine
+assert engine.consensus(event_id, EPS_DILUTED, 150, provider_id="SYNTH_A").value == 2.40
+assert engine.consensus(event_id, EPS_DILUTED, 250, provider_id="SYNTH_A").value == 2.45
+assert len(engine.consensus(event_id, EPS_DILUTED, 250).provider_claims) == 2
+release = engine.surprise(event_id, EPS_DILUTED, 300, provider_id="SYNTH_A")
+assert release.consensus.value == 2.45
+assert round(release.raw_surprise, 2) == 0.05
+assert release.normalization.observation_count == 5
+assert round(release.normalization.scale, 4) == 2.9652
+assert round(release.normalized_surprise, 6) == 0.016862
+
+# At T4 the provider retrospectively changes consensus to 2.47.
+assert engine.consensus(event_id, EPS_DILUTED, 400, provider_id="SYNTH_A").value == 2.47
+later = engine.surprise(event_id, EPS_DILUTED, 400, provider_id="SYNTH_A")
+assert later.consensus.value == release.consensus.value
+assert later.normalization.result_fingerprint == release.normalization.result_fingerprint
+assert canonical_json_bytes(
+    engine.surprise(event_id, EPS_DILUTED, 300, provider_id="SYNTH_A")
+) == canonical_json_bytes(release)
+```
+
+The example verifies earlier query bytes before and after future ingestion.
+The cutoff is strictly before original actual publication; history excludes the
+current and same-time releases. EPS/revenue and macro components remain separate.
 
 ## Offline earnings conflict and replay example
 
@@ -261,6 +303,11 @@ The accepted timestamp and EIE knowledge time are distinct when observation or i
 
 ## Scope
 
-EIE-4 adds deterministic offline corporate events and earnings calendars alongside EIE-3 SEC filing metadata and EIE-2 official sources. It has no bundled live collection, filing NLP, earnings consensus or surprise calculations, event studies, relationship graph, trading signal, broker, HTTP service, or integration with MCE or AME. The [master roadmap](docs/EIE_MASTER_SPEC.md) defines later phases.
+EIE-5 adds offline expectations, consensus, actual/previous/revised-previous values,
+earnings and macro component surprises, guidance, and strictly prior historical
+normalization alongside EIE-4 corporate events, EIE-3 SEC metadata, and EIE-2
+official sources. Live collection, durable storage, filing NLP, event studies,
+relationship graphs, trading, HTTP services, and MCE/AME integration remain deferred.
+The [master roadmap](docs/EIE_MASTER_SPEC.md) defines later phases.
 
 See [architecture](docs/architecture.md), [event contracts](docs/event-contract.md), [source policy](docs/source-policy.md), and [replay and causality](docs/replay-and-causality.md).

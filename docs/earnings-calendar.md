@@ -8,4 +8,4 @@ An earnings schedule identifies the *reference reporting period* using fiscal ye
 
 If providers disagree, all claims and raw evidence remain in the event. The selected schedule follows configurable source precedence; equal-rank disagreement is marked, and a company-primary update can supersede a news calendar selection. Historical `known_as_of` and upcoming queries preserve what was visible before each update. A successful empty provider batch may declare dated kind coverage; failed or stale providers do not imply that no earnings exist.
 
-EIE-4 has no earnings consensus, actual-versus-estimate surprise, transcript analysis, inferred date from a call, or live calendar fetcher. See [corporate events](corporate-events.md) for ingestion and replay contracts.
+EIE-5 adds separate [expectations and consensus](expectations-and-consensus.md) and [surprise](surprise-intelligence.md) queries using known canonical earnings events and verified reporting periods. Calendar queries retain their existing contracts. Transcript analysis, inferred dates from calls, and live fetching remain deferred. See [corporate events](corporate-events.md) for ingestion and replay contracts.

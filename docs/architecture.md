@@ -1,4 +1,4 @@
-# EIE architecture through EIE-4
+# EIE architecture through EIE-5
 
 ```text
 Source adapter protocol → immutable RawSourceObservation → EventNormalizer protocol
@@ -31,3 +31,28 @@ See [scheduled events](scheduled-events.md) for the full EIE-1 contract.
 ## EIE-4 corporate layer
 
 The `corporate` package separates shared enums/values, earnings payloads, action payloads, identity/claim/event contracts, queries, settings, and an append-only index. The `providers.corporate` package parses versioned offline extracts, selects multi-provider claims, and stages whole-batch ingestion. Each provider item first becomes an immutable raw observation; each selected corporate revision also becomes a canonical EIE event. The corporate index owns its in-memory canonical store and a copy of the SEC entity registry. Batch ingestion deep-copies this state and commits one new state only after all observations, entity checks, normalizations, and listing changes succeed. Query results preserve knowledge-time coverage, claims, conflicts, and deterministic fingerprints. See [corporate events](corporate-events.md).
+
+## EIE-5 expectations layer
+
+`expectations` contains typed measurements/units, estimate and actual observations,
+guidance, an append-only observation ledger, consensus selection/aggregation,
+strict-prior normalization, surprise calculations, immutable query contracts, settings,
+and `ExpectationsEngine`. `providers/estimates` contains capability declarations,
+typed parsed records, the versioned synthetic extract parser, and atomic ingestion.
+
+```text
+Known canonical event store + verified SEC registry → exact event/period binding
+Synthetic estimate extract → staged raw evidence → append-only observation streams
+                                                      ├─ as-of consensus / histories
+                                                      ├─ frozen release surprise
+                                                      │      └─ strict-prior scale artifact
+                                                      └─ company guidance comparisons
+```
+
+The engine owns copies of upstream stores; changes are not synchronized implicitly.
+Provider consensus and explicit within-provider analyst aggregates use separate
+origins. Whole-batch staging commits one engine pointer; failed batches retain only
+diagnostic health. Queries reconstruct historical knowledge and scale inputs from
+the immutable ledger, without mutable online statistics or wall-clock access.
+See [expectations and consensus](expectations-and-consensus.md) and
+[surprise intelligence](surprise-intelligence.md).

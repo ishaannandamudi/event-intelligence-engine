@@ -1,7 +1,7 @@
 # Event Intelligence Engine (EIE) — Master Specification
 
-**Status:** Pre-implementation master design<br>
-**Planned roadmap:** EIE-0 through EIE-15<br>
+**Status:** Master design; implementation completed through EIE-5 (`0.6.0`)<br>
+**Planned roadmap:** EIE-0 through EIE-17 (updated by the EIE-5 phase specification)<br>
 **Primary language:** Python<br>
 **Repository name:** `event-intelligence-engine`<br>
 **Core design goal:** institutional-grade, causal, replayable, provider-neutral event intelligence infrastructure for downstream quantitative systems.
@@ -1296,7 +1296,31 @@ Build:
 
 ---
 
-## EIE-6 — Event Studies + Influence/Decay
+## EIE-6 — Live Provider Transport & Ingestion Infrastructure
+
+Build real HTTP transport, polling, streaming abstractions where useful, rate limits,
+bounded retry/backoff, ingestion queues, per-provider concurrency, health,
+checkpoints/cursors, restart recovery, persistent source state, ingestion latency,
+atomic writes, and continuous official/provider data acquisition.
+
+**Acceptance:** bounded, observable, restartable live ingestion preserving existing
+raw-first provenance, atomicity, availability, and replay contracts.
+
+This is deferred work; EIE-5 implements no live transport or persistent database.
+
+---
+
+## EIE-7 — Historical Backfill, Dataset Construction & Source Archival
+
+Build provider-aware historical backfill, reproducible dataset construction,
+source archival, and provenance-preserving historical vintage acquisition.
+
+**Acceptance:** auditable historical datasets with explicit vintage coverage and
+causal reconstruction boundaries.
+
+---
+
+## EIE-8 — Event Studies + Influence/Decay
 
 Build event-study framework for:
 - raw returns
@@ -1317,7 +1341,7 @@ Add empirical event-influence/decay characterization.
 
 ---
 
-## EIE-7 — Abnormal Reaction & Counterfactual Impact
+## EIE-9 — Abnormal Reaction & Counterfactual Impact
 
 Add:
 - market-adjusted returns
@@ -1333,7 +1357,7 @@ Preserve raw reaction alongside residualized reaction.
 
 ---
 
-## EIE-8 — Entity Relationship & Exposure Graph
+## EIE-10 — Entity Relationship & Exposure Graph
 
 Build:
 - supplier/customer graph
@@ -1349,7 +1373,7 @@ Build:
 
 ---
 
-## EIE-9 — Multi-Source Deduplication & Claim/Evidence Graph
+## EIE-11 — Multi-Source Deduplication & Claim/Evidence Graph
 
 Build:
 - duplicate detection
@@ -1364,7 +1388,7 @@ Build:
 
 ---
 
-## EIE-10 — Unscheduled Event Intelligence & Secure Extraction
+## EIE-12 — Unscheduled Event Intelligence & Secure Extraction
 
 Add provider-neutral infrastructure for unscheduled news/business events.
 
@@ -1382,7 +1406,7 @@ Build:
 
 ---
 
-## EIE-11 — Novelty, Materiality & Uncertainty
+## EIE-13 — Novelty, Materiality & Uncertainty
 
 Build:
 - document/factual/numeric/guidance novelty
@@ -1396,7 +1420,7 @@ Build:
 
 ---
 
-## EIE-12 — Historical Analogues & Reaction Surprise
+## EIE-14 — Historical Analogues & Reaction Surprise
 
 Build analogue retrieval conditioned on:
 - event type
@@ -1417,7 +1441,7 @@ Add:
 
 ---
 
-## EIE-13 — Event Collision, Interaction & Propagation
+## EIE-15 — Event Collision, Interaction & Propagation
 
 Build:
 - overlapping-event clusters
@@ -1436,7 +1460,7 @@ Do not simply sum severity.
 
 ---
 
-## EIE-14 — Bitemporal Intelligence, Latency & Empirical Source Reliability
+## EIE-16 — Bitemporal Intelligence, Latency & Empirical Source Reliability
 
 Formalize:
 - valid time
@@ -1457,7 +1481,7 @@ Keep trust class separate from measured reliability.
 
 ---
 
-## EIE-15 — Evaluation, Snapshot, Service, Replay & Hardening
+## EIE-17 — Evaluation, Snapshot, Service, Replay & Hardening
 
 Finalize standalone engine.
 
