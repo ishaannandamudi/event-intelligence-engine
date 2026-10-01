@@ -1,6 +1,6 @@
 # Event contracts
 
-Engine version is `0.4.0`; raw-observation, canonical-event, entity, configuration, scheduled-event, official-source extract, and SEC filing schemas are each `1.0`. Constructors reject unsupported schema versions.
+Engine version is `0.5.0`; raw-observation, canonical-event, entity, configuration, scheduled-event, official-source extract, SEC filing, and corporate-event schemas are each `1.0`. Constructors reject unsupported schema versions.
 
 ## Raw observation
 
@@ -33,3 +33,7 @@ Canonical JSON sorts object keys and unordered sets, emits UTF-8, preserves expl
 ## SEC filing specialization
 
 `FilingMetadata` has stable CIK-plus-accession identity, separate filer and optional issuer IDs, exact form/base/amendment type, filing date, accepted timestamp, report period, primary document, source evidence, knowledge time, revision number, amendment status/target/candidates, and quality flags. Metadata corrections append a revision; amendments are distinct filings. `FilingView`, `FilingQueryResult`, and `SymbolFilingQueryResult` include historical symbol context, configuration fingerprint, and exact resolution outcome. Each has domain-separated deterministic fingerprints. The canonical filing event uses the `SEC_FILING` family with company or SEC-filer scope and the raw observation as evidence. See [SEC EDGAR](sec-edgar.md).
+
+## Corporate event specialization (EIE-4)
+
+Engine version is `0.5.0` and corporate-event schema is `1.0`; prior schema versions remain unchanged. `CorporateIdentity` hashes kind, stable issuer, semantic key, and optional verified security/listing. `CorporateClaim` retains provider event ID, raw observation ID, source class, available-from, status, typed payload, distinct announcement date/timestamp and effective timestamp, and quality. `CorporateEvent` appends contiguous revisions, selected claim key, confirmation, conflicts, and all provider claims. Earnings semantic identity is its fiscal reference period. Date-only schedules never create an exact canonical scheduled time. The canonical event carries a domain-separated event ID, lifecycle, evidence IDs, sorted structured facts, and distinct publication/observation/ingestion/effective clocks. Typed query results and coverage carry as-of time and configuration fingerprints. See [corporate events](corporate-events.md) and [earnings calendar](earnings-calendar.md).

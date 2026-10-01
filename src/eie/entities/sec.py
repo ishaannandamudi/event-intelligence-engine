@@ -221,6 +221,9 @@ class SecEntityRegistry:
             )
         )
 
+    def security_by_id(self, identity: str) -> Security | None:
+        return self._securities.get(identity)
+
     def add_listing(self, revision: SecListingRevision) -> bool:
         security = self._securities.get(revision.security_id)
         if security is None or security.issuer_id != revision.issuer_id:
@@ -266,6 +269,30 @@ class SecEntityRegistry:
         self._ticker_maps.append(revision)
         return True
 
+    def _superseded_snapshot_symbol(
+        self,
+        issuer: str,
+        ticker: str,
+        exchange: str,
+        snapshot_observed_ns: int,
+        as_of_ns: int,
+        valid_at_ns: int,
+    ) -> bool:
+        for history in self._listings.values():
+            row = next(
+                (item for item in reversed(history) if item.available_from_ns <= as_of_ns), None
+            )
+            if (
+                row is not None
+                and row.issuer_id == issuer
+                and row.ticker == ticker
+                and row.exchange == exchange
+                and row.valid_to_ns is not None
+                and snapshot_observed_ns < row.valid_to_ns <= valid_at_ns
+            ):
+                return True
+        return False
+
     def symbols_for_issuer(
         self, issuer: str, as_of_ns: int, valid_at_ns: int
     ) -> tuple[tuple[str, str], ...]:
@@ -284,7 +311,12 @@ class SecEntityRegistry:
         )
         if snapshot is not None:
             symbols.update(
-                (row[2], row[3]) for row in snapshot.mapping.rows if sec_issuer_id(row[0]) == issuer
+                (row[2], row[3])
+                for row in snapshot.mapping.rows
+                if sec_issuer_id(row[0]) == issuer
+                and not self._superseded_snapshot_symbol(
+                    issuer, row[2], row[3], snapshot.observed_at_ns, as_of_ns, valid_at_ns
+                )
             )
         return tuple(sorted(symbols))
 
@@ -316,6 +348,14 @@ class SecEntityRegistry:
                 if row[2] == ticker
                 and row[3] == exchange
                 and self.issuer_by_cik(row[0], as_of_ns) is not None
+                and not self._superseded_snapshot_symbol(
+                    sec_issuer_id(row[0]),
+                    ticker,
+                    exchange,
+                    snapshot.observed_at_ns,
+                    as_of_ns,
+                    valid_at,
+                )
             )
         identities = tuple(sorted(candidates))
         if not identities:

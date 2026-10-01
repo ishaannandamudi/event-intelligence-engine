@@ -1,4 +1,4 @@
-# EIE architecture through EIE-3
+# EIE architecture through EIE-4
 
 ```text
 Source adapter protocol → immutable RawSourceObservation → EventNormalizer protocol
@@ -27,3 +27,7 @@ Time is signed-64-bit nonnegative UTC nanoseconds. Scheduled/effective time desc
 Future downstream consumers should receive typed event intelligence snapshots after later phases. EIE does not import MCE or AME and does not make trading decisions.
 
 See [scheduled events](scheduled-events.md) for the full EIE-1 contract.
+
+## EIE-4 corporate layer
+
+The `corporate` package separates shared enums/values, earnings payloads, action payloads, identity/claim/event contracts, queries, settings, and an append-only index. The `providers.corporate` package parses versioned offline extracts, selects multi-provider claims, and stages whole-batch ingestion. Each provider item first becomes an immutable raw observation; each selected corporate revision also becomes a canonical EIE event. The corporate index owns its in-memory canonical store and a copy of the SEC entity registry. Batch ingestion deep-copies this state and commits one new state only after all observations, entity checks, normalizations, and listing changes succeed. Query results preserve knowledge-time coverage, claims, conflicts, and deterministic fingerprints. See [corporate events](corporate-events.md).

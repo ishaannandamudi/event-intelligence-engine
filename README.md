@@ -2,7 +2,7 @@
 
 EIE is a standalone, provider-neutral foundation for descriptive event intelligence. Its first priority is answering what was knowable at an exact time. It does not produce trade instructions.
 
-**Status:** EIE-3 SEC EDGAR filing metadata and issuer identity, version `0.4.0`. EIE-0 through EIE-2 contracts and Federal Reserve, BLS, and BEA adapters remain available. SEC submissions, historical metadata files, and ticker associations are parsed offline with causal filing, amendment, and identity queries. Providers are disabled by default; live collection and filing content analysis are deferred.
+**Status:** EIE-4 corporate events and earnings calendar, version `0.5.0`. EIE-0 through EIE-3 contracts, official macro adapters, and SEC EDGAR metadata remain available. Corporate data is parsed from versioned offline extracts with causal conflict, action, and identity queries. Providers are disabled by default; live collection, earnings consensus, and filing content analysis are deferred. See [corporate events](docs/corporate-events.md) and [earnings calendar](docs/earnings-calendar.md).
 
 ## Install and check
 
@@ -18,6 +18,60 @@ python3.11 -m venv .venv
 .venv/bin/ruff format --check .
 .venv/bin/mypy src
 ```
+
+## Offline earnings conflict and replay example
+
+Run this from the repository root. All three inputs are synthetic, checked-in extracts; no network connection is used.
+
+```python
+from pathlib import Path
+
+from eie.config.settings import Settings
+from eie.core.serialization import canonical_json_bytes
+from eie.corporate.models import CorporateKind
+from eie.corporate.settings import CorporateSettings
+from eie.entities.sec import SecEntityRegistry, SecIssuerRevision, sec_issuer_id
+from eie.providers.corporate.adapter import CorporateAdapter, CorporateIngestor
+from eie.providers.sec.models import CIK
+from eie.sources.trust import SourceClass
+
+t0 = 1_788_000_000_000_000_000
+t1 = 1_788_264_000_000_000_000
+t2 = 1_788_350_400_000_000_000
+t3 = 1_788_436_800_000_000_000
+issuer = sec_issuer_id(CIK.parse(123456))
+registry = SecEntityRegistry()
+registry.add_issuer(SecIssuerRevision(issuer, CIK.parse(123456), "Alpha", (), t0, "obs_issuer"))
+engine = CorporateIngestor(Settings(corporate=CorporateSettings(enabled=True)), registry)
+fixtures = Path("tests/fixtures/corporate")
+
+
+def ingest(name: str, provider: str, source_class: SourceClass, at_ns: int) -> None:
+    source = CorporateAdapter(provider, source_class, frozenset(CorporateKind))
+    result = engine.ingest_payload(source, (fixtures / f"{name}.json").read_bytes(), at_ns, at_ns)
+    assert result.error_category is None
+
+
+ingest("provider_a", "SYNTH_A", SourceClass.LICENSED_NEWS, t1)
+first = engine.index.upcoming_earnings(t1).events[0]
+assert first.corporate.selected_claim.payload.scheduled_date == "2026-10-20"
+before = canonical_json_bytes(engine.index.upcoming_earnings(t1))
+
+ingest("provider_b", "SYNTH_B", SourceClass.LICENSED_NEWS, t2)
+conflict = engine.index.upcoming_earnings(t2).events[0].corporate
+assert len(conflict.claims) == 2 and conflict.conflict_reason_codes
+assert len({claim.observation_id for claim in conflict.claims}) == 2
+
+ingest("company", "SYNTH_COMPANY", SourceClass.COMPANY_PRIMARY, t3)
+revised = engine.index.upcoming_earnings(t3).events[0].corporate
+assert revised.selected_claim.provider_id == "SYNTH_COMPANY"
+assert revised.selected_claim.payload.scheduled_for_ns == 1_792_585_800_000_000_000
+assert len(revised.claims) == 3
+assert canonical_json_bytes(engine.index.upcoming_earnings(t1)) == before
+assert len(engine.index.known_as_of(t3, kind=CorporateKind.EARNINGS_CALL).events) == 1
+```
+
+The two news calendars disagree on date and session. The company extract then supplies an exact release time and a separate call; earlier query bytes remain identical.
 
 ## Deterministic example
 
@@ -207,6 +261,6 @@ The accepted timestamp and EIE knowledge time are distinct when observation or i
 
 ## Scope
 
-EIE-3 implements deterministic offline SEC filing metadata normalization alongside EIE-2 official sources. It has no bundled live collection, filing NLP, earnings, event studies, relationship graph, trading signal, broker, HTTP service, or integration with MCE or AME. The [master roadmap](docs/EIE_MASTER_SPEC.md) defines later phases.
+EIE-4 adds deterministic offline corporate events and earnings calendars alongside EIE-3 SEC filing metadata and EIE-2 official sources. It has no bundled live collection, filing NLP, earnings consensus or surprise calculations, event studies, relationship graph, trading signal, broker, HTTP service, or integration with MCE or AME. The [master roadmap](docs/EIE_MASTER_SPEC.md) defines later phases.
 
 See [architecture](docs/architecture.md), [event contracts](docs/event-contract.md), [source policy](docs/source-policy.md), and [replay and causality](docs/replay-and-causality.md).

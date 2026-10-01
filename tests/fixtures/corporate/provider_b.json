@@ -1,0 +1,26 @@
+{
+  "schema": "EIE_CORPORATE_EXTRACT_V1",
+  "provider_id": "SYNTH_B",
+  "source_version": "synthetic-1",
+  "coverage": {"kinds": ["EARNINGS_SCHEDULE"], "from_date": "2026-10-01", "to_date": "2026-10-31"},
+  "items": [{
+    "item_id": "b-calendar-q3",
+    "item_version": "1",
+    "published_at_ns": 1788350400000000000,
+    "source_reference": "https://synthetic-b.example/calendar/q3",
+    "events": [{
+      "kind": "EARNINGS_SCHEDULE",
+      "provider_event_id": "b-calendar-q3",
+      "issuer_id": "iss_e913f2e0cdc1f7df12cc61b1d1ae670d47005771ef5afbf21e828d65e95cc25c",
+      "status": "SCHEDULED",
+      "data": {
+        "fiscal_year": 2026,
+        "fiscal_quarter": 3,
+        "period_end": "2026-09-30",
+        "scheduled_date": "2026-10-21",
+        "release_timing": "BEFORE_MARKET",
+        "precision": "DATE_PLUS_SESSION"
+      }
+    }]
+  }]
+}
