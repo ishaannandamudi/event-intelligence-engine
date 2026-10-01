@@ -1,0 +1,6 @@
+{
+  "fields": ["cik", "name", "ticker", "exchange"],
+  "data": [
+    [123456, "Alpha Holdings Inc.", "OLD", "NYSE"]
+  ]
+}

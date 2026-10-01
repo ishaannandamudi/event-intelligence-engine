@@ -6,6 +6,7 @@ ENTITY_SCHEMA_VERSION = "1.0"
 CONFIG_SCHEMA_VERSION = "1.0"
 SCHEDULE_SCHEMA_VERSION = "1.0"
 OFFICIAL_SOURCE_SCHEMA_VERSION = "1.0"
+FILING_SCHEMA_VERSION = "1.0"
 
 
 def require_schema(actual: str, expected: str) -> None:

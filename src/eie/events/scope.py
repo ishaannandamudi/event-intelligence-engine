@@ -10,6 +10,7 @@ class ScopeKind(StrEnum):
     SYMBOL = "SYMBOL"
     SECURITY = "SECURITY"
     COMPANY = "COMPANY"
+    SEC_FILER = "SEC_FILER"
     INDUSTRY = "INDUSTRY"
     SECTOR = "SECTOR"
     INDEX = "INDEX"
@@ -42,6 +43,7 @@ class ApplicabilityQuery:
     symbol: str | None = None
     security_id: str | None = None
     issuer_id: str | None = None
+    filer_id: str | None = None
     industry: str | None = None
     sector: str | None = None
     index: str | None = None
@@ -58,6 +60,7 @@ def applies_directly(scope: EventScope, query: ApplicabilityQuery) -> bool:
         ScopeKind.SYMBOL: query.symbol,
         ScopeKind.SECURITY: query.security_id,
         ScopeKind.COMPANY: query.issuer_id,
+        ScopeKind.SEC_FILER: query.filer_id,
         ScopeKind.INDUSTRY: query.industry,
         ScopeKind.SECTOR: query.sector,
         ScopeKind.INDEX: query.index,

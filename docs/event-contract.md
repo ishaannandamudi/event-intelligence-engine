@@ -1,6 +1,6 @@
 # Event contracts
 
-Engine version is `0.3.0`; raw-observation, canonical-event, entity, configuration, scheduled-event, and official-source extract schemas are each `1.0`. Constructors reject unsupported schema versions.
+Engine version is `0.4.0`; raw-observation, canonical-event, entity, configuration, scheduled-event, official-source extract, and SEC filing schemas are each `1.0`. Constructors reject unsupported schema versions.
 
 ## Raw observation
 
@@ -16,7 +16,7 @@ Engine version is `0.3.0`; raw-observation, canonical-event, entity, configurati
 
 Confirmation states are `UNVERIFIED`, `REPORTED`, `CORROBORATED`, `CONFIRMED_PRIMARY`, `DISPUTED`, `RETRACTED`. They are explicit evidence judgments, not inferred from headline count. Typed quality flags include stale, missing/future timestamp, source unavailable, schema changed, unresolved entity, duplicate, conflict, corrected, degraded, invalid unit/scope/revision. The system never treats a flagged record as a healthy zero value.
 
-Scope kinds include symbol, security, company, industry, sector, index, market, macro country and macro global. Direct applicability matches explicit identifiers; broad market/global scopes apply through matching query context. No relationship propagation exists yet. Taxonomy codes are uppercase dot-separated identifiers; family prefixes are validated while new family-specific codes remain possible.
+Scope kinds include symbol, security, company, SEC filer, industry, sector, index, market, macro country and macro global. Direct applicability matches explicit identifiers; broad market/global scopes apply through matching query context. No relationship propagation exists yet. Taxonomy codes are uppercase dot-separated identifiers; family prefixes are validated while new family-specific codes remain possible.
 
 Canonical JSON sorts object keys and unordered sets, emits UTF-8, preserves explicit nulls, rejects non-finite numbers and unknown object types. SHA-256 fingerprints have domain prefixes separated by a NUL byte. `event_payload_fingerprint` hashes all canonical payload fields except revision metadata/schema; `result_fingerprint` hashes the entire event record. Configuration has its own domain. These hashes exclude secrets and runtime memory state.
 
@@ -29,3 +29,7 @@ Canonical JSON sorts object keys and unordered sets, emits UTF-8, preserves expl
 ## Official-source facts
 
 `OfficialItem` is a typed parser output with source item ID/version, source version, official HTTPS reference, event type, stable semantic key, item status, optional publication time, schedule precision, optional reference period, release stage, component codes, and deterministic source-fragment hash. `ReferencePeriod` has validated ISO start and exclusive end dates, typed frequency, and label. `TimePrecision` distinguishes exact timestamp, date-only, and unknown. Provider-neutral period/stage/precision facts are added to `CanonicalEvent`; source-specific schema/version and URL remain in raw provenance. See [official sources](official-sources.md).
+
+## SEC filing specialization
+
+`FilingMetadata` has stable CIK-plus-accession identity, separate filer and optional issuer IDs, exact form/base/amendment type, filing date, accepted timestamp, report period, primary document, source evidence, knowledge time, revision number, amendment status/target/candidates, and quality flags. Metadata corrections append a revision; amendments are distinct filings. `FilingView`, `FilingQueryResult`, and `SymbolFilingQueryResult` include historical symbol context, configuration fingerprint, and exact resolution outcome. Each has domain-separated deterministic fingerprints. The canonical filing event uses the `SEC_FILING` family with company or SEC-filer scope and the raw observation as evidence. See [SEC EDGAR](sec-edgar.md).

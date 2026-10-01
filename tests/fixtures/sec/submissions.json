@@ -1,0 +1,22 @@
+{
+  "cik": "0000123456",
+  "name": "Alpha Holdings Inc.",
+  "entityType": "operating",
+  "formerNames": [{"name": "Alpha Corporation", "from": "2018-01-01", "to": "2024-12-31"}],
+  "tickers": ["OLD"],
+  "exchanges": ["NYSE"],
+  "filings": {
+    "recent": {
+      "accessionNumber": ["0000123456-26-000001"],
+      "filingDate": ["2026-01-10"],
+      "acceptanceDateTime": ["2026-01-10T14:03:12"],
+      "form": ["10-Q"],
+      "reportDate": ["2025-12-31"],
+      "primaryDocument": ["alpha10q.htm"],
+      "fileNumber": ["001-00001"]
+    },
+    "files": [
+      {"name": "CIK0000123456-submissions-001.json", "filingFrom": "2024-01-01", "filingTo": "2024-12-31"}
+    ]
+  }
+}

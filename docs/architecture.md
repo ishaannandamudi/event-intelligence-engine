@@ -1,4 +1,4 @@
-# EIE architecture through EIE-2
+# EIE architecture through EIE-3
 
 ```text
 Source adapter protocol → immutable RawSourceObservation → EventNormalizer protocol
@@ -15,6 +15,8 @@ Source adapter protocol → immutable RawSourceObservation → EventNormalizer p
 `scheduled` adds immutable schedule claims and revisions, a sorted event-time index over the canonical store, an append-only source coverage ledger, typed query results, and configurable window policies. The schedule index is the insertion entry point for scheduled events; direct underlying-store writes bypass it. Its sorted timestamps speed range and window queries without replacing historical revision resolution. Coverage records describe source-specific asserted intervals and health, and never imply completeness across unrepresented sources.
 
 `providers` adds narrow Fed, BLS, and BEA parsers plus a common explicit-clock ingestion coordinator. Fetching is an injected transport boundary. Parsers output typed official items; ingestion writes raw observations before canonical/scheduled revisions and records source health separately. Date-only events remain canonical events without invented exact times. BEA's native calendar JSON supplies time-only candidates that can verify enriched extracts; it cannot supply reference period or GDP stage by itself. See [official sources](official-sources.md).
+
+EIE-3 adds `providers/sec` for native EDGAR submissions, historical filing metadata, and ticker association parsing; `filings` for typed metadata and causal queries; and `entities/sec` for CIK-based filer/issuer revisions and point-in-time ticker/listing resolution. `SecIngestor` stages raw, registry, filing, canonical-event, and history-reference changes together before an in-memory batch commit. Its transport is injected and disabled by default. See [SEC EDGAR](sec-edgar.md) and [entity identity](entity-identity.md).
 
 The raw/canonical boundary is structural: the two immutable classes do not inherit from each other. A canonical event names one or more raw observation IDs. The store verifies that evidence exists, its ingestion precedes the event's availability, and its source classes match. No provider schema leaks into core events. A future normalizer implements the protocol and must preserve evidence IDs.
 

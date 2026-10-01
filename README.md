@@ -2,7 +2,7 @@
 
 EIE is a standalone, provider-neutral foundation for descriptive event intelligence. Its first priority is answering what was knowable at an exact time. It does not produce trade instructions.
 
-**Status:** EIE-2 official-source ingestion foundation, version `0.3.0`. EIE-0 and EIE-1 contracts remain the foundation. Federal Reserve, BLS, and BEA fixture/extract adapters, a BLS calendar parser, a BEA machine-calendar parser, source health, and causal release normalization are implemented. Providers are disabled by default; live collection and the final intelligence snapshot are deferred.
+**Status:** EIE-3 SEC EDGAR filing metadata and issuer identity, version `0.4.0`. EIE-0 through EIE-2 contracts and Federal Reserve, BLS, and BEA adapters remain available. SEC submissions, historical metadata files, and ticker associations are parsed offline with causal filing, amendment, and identity queries. Providers are disabled by default; live collection and filing content analysis are deferred.
 
 ## Install and check
 
@@ -174,8 +174,39 @@ assert engine.upcoming(t2).events[0].scheduled_for_ns != before
 
 The raw observation, canonical revision, and schedule revision each retain their own identity and provenance. See [official sources](docs/official-sources.md) for source formats, health, time semantics, and limits.
 
+## Offline SEC filing example
+
+Run from the repository root. These EDGAR-shaped fixtures are synthetic; their names, CIKs, and filings are examples.
+
+```python
+from pathlib import Path
+
+from eie.config.settings import Settings
+from eie.providers.sec.adapter import SecIngestor
+from eie.providers.sec.models import CIK
+from eie.providers.sec.settings import SecSettings
+
+fixture = Path("tests/fixtures/sec")
+ingestor = SecIngestor(Settings(sec=SecSettings(enabled=True)))
+before = 1_767_978_000_000_000_000
+accepted = 1_768_071_792_000_000_000
+ingestor.ingest_ticker_map((fixture / "ticker_map.json").read_bytes(), before, before)
+assert ingestor.filings_for_cik(CIK.parse(123456), accepted - 1).filings == ()
+ingestor.ingest_payload(
+    (fixture / "submissions.json").read_bytes(),
+    "https://data.sec.gov/submissions/CIK0000123456.json",
+    accepted,
+    accepted,
+)
+filing = ingestor.filings_for_cik(CIK.parse(123456), accepted).filings[0]
+assert filing.metadata.form.raw == "10-Q"
+assert filing.historical_symbols == (("OLD", "NYSE"),)
+```
+
+The accepted timestamp and EIE knowledge time are distinct when observation or ingestion is delayed. See [SEC EDGAR](docs/sec-edgar.md) and [entity identity](docs/entity-identity.md) for the exact rules.
+
 ## Scope
 
-EIE-2 implements deterministic offline official-source normalization. It has no bundled live collection, news classification, event studies, relationship graph, trading signal, broker, HTTP service, or integration with MCE or AME. The [master roadmap](docs/EIE_MASTER_SPEC.md) defines later phases.
+EIE-3 implements deterministic offline SEC filing metadata normalization alongside EIE-2 official sources. It has no bundled live collection, filing NLP, earnings, event studies, relationship graph, trading signal, broker, HTTP service, or integration with MCE or AME. The [master roadmap](docs/EIE_MASTER_SPEC.md) defines later phases.
 
 See [architecture](docs/architecture.md), [event contracts](docs/event-contract.md), [source policy](docs/source-policy.md), and [replay and causality](docs/replay-and-causality.md).

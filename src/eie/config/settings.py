@@ -12,6 +12,7 @@ from eie.core.schema import (
 )
 from eie.core.time import require_ns
 from eie.providers.common.settings import OfficialProviderSettings
+from eie.providers.sec.settings import SecSettings
 from eie.scheduled.windows import ScheduledSettings
 from eie.sources.trust import SourceClass, SourcePrecedencePolicy
 
@@ -27,6 +28,7 @@ class Settings:
     strict_replay_availability: bool = True
     scheduled: ScheduledSettings = ScheduledSettings()
     official: OfficialProviderSettings = OfficialProviderSettings()
+    sec: SecSettings = SecSettings()
 
     def __post_init__(self) -> None:
         require_schema(self.schema_version, CONFIG_SCHEMA_VERSION)
@@ -44,6 +46,8 @@ class Settings:
             raise ValidationError("typed immutable scheduled settings required")
         if not isinstance(self.official, OfficialProviderSettings):
             raise ValidationError("typed immutable official provider settings required")
+        if not isinstance(self.sec, SecSettings):
+            raise ValidationError("typed immutable SEC settings required")
         require_ns(self.default_staleness_ns, "default_staleness_ns")
         if self.strict_replay_availability is not True:
             raise ValidationError("EIE-0 cannot disable causal replay validation")
