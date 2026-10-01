@@ -1,0 +1,1 @@
+"""BEA official-source adapter."""

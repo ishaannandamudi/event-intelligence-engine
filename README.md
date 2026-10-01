@@ -2,7 +2,7 @@
 
 EIE is a standalone, provider-neutral foundation for descriptive event intelligence. Its first priority is answering what was knowable at an exact time. It does not produce trade instructions.
 
-**Status:** EIE-1 scheduled-event engine, version `0.2.0`. EIE-0 raw observations, canonical event revisions, entity identity, source contracts, in-memory store, and causal replay remain the foundation. Scheduled-event history, causal queries, source coverage, and configurable event windows are implemented. Live providers and the final intelligence snapshot are deferred.
+**Status:** EIE-2 official-source ingestion foundation, version `0.3.0`. EIE-0 and EIE-1 contracts remain the foundation. Federal Reserve, BLS, and BEA fixture/extract adapters, a BLS calendar parser, a BEA machine-calendar parser, source health, and causal release normalization are implemented. Providers are disabled by default; live collection and the final intelligence snapshot are deferred.
 
 ## Install and check
 
@@ -134,8 +134,48 @@ assert engine.upcoming(25, horizon_ns=200).events[0].scheduled_for_ns == 120
 
 The schedule time and the time at which it became knowable are separate. See [scheduled events](docs/scheduled-events.md) for query, window, coverage, and conflict contracts.
 
+## Offline official-source example
+
+Run this from the repository root. The fixture transcribes a small [official BLS calendar](https://www.bls.gov/schedule/2026/09_sched.htm) subset; the later reschedule is synthetic and demonstrates replay.
+
+```python
+import json
+from datetime import datetime
+from pathlib import Path
+
+from eie.config.settings import Settings
+from eie.core.time import datetime_to_ns
+from eie.providers.bls.adapter import BLSAdapter
+from eie.providers.common.ingestion import OfficialSourceIngestor
+from eie.providers.common.settings import OfficialProviderSettings
+from eie.scheduled.engine import ScheduledEventEngine
+from eie.scheduled.index import ScheduledEventIndex
+
+
+def ns(value: str) -> int:
+    return datetime_to_ns(datetime.fromisoformat(value.replace("Z", "+00:00")))
+
+
+index = ScheduledEventIndex(Settings(official=OfficialProviderSettings(enabled_ids=("BLS",))))
+ingestor = OfficialSourceIngestor(index)
+engine = ScheduledEventEngine(index)
+fixture = json.loads(Path("tests/fixtures/official/bls_schedule.json").read_text())
+fixture["items"] = [item for item in fixture["items"] if item["release"] == "CPI"]
+t1, t2 = ns("2026-09-01T00:00:00Z"), ns("2026-09-02T00:00:00Z")
+ingestor.ingest_payload(BLSAdapter(), json.dumps(fixture).encode(), t1, t1)
+before = engine.upcoming(t1).events[0].scheduled_for_ns
+fixture["items"][0].update(
+    {"status": "RESCHEDULE", "item_version": "2", "scheduled_at": "2026-09-12T08:30:00-04:00"}
+)
+ingestor.ingest_payload(BLSAdapter(), json.dumps(fixture).encode(), t2, t2)
+assert engine.upcoming(t1).events[0].scheduled_for_ns == before
+assert engine.upcoming(t2).events[0].scheduled_for_ns != before
+```
+
+The raw observation, canonical revision, and schedule revision each retain their own identity and provenance. See [official sources](docs/official-sources.md) for source formats, health, time semantics, and limits.
+
 ## Scope
 
-EIE-1 implements deterministic offline scheduled-event behavior. It has no live ingestion, news classification, event studies, relationship graph, trading signal, broker, HTTP service, or integration with MCE or AME. The [master roadmap](docs/EIE_MASTER_SPEC.md) defines later phases.
+EIE-2 implements deterministic offline official-source normalization. It has no bundled live collection, news classification, event studies, relationship graph, trading signal, broker, HTTP service, or integration with MCE or AME. The [master roadmap](docs/EIE_MASTER_SPEC.md) defines later phases.
 
 See [architecture](docs/architecture.md), [event contracts](docs/event-contract.md), [source policy](docs/source-policy.md), and [replay and causality](docs/replay-and-causality.md).

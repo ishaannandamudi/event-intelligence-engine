@@ -1,0 +1,39 @@
+{
+  "format": "EIE_OFFICIAL_EXTRACT_V1",
+  "provider": "BLS",
+  "source_version": "2026-selected-releases",
+  "items": [
+    {
+      "release_id": "CPI-2026-08",
+      "item_version": "1",
+      "release": "CPI",
+      "title": "Consumer Price Index for August 2026",
+      "status": "SCHEDULE",
+      "scheduled_at": "2026-09-11T08:30:00-04:00",
+      "source_reference": "https://www.bls.gov/schedule/2026/09_sched.htm",
+      "reference_period": {"start_date": "2026-08-01", "end_date": "2026-09-01", "frequency": "MONTHLY", "label": "August 2026"},
+      "components": ["CORE_CPI"]
+    },
+    {
+      "release_id": "EMP-2026-08",
+      "item_version": "1",
+      "release": "EMPLOYMENT_SITUATION",
+      "title": "Employment Situation for August 2026",
+      "status": "SCHEDULE",
+      "scheduled_at": "2026-09-04T08:30:00-04:00",
+      "source_reference": "https://www.bls.gov/schedule/news_release/empsit.htm",
+      "reference_period": {"start_date": "2026-08-01", "end_date": "2026-09-01", "frequency": "MONTHLY", "label": "August 2026"},
+      "components": ["AVERAGE_HOURLY_EARNINGS", "UNEMPLOYMENT_RATE"]
+    },
+    {
+      "release_id": "PPI-2026-08",
+      "item_version": "1",
+      "release": "PPI",
+      "title": "Producer Price Index for August 2026",
+      "status": "SCHEDULE",
+      "scheduled_at": "2026-09-10T08:30:00-04:00",
+      "source_reference": "https://www.bls.gov/schedule/2026/09_sched.htm",
+      "reference_period": {"start_date": "2026-08-01", "end_date": "2026-09-01", "frequency": "MONTHLY", "label": "August 2026"}
+    }
+  ]
+}

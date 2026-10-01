@@ -1,0 +1,20 @@
+{
+  "format": "EIE_OFFICIAL_EXTRACT_V1",
+  "provider": "FEDERAL_RESERVE",
+  "source_version": "2026-calendar-snapshot",
+  "items": [
+    {
+      "meeting_id": "2026-09-16",
+      "meeting_start_date": "2026-09-15",
+      "meeting_end_date": "2026-09-16",
+      "item_version": "1",
+      "source_reference": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm",
+      "events": [
+        {"event": "DECISION", "status": "SCHEDULE", "scheduled_date": "2026-09-16"},
+        {"event": "STATEMENT", "status": "SCHEDULE", "scheduled_date": "2026-09-16"},
+        {"event": "SEP", "status": "SCHEDULE", "scheduled_date": "2026-09-16"},
+        {"event": "PRESS_CONFERENCE", "status": "SCHEDULE", "scheduled_date": "2026-09-16"}
+      ]
+    }
+  ]
+}

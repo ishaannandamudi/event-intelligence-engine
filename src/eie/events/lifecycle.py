@@ -57,6 +57,7 @@ TRANSITIONS: dict[LifecycleState, frozenset[LifecycleState]] = {
             LifecycleState.RESCHEDULED,
             LifecycleState.SCHEDULED,
             LifecycleState.CONFIRMED,
+            LifecycleState.RELEASED,
             LifecycleState.CANCELLED,
         }
     ),

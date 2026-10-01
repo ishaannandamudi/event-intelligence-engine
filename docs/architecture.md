@@ -1,4 +1,4 @@
-# EIE architecture through EIE-1
+# EIE architecture through EIE-2
 
 ```text
 Source adapter protocol → immutable RawSourceObservation → EventNormalizer protocol
@@ -13,6 +13,8 @@ Source adapter protocol → immutable RawSourceObservation → EventNormalizer p
 `src/eie/core` owns UTC nanoseconds, schemas, serialization, hashes, quality and errors. `sources` owns provenance, trust, health and optional-capability protocols. `events` owns taxonomy, scope, semantic identity, lifecycle and revisions. `entities` separates issuer, security and time-bounded ticker listing. `persistence` holds the append-only protocol and deterministic in-memory store. `replay` owns the explicit clock and minimal known-events view. `config` holds immutable settings.
 
 `scheduled` adds immutable schedule claims and revisions, a sorted event-time index over the canonical store, an append-only source coverage ledger, typed query results, and configurable window policies. The schedule index is the insertion entry point for scheduled events; direct underlying-store writes bypass it. Its sorted timestamps speed range and window queries without replacing historical revision resolution. Coverage records describe source-specific asserted intervals and health, and never imply completeness across unrepresented sources.
+
+`providers` adds narrow Fed, BLS, and BEA parsers plus a common explicit-clock ingestion coordinator. Fetching is an injected transport boundary. Parsers output typed official items; ingestion writes raw observations before canonical/scheduled revisions and records source health separately. Date-only events remain canonical events without invented exact times. BEA's native calendar JSON supplies time-only candidates that can verify enriched extracts; it cannot supply reference period or GDP stage by itself. See [official sources](official-sources.md).
 
 The raw/canonical boundary is structural: the two immutable classes do not inherit from each other. A canonical event names one or more raw observation IDs. The store verifies that evidence exists, its ingestion precedes the event's availability, and its source classes match. No provider schema leaks into core events. A future normalizer implements the protocol and must preserve evidence IDs.
 

@@ -1,6 +1,6 @@
 # Event contracts
 
-Engine version is `0.2.0`; raw-observation, canonical-event, entity, configuration, and scheduled-event schemas are each `1.0`. Constructors reject unsupported schema versions.
+Engine version is `0.3.0`; raw-observation, canonical-event, entity, configuration, scheduled-event, and official-source extract schemas are each `1.0`. Constructors reject unsupported schema versions.
 
 ## Raw observation
 
@@ -12,7 +12,7 @@ Engine version is `0.2.0`; raw-observation, canonical-event, entity, configurati
 
 `EventRevision` records number, kind, availability, previous revision number, optional superseded event ID and sorted reason codes. First revision is `ORIGINAL` number 1. Later revisions reference the immediate predecessor. Store insertion requires contiguous numbers and strictly increasing availability. A reschedule changes the schedule while retaining semantic event ID and prior revision. Cancellation is terminal. An actual different semantic event may use `supersedes_event_id`; the store requires the target to be a different event already known by that availability time but does not adjudicate cross-event facts in EIE-0.
 
-`LifecycleState` is separate from `EventWindowState`. The transition table lives in `events/lifecycle.py`. `UPDATED` requires a prior released/post-event/updated/normalized state. `CANCELLED` has no outgoing transition. Scheduled and confirmed states permit same-state schedule updates, and `RESCHEDULED` permits consecutive moves or return to scheduled/confirmed. EIE-1 calculates window state from an explicit policy. Reinstatement after cancellation remains deferred because cancellation is terminal.
+`LifecycleState` is separate from `EventWindowState`. The transition table lives in `events/lifecycle.py`. `UPDATED` requires a prior released/post-event/updated/normalized state. `CANCELLED` has no outgoing transition. Scheduled and confirmed states permit same-state schedule updates, and `RESCHEDULED` permits consecutive moves, return to scheduled/confirmed, or release. EIE-1 calculates window state from an explicit policy. Reinstatement after cancellation remains deferred because cancellation is terminal.
 
 Confirmation states are `UNVERIFIED`, `REPORTED`, `CORROBORATED`, `CONFIRMED_PRIMARY`, `DISPUTED`, `RETRACTED`. They are explicit evidence judgments, not inferred from headline count. Typed quality flags include stale, missing/future timestamp, source unavailable, schema changed, unresolved entity, duplicate, conflict, corrected, degraded, invalid unit/scope/revision. The system never treats a flagged record as a healthy zero value.
 
@@ -25,3 +25,7 @@ Canonical JSON sorts object keys and unordered sets, emits UTF-8, preserves expl
 `ScheduleRevision` wraps exactly one `CanonicalEvent` revision and immutable, raw-observation-backed `ScheduleClaim`s. It reuses canonical semantic identity, lifecycle, confirmation, quality, revision chain, and evidence. It adds the selected schedule claim and optional adjudication reasons; its own schema and fingerprint are `1.0` and domain-separated. `ScheduleStatus` is derived as active or cancelled and remains distinct from lifecycle and window state. A cancellation claim proposes no new time while canonical `scheduled_for_ns` retains the last known time for historical reference.
 
 `ScheduledEventView`, range/query results, next-event result, active-window result, and coverage summary are immutable typed results. Query results include as-of time, resolved revision and provenance, configuration fingerprint, source coverage, and deterministic serialization. Empty `NO_MATCH` requires reported available coverage; other empty outcomes are `INDETERMINATE`. See [scheduled events](scheduled-events.md).
+
+## Official-source facts
+
+`OfficialItem` is a typed parser output with source item ID/version, source version, official HTTPS reference, event type, stable semantic key, item status, optional publication time, schedule precision, optional reference period, release stage, component codes, and deterministic source-fragment hash. `ReferencePeriod` has validated ISO start and exclusive end dates, typed frequency, and label. `TimePrecision` distinguishes exact timestamp, date-only, and unknown. Provider-neutral period/stage/precision facts are added to `CanonicalEvent`; source-specific schema/version and URL remain in raw provenance. See [official sources](official-sources.md).

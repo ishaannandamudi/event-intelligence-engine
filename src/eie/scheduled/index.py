@@ -36,11 +36,22 @@ class ScheduledEventIndex:
     def append(self, revision: ScheduleRevision) -> bool:
         event = revision.event
         history = self._revisions.get(event.event_id, [])
-        if event.revision.number <= len(history):
-            if history[event.revision.number - 1] != revision:
+        matching = next(
+            (item for item in history if item.event.revision.number == event.revision.number),
+            None,
+        )
+        if matching is not None:
+            if matching != revision:
                 raise PersistenceError("schedule revision identity collision")
             return False
-        if event.revision.number != len(history) + 1:
+        previous_number = history[-1].event.revision.number if history else 0
+        if history and event.revision.number != previous_number + 1:
+            raise PersistenceError("schedule revision gap")
+        if not history and event.revision.number > 1:
+            stored = self.store.get_revisions(event.event_id)
+            if len(stored) != event.revision.number - 1 or stored[-1].scheduled_for_ns is not None:
+                raise PersistenceError("first exact schedule must follow date-only history")
+        elif not history and event.revision.number != 1:
             raise PersistenceError("schedule revision gap")
         for claim in revision.claims:
             observation = self.store.get_observation(claim.observation_id)
@@ -70,7 +81,7 @@ class ScheduledEventIndex:
         self._revisions.setdefault(event.event_id, []).append(revision)
         assert event.scheduled_for_ns is not None
         insort(self._times, (event.scheduled_for_ns, event.event_id, event.revision.number))
-        if event.revision.number == 1:
+        if not history:
             insort(self._first_known, event.revision.available_from_ns)
         return True
 

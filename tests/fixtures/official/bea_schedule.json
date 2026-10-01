@@ -1,0 +1,40 @@
+{
+  "format": "EIE_OFFICIAL_EXTRACT_V1",
+  "provider": "BEA",
+  "source_version": "2026-full-schedule",
+  "items": [
+    {
+      "release_id": "GDP-2026Q3-ADVANCE",
+      "item_version": "1",
+      "release": "GDP",
+      "title": "GDP Advance Estimate, Third Quarter 2026",
+      "stage": "ADVANCE",
+      "status": "SCHEDULE",
+      "scheduled_at": "2026-10-29T08:30:00-04:00",
+      "source_reference": "https://www.bea.gov/news/schedule/full",
+      "reference_period": {"start_date": "2026-07-01", "end_date": "2026-10-01", "frequency": "QUARTERLY", "label": "Q3 2026"}
+    },
+    {
+      "release_id": "GDP-2026Q3-SECOND",
+      "item_version": "1",
+      "release": "GDP",
+      "title": "GDP Second Estimate, Third Quarter 2026",
+      "stage": "SECOND",
+      "status": "SCHEDULE",
+      "scheduled_at": "2026-11-25T08:30:00-05:00",
+      "source_reference": "https://www.bea.gov/news/schedule/full",
+      "reference_period": {"start_date": "2026-07-01", "end_date": "2026-10-01", "frequency": "QUARTERLY", "label": "Q3 2026"}
+    },
+    {
+      "release_id": "PCE-2026-09",
+      "item_version": "1",
+      "release": "PERSONAL_INCOME_AND_OUTLAYS",
+      "title": "Personal Income and Outlays, September 2026",
+      "status": "SCHEDULE",
+      "scheduled_at": "2026-10-29T08:30:00-04:00",
+      "source_reference": "https://www.bea.gov/news/schedule/full",
+      "reference_period": {"start_date": "2026-09-01", "end_date": "2026-10-01", "frequency": "MONTHLY", "label": "September 2026"},
+      "components": ["CORE_PCE", "PERSONAL_INCOME", "PERSONAL_SPENDING"]
+    }
+  ]
+}
