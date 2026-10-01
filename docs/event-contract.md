@@ -1,0 +1,21 @@
+# Event contracts
+
+Engine version is `0.1.0`; raw-observation, canonical-event, entity and configuration schemas are each `1.0`. Constructors reject unsupported schema versions.
+
+## Raw observation
+
+`RawSourceObservation` has source name/version/adapter version/class; item ID and item version; SHA-256 payload hash; content type; observed, ingested and optional published times; optional source reference and raw event type; sorted raw entity identifiers and string metadata; quality flags. The raw payload itself is outside this core contract. Observation ID hashes full source identity, item ID, item version and payload hash. Its result fingerprint hashes the whole immutable record. Inserting an identical observation twice is idempotent; a different record with the same ID is rejected.
+
+## Canonical event
+
+`CanonicalEvent` contains `EventIdentity`, `EventRevision`, lifecycle, confirmation, evidence observation IDs, source classes, title, distinct optional scheduled/announced/published/observed/ingested/effective/updated timestamps, typed scalar facts with optional units, and quality flags. Evidence IDs and facts are sorted and unique. No NaN, infinity or arbitrary executable object is accepted. `EventIdentity` consists of hierarchical `EventType`, `EventScope`, and a stable semantic key. Its event ID is independent of schedule, title and revision. The key must be stable across ingestion; EIE-0 cannot infer one from arbitrary text.
+
+`EventRevision` records number, kind, availability, previous revision number, optional superseded event ID and sorted reason codes. First revision is `ORIGINAL` number 1. Later revisions reference the immediate predecessor. Store insertion requires contiguous numbers and strictly increasing availability. A reschedule changes the schedule while retaining semantic event ID and prior revision. Cancellation is terminal. An actual different semantic event may use `supersedes_event_id`; the store requires the target to be a different event already known by that availability time but does not adjudicate cross-event facts in EIE-0.
+
+`LifecycleState` is separate from `EventWindowState`. The transition table lives in `events/lifecycle.py`. `UPDATED` requires a prior released/post-event/updated/normalized state. `CANCELLED` has no outgoing transition. `RESCHEDULED` can return to scheduled/confirmed or be cancelled. Window state is only a contract in EIE-0; calculation belongs to EIE-1.
+
+Confirmation states are `UNVERIFIED`, `REPORTED`, `CORROBORATED`, `CONFIRMED_PRIMARY`, `DISPUTED`, `RETRACTED`. They are explicit evidence judgments, not inferred from headline count. Typed quality flags include stale, missing/future timestamp, source unavailable, schema changed, unresolved entity, duplicate, conflict, corrected, degraded, invalid unit/scope/revision. The system never treats a flagged record as a healthy zero value.
+
+Scope kinds include symbol, security, company, industry, sector, index, market, macro country and macro global. Direct applicability matches explicit identifiers; broad market/global scopes apply through matching query context. No relationship propagation exists yet. Taxonomy codes are uppercase dot-separated identifiers; family prefixes are validated while new family-specific codes remain possible.
+
+Canonical JSON sorts object keys and unordered sets, emits UTF-8, preserves explicit nulls, rejects non-finite numbers and unknown object types. SHA-256 fingerprints have domain prefixes separated by a NUL byte. `event_payload_fingerprint` hashes all canonical payload fields except revision metadata/schema; `result_fingerprint` hashes the entire event record. Configuration has its own domain. These hashes exclude secrets and runtime memory state.

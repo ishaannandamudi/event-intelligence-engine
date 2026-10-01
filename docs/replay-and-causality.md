@@ -1,0 +1,9 @@
+# Replay and causality
+
+**Known now** means a record was available to EIE at or before `as_of_ns`. **Known later** must not enter that view. All canonical times are nonnegative signed-64-bit UTC nanoseconds since Unix epoch. Conversion from `datetime` requires an aware timezone, normalizes to UTC and uses integer arithmetic. Python `datetime` has microsecond precision, so conversion back rejects nanoseconds not divisible by 1,000 rather than truncating them.
+
+World/valid times include a scheduled time and an effective time. Source publication, observation and ingestion are distinct arrival stages. `EventRevision.available_from_ns` is knowledge time. The model requires publication/observation/ingestion/last update (when present) no later than revision availability. The store additionally requires all raw evidence to have been ingested by availability. A future schedule is valid if its existence is already known. It is not future information by itself.
+
+For `known_as_of(T)`, the store chooses the latest revision of each semantic event whose availability is `<= T`; absent events are omitted. Thus a 14:03 release is absent at 14:02; a 14:10 correction does not change the 14:09 view; tomorrow's known reschedule does not rewrite yesterday's schedule. Queries are ordered by semantic event ID, independent of insertion order. Optional direct scope and event-time interval filtering is applied after selecting the historically visible revision. `ReplayClock` only advances from explicit caller input and never reads wall time.
+
+In-memory persistence retains history and is deterministic but not durable. EIE-0 does not implement the full bitemporal analytics, source-outage replay, or final `EventIntelligenceSnapshot`. Those later systems must preserve these availability rules.
