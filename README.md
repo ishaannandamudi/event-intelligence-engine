@@ -2,15 +2,15 @@
 
 EIE is a standalone, provider-neutral foundation for descriptive event intelligence. Its first priority is answering what was knowable at an exact time. It does not produce trade instructions.
 
-**Status:** EIE-10 entity relationships and exposure graph, version `1.1.0`.
-Source-backed bitemporal relationships support typed exposure, bounded traversal,
-separate event propagation candidates and immutable historical restart. EIE-9's
-prior-fitted abnormal returns, CAR, diagnostics and uncertainty remain independent.
-Relationship, impact and event-study schemas are `1.0`; SQLite store schema is `1.4`.
+**Status:** EIE-11 structured claim/evidence and multi-source resolution, version `1.2.0`.
+Source-backed claims preserve alternatives, categorical field resolution, independent
+corroboration, conservative event aliases and historical correction/merge/split replay.
+Relationship exposure and empirical impact remain separate.
+Claim/evidence, relationship, impact and event-study schemas are `1.0`; SQLite is `1.5`.
 All prior public schemas remain `1.0`. Zero runtime dependencies.
 See [event studies](docs/event-studies.md), [alignment](docs/market-data-alignment.md),
 [influence/decay](docs/event-influence-decay.md), [counterfactual impact](docs/counterfactual-impact.md)
-and [EIE-10 completion](docs/EIE-10-completion.md). Graph contracts are documented in
+and [EIE-11 completion](docs/EIE-11-completion.md). Graph contracts are documented in
 [relationships](docs/entity-relationship-graph.md), [exposure](docs/exposure-graph.md),
 [replay](docs/graph-replay.md) and [event propagation](docs/event-propagation.md).
 
@@ -427,10 +427,10 @@ The accepted timestamp and EIE knowledge time are distinct when observation or i
 
 ## Scope
 
-EIE-0 through EIE-10 provide canonical/replay contracts, scheduled/official/SEC/corporate
+EIE-0 through EIE-11 provide canonical/replay contracts, scheduled/official/SEC/corporate
 events, numerical surprise, durable acquisition, historical builds, raw studies and
-counterfactual estimates, plus sourced relationship graphs and propagation candidates.
-Arbitrary claim/evidence graphs, unscheduled NLP, novelty,
+counterfactual estimates, sourced relationship graphs, propagation candidates and
+structured claim/evidence resolution with conservative event deduplication. Unscheduled NLP, novelty,
 materiality, analogues, collision modeling, final services and downstream integration
 remain deferred. Trading and execution are outside the engine's purpose.
 The [master roadmap](docs/EIE_MASTER_SPEC.md) defines later phases.
@@ -468,3 +468,37 @@ Small timestamps illustrate logical clocks; production inputs use UTC nanosecond
 The [offline profile](benchmarks/entity_relationship_graph.py) measures ingestion,
 adjacency, depth-two traversal, paths, propagation, storage and verified restart:
 `PYTHONPATH=src python benchmarks/entity_relationship_graph.py --nodes 2000`.
+
+## Offline multi-source claim/evidence example
+
+```sh
+PYTHONPATH=src:. python examples/evidence_demo.py
+```
+
+The runnable example ingests provider A's earnings schedule into raw metadata,
+precise hashed evidence and a semantic time claim. Provider B produces a duplicate
+candidate and canonical alias group with two independent supporting origins. Provider C's
+conflicting time remains retained. A later official correction resolves the time field,
+preserving the old value, evidence, source event revisions and earlier grouping.
+It replays before/after the correction, freezes the complete cutoff, persists/restarts
+and asserts byte-identical claim and event resolution. Output includes fingerprints.
+
+```python
+from eie.evidence.engine import EvidenceEngine
+from eie.evidence.queries import EvidenceQueries
+from eie.evidence.repository import EvidenceRepository
+
+repository = EvidenceRepository(sqlite_store)
+engine = EvidenceEngine(repository)
+receipt = engine.ingest(configured_provider, structured_batch)
+queries = EvidenceQueries(repository, configured_provider.dataset.dataset_id)
+field = queries.resolution(semantic_claim_id, known_as_of_ns=400)
+group = queries.event_group(source_event_id, known_as_of_ns=400)
+saved_claims, saved_event_run = engine.freeze(queries, known_as_of_ns=400)
+```
+
+The code above assumes the named typed inputs; the executable example supplies them.
+See [claim/evidence](docs/claim-evidence-graph.md), [deduplication](docs/multi-source-deduplication.md),
+[claim resolution](docs/claim-resolution.md) and [evidence replay](docs/evidence-replay.md).
+Run the representative [profile](benchmarks/evidence_profile.py):
+`PYTHONPATH=src:. python benchmarks/evidence_profile.py`.

@@ -123,3 +123,11 @@ are not implemented. Completeness and source truth are assertions, not independe
 authenticated facts. Pure artifact checks prove internal consistency; repository checks
 also recalculate from retained historical claims. See [exposure](exposure-graph.md),
 [propagation](event-propagation.md) and [persistence](persistence.md).
+
+## EIE-11 claim/evidence boundary
+
+The exposure graph and claim/evidence graph retain separate models and traversal semantics.
+Evidence claims can reference existing relationship edge/node IDs and typed exposure values;
+this does not add inferred relationships, compose exposures or alter direct event scope.
+Source-family corroboration and field-level unresolved resolution belong to the evidence
+layer. EIE-10 behavior remains stable. See [claim/evidence](claim-evidence-graph.md).

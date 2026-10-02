@@ -111,7 +111,7 @@ def test_module_entry_point_is_explicit(tmp_path, monkeypatch, capsys):
     )
     with pytest.raises(SystemExit) as exc:
         runpy.run_module("eie", run_name="__main__")
-    assert exc.value.code == 0 and json.loads(capsys.readouterr().out)["schema_version"] == "1.4"
+    assert exc.value.code == 0 and json.loads(capsys.readouterr().out)["schema_version"] == "1.5"
 
 
 def test_signals_restore_and_require_main_thread():

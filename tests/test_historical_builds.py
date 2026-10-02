@@ -389,7 +389,7 @@ def test_old_database_migration_and_rollback_preserve_live_records(
     conn.close()
     monkeypatch.setattr(migrations, "MIGRATIONS", old)
     with SQLiteEventStore(path) as store:
-        assert store.schema_version == "1.4" and store.get_observation(raw.observation_id) == raw
+        assert store.schema_version == "1.5" and store.get_observation(raw.observation_id) == raw
         store.append_event(event)
         assert store.get_revisions(event.event_id) == (event,)
         assert store.validate() == ()

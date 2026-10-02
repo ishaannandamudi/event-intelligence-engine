@@ -121,3 +121,11 @@ references. Rebuilding an ordered source ledger with the same inputs and version
 deterministic. A changed parser or reconstruction uses new lineage and cannot mutate
 frozen snapshots. Store `1.4` preserves earlier dataset tables and manifests unchanged.
 See [graph replay](graph-replay.md).
+
+## EIE-11 build-bound evidence
+
+An evidence dataset can pin a completed EIE-7 build and exact content fingerprint. Each
+reconstructed assertion's acquisition pins its retained historical fact and acquisition ID, parser, settings,
+reconstruction quality and source availability. Live/backfill copies may share a logical raw
+identity/reference while retaining distinct acquisition rows. Evidence queries require an
+explicit dataset, preventing silent mixing across builds. See [evidence replay](evidence-replay.md).

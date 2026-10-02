@@ -48,3 +48,12 @@ An announced, approved or generic closed deal is not automatically converted int
 parent/subsidiary edge; the source must establish the realized relationship and effective
 semantics. No document extraction or automatic corporate-action graph inference is added.
 See [relationship taxonomy](entity-relationship-graph.md).
+
+## EIE-11 conservative multi-source event aliases
+
+Structured matching reuses EIE-4 corporate identity and exact fiscal period/type. It keeps
+earnings, calls, dividends, splits, management changes and deal lifecycle events distinct.
+M&A retains exact target/acquirer roles; separate deal IDs or effective dates prevent merge.
+Provider formatting and exact-time refinements can support an existing semantic identity.
+Source-item bundles never imply one event. See [deduplication](multi-source-deduplication.md)
+and [claim resolution](claim-resolution.md).

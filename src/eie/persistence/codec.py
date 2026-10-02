@@ -24,6 +24,13 @@ from eie.entities import protocols as entity_protocols
 from eie.entities import sec as registry
 from eie.events import identity, lifecycle, revisions, scope, taxonomy
 from eie.events import models as events
+from eie.evidence import claims as evidence_claims
+from eie.evidence import dedup as evidence_dedup
+from eie.evidence import graph as evidence_graph
+from eie.evidence import matching as evidence_matching
+from eie.evidence import models as evidence_models
+from eie.evidence import references as evidence_references
+from eie.evidence import schema as evidence_schema
 from eie.expectations import consensus, guidance, normalization, observations, queries, units
 from eie.expectations import models as measurements
 from eie.expectations import settings as expectations_settings
@@ -46,6 +53,7 @@ from eie.providers.common import models as official
 from eie.providers.common import settings as official_settings
 from eie.providers.corporate import adapter as corporate_adapter
 from eie.providers.estimates import adapter as estimates_adapter
+from eie.providers.evidence import models as evidence_sources
 from eie.providers.relationships import models as relationship_sources
 from eie.providers.sec import adapter as sec_adapter
 from eie.providers.sec import models as sec
@@ -60,6 +68,14 @@ from eie.studies import queries as study_queries
 from eie.studies import validation as study_validation
 
 MODULES: tuple[ModuleType, ...] = (
+    evidence_claims,
+    evidence_dedup,
+    evidence_graph,
+    evidence_matching,
+    evidence_models,
+    evidence_references,
+    evidence_schema,
+    evidence_sources,
     graph_claims,
     graph_exposure,
     graph_history,

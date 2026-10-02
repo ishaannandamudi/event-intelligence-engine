@@ -50,3 +50,11 @@ and observation histories preserve explicit availability and deterministic
 fingerprints. Domain-separated historical row fingerprints and complete scale
 inputs make normalization auditable. See [expectations and consensus](expectations-and-consensus.md)
 and [surprise intelligence](surprise-intelligence.md).
+
+## EIE-11 claim augmentation
+
+Claims augment existing immutable canonical events. Source observations, precise evidence,
+semantic proposition slots, provider assertions and canonical field resolutions have distinct
+identities. Event aliases retain each original event/revision rather than rewriting scope or
+facts. Claims supporting a group can be queried as field-specific resolutions. See
+[claim/evidence](claim-evidence-graph.md) and [claim resolution](claim-resolution.md).

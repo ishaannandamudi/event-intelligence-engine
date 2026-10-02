@@ -1,4 +1,4 @@
-# EIE architecture through EIE-10
+# EIE architecture through EIE-11
 
 ```text
 Source adapter protocol → immutable RawSourceObservation → EventNormalizer protocol
@@ -120,3 +120,18 @@ persisted snapshots seal their cutoff against later backdated inserts. Local tra
 uses indexed adjacency rather than a permanent in-memory copy of the whole graph.
 Prior event scopes, studies and impact contracts stay independent. See
 [relationships](entity-relationship-graph.md) and [graph replay](graph-replay.md).
+
+## EIE-11 evidence architecture
+
+Configured structured provider → raw metadata/acquisition → normalized hash-pinned field
+references → semantic claims and provider assertion revisions → typed support/conflict/
+correction links → categorical field resolutions → optional structured duplicate candidates
+and immutable event alias groups. One source item and checkpoint commit under the existing
+SQLite transaction. Migration 6 raises the store to `1.5`; evidence schema is `1.0`.
+
+`evidence` separates vocabulary, claims, references/content verification, relationships,
+resolution, matching/blocking, grouping, history, queries, repository, validation and engine.
+`providers/evidence` supplies typed bounded interchange and existing-domain bridges.
+The exposure graph keeps its own semantics. Saved evidence views seal their cutoff;
+independent provider writes at a shared unsealed clock retain both alternatives.
+See [claim/evidence](claim-evidence-graph.md) and [deduplication](multi-source-deduplication.md).

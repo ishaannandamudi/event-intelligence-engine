@@ -1,6 +1,6 @@
 # Event Intelligence Engine (EIE) — Master Specification
 
-**Status:** Master design; implementation completed through EIE-10 (`1.1.0`)<br>
+**Status:** Master design; implementation completed through EIE-11 (`1.2.0`)<br>
 **Planned roadmap:** EIE-0 through EIE-17 (updated by the EIE-5 phase specification)<br>
 **Primary language:** Python<br>
 **Repository name:** `event-intelligence-engine`<br>
@@ -1312,7 +1312,7 @@ provider health and foreground operational controls. Current SEC submissions
 and BLS iCalendar are explicit opt-in sources. All quantitative schemas remain
 `1.0`; runtime/ingestion and persistent-store schemas start at `1.0`.
 See [EIE-6 completion](EIE-6-completion.md), [live ingestion](live-ingestion.md)
-and [persistence](persistence.md). EIE-7 through EIE-10 are implemented below; EIE-11 and later remain deferred.
+and [persistence](persistence.md). EIE-7 through EIE-11 are implemented below; EIE-12 and later remain deferred.
 
 ---
 
@@ -1441,6 +1441,18 @@ Build:
 - deterministic source precedence
 
 **Acceptance:** multiple reports resolve into auditable semantic events instead of duplicate catalysts.
+
+**Implemented:** engine `1.2.0` adds distinct semantic claims/provider assertions, hash-pinned
+normalized evidence references and many-to-many links, typed corrections/retractions and
+independent-source corroboration, unresolved categorical field resolution, structured blocked
+duplicate candidates and complete-link event alias groups. Append-only two-time history,
+exact EIE-7 build/acquisition lineage, atomic source-item checkpoints, sealed saved cutoffs,
+concurrent-provider safety and checked byte-identical restart are supported.
+Claim/evidence schema is `1.0`; additive migration 6 raises SQLite to `1.5`. Prior schemas
+and foundation contracts remain unchanged. Free-form extraction is deferred to EIE-12.
+See [EIE-11 completion](EIE-11-completion.md), [claim/evidence](claim-evidence-graph.md),
+[deduplication](multi-source-deduplication.md), [resolution](claim-resolution.md) and
+[evidence replay](evidence-replay.md).
 
 ---
 

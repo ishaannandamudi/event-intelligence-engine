@@ -83,3 +83,13 @@ bounded paths and processing/schema versions. Sealed persisted cutoffs reject su
 backdated graph writes, including empty source checkpoints. Graph-derived candidates
 retain the original direct event scope and cannot use future relationships. See
 [graph replay](graph-replay.md) and [propagation](event-propagation.md).
+
+## EIE-11 evidence and event resolution history
+
+Claims separate knowledge time from valid intervals; event descriptors retain knowledge
+revisions and supplied event timing. Correction/retraction history is append-only. Later
+merges or splits never rewrite old inputs.
+Completed item clocks cannot backdate; independent providers may commit at one unsealed
+clock. Freeze a complete cutoff atomically before relying on an unfinished ingest wave's
+view as immutable. Historical acquisitions pin their EIE-7 build/fact/acquisition and retain actual local
+clocks separately from qualified source availability. See [evidence replay](evidence-replay.md).

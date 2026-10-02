@@ -1,0 +1,45 @@
+{
+  "candidate_count": 2000,
+  "group_count": 200,
+  "historical_claim_count": 1020,
+  "restart_byte_identical": true,
+  "row_counts": {
+    "ce_assertion_evidence": 4080,
+    "ce_assertions": 2040,
+    "ce_claims": 2000,
+    "ce_receipts": 102,
+    "ce_references": 4080,
+    "observations": 102
+  },
+  "seconds": {
+    "100_evidence_lookups": 0.26604870799928904,
+    "atomic_ingestion": 12.418379458016716,
+    "blocked_candidate_generation": 2.128674834006233,
+    "claim_resolution": 3.080809542007046,
+    "fully_checked_restart": 7.836902917013504,
+    "historical_replay": 1.2283529170090333
+  },
+  "storage_bytes": 26292224,
+  "validated_counts": {
+    "ce_acquisitions": 102,
+    "ce_assertions": 2040,
+    "ce_candidates": 0,
+    "ce_claim_resolutions": 2040,
+    "ce_claims": 2000,
+    "ce_datasets": 1,
+    "ce_descriptors": 0,
+    "ce_event_runs": 0,
+    "ce_receipts": 102,
+    "ce_references": 4080,
+    "ce_relations": 60
+  },
+  "workload": {
+    "claims": 2000,
+    "conflicting_propositions": 20,
+    "corrections": 20,
+    "event_descriptors": 1000,
+    "provider_assertions": 2040,
+    "references": 4080,
+    "source_items": 102
+  }
+}

@@ -63,3 +63,12 @@ vendor bytes still uses the EIE-6/EIE-7 retention and license policy; this adapt
 not grant an entitlement or enable archival. Structured identifiers/exposures may be
 supplied from a SEC disclosure, but filing prose is not parsed or fuzzy-resolved here.
 See [relationships](entity-relationship-graph.md) and [exposure](exposure-graph.md).
+
+## EIE-11 independent origins and conflicts
+
+Evidence providers configure a source family separately from source name/class. Syndicated
+mirrors can share a primary origin; repetitions/revisions never inflate independent support.
+Categorical precedence retains every alternative, and equal-rank disagreement can remain
+unresolved. Predicate-specific policies resolve fields independently. Normalized retention
+requires configured entitlement; raw bytes remain under EIE-6/7 archive policy. See
+[claim resolution](claim-resolution.md) and [claim/evidence](claim-evidence-graph.md).

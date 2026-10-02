@@ -155,3 +155,14 @@ generation commit atomically. Restart validates typed payloads against indexes a
 references, then recalculates snapshots/candidates at their pinned cutoff. Graph writes
 respect an ordered knowledge ledger and persisted snapshots seal their cutoff. No graph
 database dependency or live graph transport is introduced. See [graph replay](graph-replay.md).
+
+## EIE-11 normalized evidence persistence (store 1.5)
+
+Additive migration 6 adds 19 normalized immutable tables for datasets/acquisitions, semantic
+claims, hash-pinned references, assertions and many-to-many evidence links, relationships,
+indexed event descriptors/blocks, canonical resolutions/input links, candidates, event runs/
+groups, source-item checkpoint receipts and sealed cutoffs. A linked raw observation cannot
+be updated. No raw body or fragment is copied into claim rows. Earlier migrations and stored
+payload bytes remain unchanged. Checks cover scalar/index agreement, references, causal
+chains, exact artifact recalculation, atomic rollback and two-connection races. See
+[claim/evidence](claim-evidence-graph.md) and [evidence replay](evidence-replay.md).

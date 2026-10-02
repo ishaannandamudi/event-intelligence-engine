@@ -188,3 +188,13 @@ It stays bound to its canonical event and measurement, retains its result finger
 normalization history, and cannot be newer than the study anchor. Bucket boundaries are
 explicit numeric settings; equality goes to the right bucket. There are no bullish/bearish
 labels, future-calibrated quantiles or regime inference. See [event studies](event-studies.md).
+
+## EIE-11 structured numeric evidence
+
+Numeric claims reuse EIE-5 measurement context, canonical units, actual/previous/revised
+roles, estimate kind/contributor and exact reference periods. These dimensions participate
+in semantic identity, so an actual and prior value or a mean and median cannot collapse.
+Guidance preserves supplied lower/upper/point values, including one-sided ranges, without
+inventing a midpoint. Claim resolution retains provider alternatives and uses categorical
+field-specific policy. Information surprise and consensus calculations remain unchanged.
+See [claim resolution](claim-resolution.md).
