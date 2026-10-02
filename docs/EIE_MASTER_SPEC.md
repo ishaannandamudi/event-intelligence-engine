@@ -1,6 +1,6 @@
 # Event Intelligence Engine (EIE) — Master Specification
 
-**Status:** Master design; implementation completed through EIE-6 (`0.7.0`)<br>
+**Status:** Master design; implementation completed through EIE-7 (`0.8.0`)<br>
 **Planned roadmap:** EIE-0 through EIE-17 (updated by the EIE-5 phase specification)<br>
 **Primary language:** Python<br>
 **Repository name:** `event-intelligence-engine`<br>
@@ -1312,7 +1312,7 @@ provider health and foreground operational controls. Current SEC submissions
 and BLS iCalendar are explicit opt-in sources. All quantitative schemas remain
 `1.0`; runtime/ingestion and persistent-store schemas start at `1.0`.
 See [EIE-6 completion](EIE-6-completion.md), [live ingestion](live-ingestion.md)
-and [persistence](persistence.md). EIE-7 and later phases remain unimplemented.
+and [persistence](persistence.md). EIE-7 is implemented below; EIE-8 and later remain deferred.
 
 ---
 
@@ -1323,6 +1323,18 @@ source archival, and provenance-preserving historical vintage acquisition.
 
 **Acceptance:** auditable historical datasets with explicit vintage coverage and
 causal reconstruction boundaries.
+
+**Implemented:** engine `0.8.0` adds deterministic bounded historical plans,
+resumable page commits, multi-CIK official SEC traversal, retention-controlled raw
+archive, append/index build records, immutable manifests, explicit completeness/
+reconstruction labels, historical queries and isolated archive rebuild/reuse.
+Historical schemas are `1.0`; ordered SQLite migration raises store schema to `1.1`.
+Live/domain/runtime/session contracts remain unchanged. SEC complete metadata-vintage
+coverage and generic licensed/macro historical collectors are not claimed.
+See [EIE-7 completion](EIE-7-completion.md), [historical backfill](historical-backfill.md),
+[manifests](dataset-manifests.md), [archive](source-archive.md) and
+[completeness](data-completeness.md). EIE-8 remains unimplemented.
+
 
 ---
 

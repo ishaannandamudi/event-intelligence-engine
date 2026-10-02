@@ -37,3 +37,19 @@ durable domain session. Recent filing, registry and canonical history commit
 with the resource checkpoint. Restart restores accession/revision/idempotency
 state. Historical references are not followed and documents are not archived.
 See [live ingestion](live-ingestion.md) and [persistence](persistence.md).
+
+## EIE-7 official historical submissions
+
+The historical path traverses current submissions and validated CIK-specific
+referenced history files with one shared contact-configured SEC client. It requests
+metadata only, never filings/exhibits/XBRL. Date partitions select acceptance times;
+the same references can be visited across partitions and exact bytes deduplicate.
+Verified issuer bindings are explicit and pinned; no current name/ticker is stored as
+a historical listing. With the same verified CIK context, historical and live filing,
+raw and canonical event identities coincide. Form 4 unresolved actors remain distinct.
+
+Acceptance timestamps support labeled reconstructed source timing, not verified
+complete metadata vintages. SEC manifests therefore retain unknown-completeness
+assumptions/gaps. Amendment links are reconstructed across visible dataset pages;
+a later amendment cannot appear before acceptance. See
+[historical backfill](historical-backfill.md) and [completeness](data-completeness.md).

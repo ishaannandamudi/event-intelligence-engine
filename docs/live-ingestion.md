@@ -103,3 +103,14 @@ These measurements are not empirical source-latency intelligence.
 
 See [provider runtime](provider-runtime.md), [persistence](persistence.md) and
 [operations](operations.md) for recovery, concurrency and controls.
+
+## Historical coexistence (0.8.0)
+
+The EIE-6 live APIs, checkpoints, observation clocks and durable session layout stay
+in use. EIE-7 stores historical builds in isolated tables on the same SQLite
+transaction boundary, with append/index page commits. A matching live raw observation
+is reused without changing its genuine clock; canonical logical identities remain
+shared when issuer context is pinned. Historical source availability is never written
+as a fabricated live observation time. Multi-CIK SEC backfill and dataset rebuild are
+explicit foreground jobs; live polling does not automatically backfill or claim that
+a recent source window covers downtime. See [historical backfill](historical-backfill.md).

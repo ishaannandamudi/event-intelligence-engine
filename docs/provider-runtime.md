@@ -32,8 +32,8 @@ The acquisition queue is bounded. A full queue rejects that attempt with
 The source must offer the item again through its overlap/resume contract.
 Current SEC polling naturally overlaps the recent submissions response; EIE
 does not promise recovery of items that have already fallen out of a source's
-current window. General downtime gap detection and historical traversal belong
-to EIE-7.
+current window. EIE-7 adds explicit historical jobs and completeness reporting;
+live polling does not automatically schedule those jobs.
 
 ## Retry and rate control
 
@@ -109,3 +109,14 @@ blocking on that connection. On a continuing embedded process, release the
 custom operation and call shutdown again before closing/reusing its database.
 All uncommitted items are retriable. A commit already admitted at the
 shutdown boundary can finish atomically; its committed checkpoint remains valid. Custom sources/processors must respect their bounded runtime contracts.
+
+## Historical provider registration
+
+Historical sources declare resources, range/page/body/item/split bounds, supported
+coverage, point-in-time capability, assumptions, source class and pinned identity
+bindings. Their processors declare adapter/parser versions. A dataset must match the
+trusted registration exactly. Bounded scheduling rotates providers/resources; source
+failures remain scoped while global storage failures abort. The SEC historical
+source shares the existing respectful HTTP client and limiter across its explicit
+watchlist. Generic typed extracts are audited offline inputs, not live licensed
+collection. See [historical backfill](historical-backfill.md).

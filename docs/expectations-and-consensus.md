@@ -168,3 +168,15 @@ coverage and adapter identity caches survive restart. Consensus/surprise queries
 use the existing immutable histories and cutoff rules. Operational transport
 settings and telemetry do not alter their fingerprints. No licensed collector
 is bundled. See [persistence](persistence.md) and [provider runtime](provider-runtime.md).
+
+## Historical vintage inputs
+
+EIE-7 audited structured histories can preserve estimate, actual and guidance
+observations with provider vintages, publication times, units, periods and source
+revision numbers. Dataset queries filter the wrapper's explicit source availability;
+later source revisions never overwrite an older frozen build. Supporting domain
+contracts keep genuine local acquisition clocks, preserving EIE-5 invariants. They
+must not be backdated and inserted into a live expectations engine. Current snapshots
+alone do not establish old consensus or macro correction history; exact historical
+cutoffs require audited provider support. Licensed historical collection and exhaustive
+macro vintage downloading remain absent. See [completeness](data-completeness.md).

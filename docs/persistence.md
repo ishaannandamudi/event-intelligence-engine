@@ -103,3 +103,20 @@ restart layouts. `counts()` exposes row counts. Protect the database and WAL/SHM
 files using operator-controlled filesystem permissions. Use SQLite's backup
 API or a clean shutdown for backups; copying only the main file during active
 WAL writes is unsafe. A backup service is outside EIE-6.
+
+## EIE-7 migration and historical records
+
+Engine 0.8.0 uses persistent-store schema **1.1**. Ordered migration 2 adds historical
+jobs/partitions/progress, archive object metadata, accepted and failed acquisitions,
+raw observations, indexed typed facts, lineage, gaps, operation records and frozen
+manifests. Migration 1 and existing EIE-6 rows/session layout remain unchanged;
+failed DDL rolls back, and unknown/partial schemas are refused.
+
+Linked historical page writes require the current thread's owned transaction.
+Durable page metadata/data precedes any progress increase; SQLite commits all linked
+records or rolls back all of them. Raw byte publication precedes the database commit
+and may leave an unreferenced object after a crash. SQL triggers freeze finalized
+builds, including updates that try to move rows into another frozen build. Archive
+byte verification is performed by `validate_dataset` because SQLite alone cannot
+certify filesystem content. See [archive](source-archive.md) and
+[manifests](dataset-manifests.md).

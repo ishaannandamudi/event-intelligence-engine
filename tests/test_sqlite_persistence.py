@@ -78,7 +78,7 @@ def test_reopen_atomic_checkpoint_and_rollback(tmp_path, raw, event):
     path = tmp_path / "state.sqlite"
     cp = Checkpoint("SYNTH_A", "recent", 1, 100, 210, Cursor(CursorKind.OPAQUE, "resume-value"))
     with SQLiteEventStore(path) as db:
-        assert db.schema_version == "1.0"
+        assert db.schema_version == "1.1"
         with pytest.raises(PersistenceError):
             db.advance_checkpoint(cp, 0)
         with pytest.raises(RuntimeError), db.transaction():

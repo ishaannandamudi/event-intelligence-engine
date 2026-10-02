@@ -2,7 +2,15 @@
 
 EIE is a standalone, provider-neutral foundation for descriptive event intelligence. Its first priority is answering what was knowable at an exact time. It does not produce trade instructions.
 
-**Status:** EIE-6 live provider transport and continuous ingestion infrastructure, version `0.7.0`. Durable SQLite, atomic data/checkpoints, bounded HTTP, polling, queues, recovery and operations now complement the existing causal event and expectations engines. Runtime and providers remain disabled by default. All domain schemas remain `1.0`. See [live ingestion](docs/live-ingestion.md), [persistence](docs/persistence.md), [provider runtime](docs/provider-runtime.md) and [operations](docs/operations.md).
+**Status:** EIE-7 historical backfill, dataset construction and source archival,
+version `0.8.0`. Bounded resumable jobs, official SEC multi-CIK history traversal,
+retention-controlled content-addressed archives, immutable manifests and explicit
+archive rebuild now complement live ingestion. Runtime providers remain opt-in.
+All domain/runtime schemas remain `1.0`; historical contracts start at `1.0` and
+SQLite store schema is `1.1`. See [historical backfill](docs/historical-backfill.md),
+[manifests](docs/dataset-manifests.md), [archive](docs/source-archive.md),
+[completeness](docs/data-completeness.md) and [completion report](docs/EIE-7-completion.md).
+
 
 ## Install and check
 
@@ -18,6 +26,34 @@ python3.11 -m venv .venv
 .venv/bin/ruff format --check .
 .venv/bin/mypy src
 ```
+
+## Offline historical build, restart and archive replay
+
+```sh
+PYTHONPATH=src python examples/historical_rebuild.py
+```
+
+The [runnable example](examples/historical_rebuild.py) defines synthetic `[10,20)`
+history, plans two partitions, runs one page, closes/reopens SQLite, resumes, archives
+eligible bytes, creates and validates a frozen manifest, queries at 14/19 and rebuilds
+from the archive with an identical content fingerprint. It uses no internet.
+
+```python
+from pathlib import Path
+from tempfile import TemporaryDirectory
+from examples.historical_rebuild import demo
+
+with TemporaryDirectory() as directory:
+    result = demo(Path(directory))
+    assert result["partitions"] == 2
+    assert result["events"] == 2
+    assert result["rebuild_matches"] is True
+```
+
+Historical CLI controls include `backfill plan/run/resume/status` and
+`dataset manifest/validate/events-as-of/rebuild`. See [operations](docs/operations.md)
+for bounded offline inputs and explicit SEC live setup. Historical queries report
+source reconstruction assumptions separately from actual EIE acquisition clocks.
 
 ## Offline durable ingestion and restart
 

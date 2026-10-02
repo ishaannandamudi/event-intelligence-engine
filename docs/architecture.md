@@ -72,3 +72,14 @@ worker counts cannot contaminate canonical fingerprints. Current SEC submissions
 and BLS iCalendar have opt-in sources. Fed/BEA remain audited-extract adapters.
 See [live ingestion](live-ingestion.md), [persistence](persistence.md),
 [provider runtime](provider-runtime.md) and [operations](operations.md).
+
+## EIE-7 historical construction
+
+`backfill` owns pure plans, bounded page scheduling, SEC traversal, reuse and explicit
+archive rebuild. `archive` owns bounded retained bytes and acquisition metadata.
+`datasets` owns isolated append/index records, lineage, immutable manifests,
+validation and build-bound queries. All use the existing serialized SQLite
+transaction boundary; historical page commits do not copy live durable sessions.
+Source availability is stored in a wrapper beside honestly acquired domain/raw
+contracts. This preserves established live clock invariants. See
+[historical backfill](historical-backfill.md) and [dataset manifests](dataset-manifests.md).

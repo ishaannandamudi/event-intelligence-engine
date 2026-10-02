@@ -7,6 +7,8 @@ from enum import Enum
 from types import ModuleType
 from typing import cast
 
+from eie.archive import models as archive_models
+from eie.backfill import models as backfill_models
 from eie.config import settings as config
 from eie.core import quality
 from eie.core.errors import EIEError, PersistenceError
@@ -16,6 +18,7 @@ from eie.corporate import models as corporate
 from eie.corporate import queries as corporate_queries
 from eie.corporate import settings as corporate_settings
 from eie.corporate import types as corporate_types
+from eie.datasets import models as dataset_models
 from eie.entities import models as entities
 from eie.entities import protocols as entity_protocols
 from eie.entities import sec as registry
@@ -40,6 +43,9 @@ from eie.sources import models as sources
 from eie.sources import trust
 
 MODULES: tuple[ModuleType, ...] = (
+    archive_models,
+    backfill_models,
+    dataset_models,
     config,
     quality,
     actions,

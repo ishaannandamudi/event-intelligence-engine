@@ -35,3 +35,14 @@ enable raw retention. Quarantine suppresses repeated normalization of identical
 malformed content. Source failure never certifies event absence. SEC contact
 identity stays out of domain settings and persistence.
 See [live ingestion](live-ingestion.md) and [operations](operations.md).
+
+## Historical storage and trust
+
+Raw historical retention defaults to metadata only. Bounded raw requires explicit
+allowed permission and size bounds; restricted/unknown entitlement never enables
+raw storage. Source class is pinned in the historical definition and cannot be
+upgraded by provider bytes or normalized output. Contacts stay in runtime configuration.
+Acquisition clock, source availability and replay clock are separately recorded.
+Exact availability claims require provider evidence and are qualified by coverage/
+reconstruction labels. See [archive policy](source-archive.md) and
+[completeness](data-completeness.md).

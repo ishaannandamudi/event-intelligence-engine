@@ -33,3 +33,16 @@ publication/effective time. Atomic checkpoints cannot skip uncommitted data.
 Restart and overlapping polls preserve old record clocks and query fingerprints.
 Operational generations, health, rate windows and latencies are separate.
 See [persistence](persistence.md) and [live ingestion](live-ingestion.md).
+
+## Historical dataset replay
+
+EIE-7 separates source historical availability from actual EIE acquisition. A
+`DatasetReader` is explicitly bound to a frozen build and filters on audited exact
+source cutoffs. Canonical projections omit local observed/ingested/last-updated
+clocks. Supporting historical facts retain original acquisition provenance;
+archive replay records a separate replay clock. Coarse/current/unknown histories
+are excluded from exact queries, and revision conflicts fail latest selection.
+Later discovery/reprocessing does not change an older build. These source projections
+are subject to [reconstruction assumptions](data-completeness.md), including SEC's
+unproven complete metadata-vintage history. They do not replace live knowledge-time
+semantics or establish causal proof.

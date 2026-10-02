@@ -7,6 +7,7 @@ import sys
 from collections.abc import Sequence
 from pathlib import Path
 
+from eie.backfill.cli import add_commands, execute
 from eie.config.settings import Settings
 from eie.core.errors import EIEError, ValidationError
 from eie.core.serialization import canonical_json_bytes
@@ -41,6 +42,7 @@ def parser() -> argparse.ArgumentParser:
         mode = command.add_mutually_exclusive_group(required=True)
         mode.add_argument("--live", action="store_true")
         mode.add_argument("--fixture", type=Path)
+    add_commands(commands)
     return result
 
 
@@ -84,6 +86,10 @@ def main(argv: Sequence[str] | None = None) -> int:
     store: SQLiteEventStore | None = None
     close_store = True
     try:
+        if args.command in ("backfill", "dataset"):
+            historical_output, code = execute(args)
+            print(canonical_json_bytes(historical_output).decode())
+            return code
         clock = SystemClock()
         configured = registration(args, clock) if args.command in ("ingest-once", "run") else None
         store = SQLiteEventStore(args.database)
