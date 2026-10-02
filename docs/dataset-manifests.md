@@ -96,3 +96,14 @@ Mixing incompatible event builds is refused. Adding store migration 1.2 preserve
 1.1 manifests and content fingerprints; validation accepts that supported prior layout.
 Old engine-pinned archive rebuilds still require their matching installed processing code
 or explicit new-version reprocessing. See [event studies](event-studies.md).
+
+## EIE-9 model linkage
+
+Impact specs/results pin the raw study and its selected historical fact/revision, build
+content and reconstruction quality, plus exact market, benchmark, factor and control/
+feature dataset hashes/versions. Impact-run manifests seal model IDs, result fingerprints,
+dataset pins, selected members and failure/contamination counts. Different historical
+builds cannot be silently mixed. Store migration 1.3 preserves earlier manifests and
+studies byte-for-byte; it adds separate immutable model/fit/result/sensitivity/run tables.
+Retained exact inputs permit recalculation but do not certify a provider's asserted
+point-in-time completeness. See [counterfactual impact](counterfactual-impact.md).

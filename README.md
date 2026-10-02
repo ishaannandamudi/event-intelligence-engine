@@ -2,13 +2,15 @@
 
 EIE is a standalone, provider-neutral foundation for descriptive event intelligence. Its first priority is answering what was knowable at an exact time. It does not produce trade instructions.
 
-**Status:** EIE-8 descriptive event studies and influence/decay, version `0.9.0`.
-Supplied historical market data supports explicit anchors/windows, raw responses,
-contamination flags and prior-only descriptors against frozen EIE-7 builds.
-Event-study schema is `1.0`; SQLite store schema is `1.2`. Existing quantitative
+**Status:** EIE-9 abnormal returns and counterfactual impact estimates, version `1.0.0`.
+Supplied historical market/factor/control data supports explicit prior fitting windows,
+five transparent model classes, period abnormal returns, CAR, diagnostics, uncertainty,
+and contamination sensitivity against validated raw EIE-8 studies.
+Impact and event-study schemas are `1.0`; SQLite store schema is `1.3`. Existing quantitative
 schemas remain `1.0`. Zero runtime dependencies; no market fetcher or trading logic.
 See [event studies](docs/event-studies.md), [alignment](docs/market-data-alignment.md),
-[influence/decay](docs/event-influence-decay.md) and [completion](docs/EIE-8-completion.md).
+[influence/decay](docs/event-influence-decay.md), [counterfactual impact](docs/counterfactual-impact.md)
+and [completion](docs/EIE-9-completion.md).
 
 
 ## Install and check
@@ -45,7 +47,42 @@ Profile 10,000 events, two window definitions and a sector series with:
 PYTHONPATH=src:. python benchmarks/event_studies.py
 ```
 
-EIE-8 measures observed responses; abnormal-return/counterfactual models remain EIE-9.
+## Offline counterfactual impact and deterministic restart
+
+```sh
+PYTHONPATH=src:. python examples/counterfactual_impact.py
+```
+
+The [runnable example](examples/counterfactual_impact.py) loads a validated raw study,
+supplies exact prior target/market periods, fits alpha/beta on `[-250m,-20m]`, and
+computes expected period returns, abnormal curves and independent CAR windows. It
+prints normal OLS uncertainty and diagnostics, compares sector, supplied-factor and
+matched-control models, reports include/exclude contamination variants, persists models,
+fits, results, sensitivity and a run, and verifies a byte-identical reload. It preserves
+model disagreement without choosing a winner. These are descriptive model-based
+residuals, **not causal proof**. Information surprise and raw responses remain separate.
+
+```python
+from pathlib import Path
+from tempfile import TemporaryDirectory
+from examples.counterfactual_impact import demo
+
+with TemporaryDirectory() as directory:
+    result = demo(Path(directory))
+    assert result["restart_byte_identical"]
+    assert result["models"]["MARKET_MODEL"]["observations"] == 230
+    assert result["contamination_variants"] == 2
+```
+
+Profile distinct daily-window events and a bounded persisted sample:
+
+```sh
+PYTHONPATH=src:. python benchmarks/counterfactual_impact.py --events 1000
+```
+
+The profile accepts up to 10,000 events and reports fitting, CAR, control matching,
+validation, storage and indexed query timings. No timing threshold is enforced.
+See [abnormal returns](docs/abnormal-returns.md) and [matched controls](docs/matched-controls.md).
 
 ## Offline historical build, restart and archive replay
 
@@ -388,11 +425,11 @@ The accepted timestamp and EIE knowledge time are distinct when observation or i
 
 ## Scope
 
-EIE-5 adds offline expectations, consensus, actual/previous/revised-previous values,
-earnings and macro component surprises, guidance, and strictly prior historical
-normalization alongside EIE-4 corporate events, EIE-3 SEC metadata, and EIE-2
-official sources. Live collection, durable storage, filing NLP, event studies,
-relationship graphs, trading, HTTP services, and MCE/AME integration remain deferred.
+EIE-0 through EIE-9 provide canonical/replay contracts, scheduled/official/SEC/corporate
+events, numerical surprise, durable acquisition, historical builds, raw studies and
+counterfactual estimates. Relationship/evidence graphs, unscheduled NLP, novelty,
+materiality, analogues, collision modeling, final services and downstream integration
+remain deferred. Trading and execution are outside the engine's purpose.
 The [master roadmap](docs/EIE_MASTER_SPEC.md) defines later phases.
 
 See [architecture](docs/architecture.md), [event contracts](docs/event-contract.md), [source policy](docs/source-policy.md), and [replay and causality](docs/replay-and-causality.md).

@@ -1,4 +1,4 @@
-# EIE architecture through EIE-8
+# EIE architecture through EIE-9
 
 ```text
 Source adapter protocol → immutable RawSourceObservation → EventNormalizer protocol
@@ -92,3 +92,14 @@ contamination → immutable indexed study definitions/results/run manifests → 
 cohort distributions and sampled influence/decay. Retained bounded input slices permit
 pure recalculation without becoming a market-data warehouse. Domain/live caches and
 existing event identities remain unchanged. See [event studies](event-studies.md).
+
+## EIE-9 counterfactual architecture
+
+Validated raw study + explicit supplied prior target/benchmark/factor/control history →
+causal input projection + pinned model spec → exact paired-period fit/match diagnostics →
+period abnormal returns + independent CAR + justified uncertainty → immutable indexed
+model/fit/result/set/run storage. The impact package separates inputs/models, estimation,
+regression/fitting, controls, abnormal, uncertainty, diagnostics, sensitivity, engine,
+queries, repository and validation. Every result preserves its raw study and historical
+fact/build/reconstruction qualification. No model winner is chosen from post-event
+performance. See [counterfactual impact](counterfactual-impact.md).

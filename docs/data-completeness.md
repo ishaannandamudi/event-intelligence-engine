@@ -67,3 +67,15 @@ Missing prices never become zero returns. Relative volume requires prior matchin
 session buckets; absent/zero baselines remain unavailable. Unadjusted prices carry action
 risk, and known split windows suppress price/volatility measures. Per-offset sample counts
 and unavailable reasons accompany decay/aggregates. See [event studies](event-studies.md).
+
+## EIE-9 fit and counterfactual limitations
+
+Insufficient paired history, zero benchmark variance, singular/ill-conditioned factors,
+missing event-window inputs, poor/fewer-than-K controls, target/control contamination,
+gaps, coarse event timing, reconstruction limits and unresolved actions remain visible.
+Missing returns or uncertainty never become zero. Compatibility failures are hard
+rejections. Prior-only supplied feature scaling cannot substantiate an omitted universe
+or contamination history. Factor/feature vintage availability must be audited; current
+revised datasets cannot stand in for unknown historical vintages. Normal OLS/CAR bands
+state homoskedasticity and residual-independence assumptions, with no causal proof.
+See [matched controls](matched-controls.md) and [abnormal returns](abnormal-returns.md).

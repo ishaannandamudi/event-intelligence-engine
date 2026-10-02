@@ -1,6 +1,6 @@
 # Event Intelligence Engine (EIE) — Master Specification
 
-**Status:** Master design; implementation completed through EIE-8 (`0.9.0`)<br>
+**Status:** Master design; implementation completed through EIE-9 (`1.0.0`)<br>
 **Planned roadmap:** EIE-0 through EIE-17 (updated by the EIE-5 phase specification)<br>
 **Primary language:** Python<br>
 **Repository name:** `event-intelligence-engine`<br>
@@ -1312,7 +1312,7 @@ provider health and foreground operational controls. Current SEC submissions
 and BLS iCalendar are explicit opt-in sources. All quantitative schemas remain
 `1.0`; runtime/ingestion and persistent-store schemas start at `1.0`.
 See [EIE-6 completion](EIE-6-completion.md), [live ingestion](live-ingestion.md)
-and [persistence](persistence.md). EIE-7 is implemented below; EIE-9 and later remain deferred.
+and [persistence](persistence.md). EIE-7 through EIE-9 are implemented below; EIE-10 and later remain deferred.
 
 ---
 
@@ -1365,7 +1365,7 @@ raises SQLite to `1.2`. Existing domain/runtime/historical schemas are unchanged
 No live market collector, causal/counterfactual model or trading logic is introduced.
 See [EIE-8 completion](EIE-8-completion.md), [event studies](event-studies.md),
 [alignment](market-data-alignment.md) and [influence/decay](event-influence-decay.md).
-EIE-9 remains deferred.
+EIE-9 is implemented below.
 
 
 ---
@@ -1383,6 +1383,18 @@ Add:
 Preserve raw reaction alongside residualized reaction.
 
 **Acceptance:** stronger descriptive event-reaction attribution without claiming proof of causation.
+
+**Implemented:** engine `1.0.0` adds pinned prior estimation windows, exact compatible
+close-to-close periods, market/sector-adjusted baselines, stable small OLS market/factor
+models, transparent supplied matched controls, abnormal returns, independent CAR windows,
+normal OLS uncertainty, fit diagnostics, contamination sensitivity and immutable indexed
+model/result/set/run persistence. Impact schema is `1.0`; migration 4 raises store to
+`1.3`. All prior public schemas remain `1.0`. Raw studies and information surprise stay
+separate. No causal-identification claim, post-event model ranking or trading logic is
+introduced. See [EIE-9 completion](EIE-9-completion.md),
+[counterfactual impact](counterfactual-impact.md), [abnormal returns](abnormal-returns.md)
+and [matched controls](matched-controls.md). EIE-10 remains deferred.
+
 
 ---
 

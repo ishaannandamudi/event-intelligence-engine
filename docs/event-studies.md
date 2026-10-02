@@ -1,8 +1,9 @@
 # Descriptive event studies
 
 EIE-8 answers **what happened around an event**. Raw event-window movements, sector
-comparisons and response persistence do not establish causal attribution. Counterfactual
-and abnormal-return models remain EIE-9 work. There are no forecasts or trade labels.
+comparisons and response persistence do not establish causal attribution. Raw responses
+are separate from EIE-9's [model-based abnormal returns](counterfactual-impact.md).
+There are no trade labels or causal-identification claims.
 
 ## Reproducible inputs
 
@@ -126,3 +127,11 @@ Inputs are capped at 100,000 observations/metadata per series (configurably lowe
 1,000 response offsets, and 20 MB serialized persisted result. Windows must finish by the
 explicit market cutoff. See [influence/decay](event-influence-decay.md) for persistence of
 observed response magnitude.
+
+## EIE-9 consumption
+
+A validated raw result is retained unchanged inside `EventImpactResult`; its cumulative
+reference-price curve is never summed to form CAR. The impact layer derives compatible
+period returns and applies a declared prior-fitted benchmark/factor/control model.
+Information surprise, raw response and abnormal response stay separate. See
+[counterfactual impact](counterfactual-impact.md) and [abnormal returns](abnormal-returns.md).

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "event-intelligence-engine"
-version = "0.9.0"
+version = "1.0.0"
 description = "Causal, replayable event intelligence contracts"
 readme = "README.md"
 requires-python = ">=3.11"

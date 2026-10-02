@@ -129,3 +129,13 @@ unchanged; failed DDL rolls back. Study results retain bounded exact inputs, def
 source dataset pins and deterministic hashes. Reads verify scalar indexes, content hashes
 and recalculated measurements; writes also bind the historical fact/revision/quality and
 manifest. Completed artifacts have update/delete refusal triggers. See [event studies](event-studies.md).
+
+## EIE-9 model persistence (store 1.3)
+
+Ordered migration 4 adds indexed immutable impact model/spec/fit, result, sensitivity
+set and run tables. All previous DDL remains intact. Appends verify the original study
+through EIE-8's historical build/fact checks in the same transaction; failed runs/sets
+leave no partial artifacts. Reloads compare scalar indexes, separately retained spec/
+fit payloads, member/raw-study references, exact recalculation and fingerprints. UPDATE/
+DELETE triggers enforce completed-artifact immutability. As-of result availability is
+strictly prior to the query. See [counterfactual impact](counterfactual-impact.md).

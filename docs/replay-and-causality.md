@@ -57,3 +57,15 @@ excludable even after completion. Later corrected events cannot replace an origi
 persisted study. Retained market inputs and source fingerprints support byte-identical
 recalculation. Reconstructed study availability is an evidence/replay cutoff, not a
 backdated claim of actual EIE computation. See [alignment](market-data-alignment.md).
+
+## EIE-9 counterfactual replay
+
+A model pins its original raw study, event fact/revision, frozen build, market/factor/
+control/feature inputs, estimation/event windows and versioned policies. Fit periods
+and their availability strictly precede both event and fit cutoff. Control snapshots/
+scaling populations are prior-only. Event factors use the study data cutoff; future
+control features and unavailable observations are projected out. Later event corrections
+do not replace a historical model. As-of impact queries require anchor and complete
+result availability strictly before T. Replay availability is an evidence cutoff, not
+an assertion that EIE actually computed a reconstructed result in the past. Model-based
+residuals are descriptive and do not prove causation. See [counterfactual impact](counterfactual-impact.md).

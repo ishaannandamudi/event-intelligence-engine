@@ -28,6 +28,10 @@ from eie.expectations import consensus, guidance, normalization, observations, q
 from eie.expectations import models as measurements
 from eie.expectations import settings as expectations_settings
 from eie.filings import models as filings
+from eie.impact import inputs as impact_inputs
+from eie.impact import models as impact_models
+from eie.impact import sensitivity as impact_sensitivity
+from eie.impact import validation as impact_validation
 from eie.ingestion import models as operations
 from eie.providers.common import ingestion as official_ingestion
 from eie.providers.common import models as official
@@ -47,6 +51,10 @@ from eie.studies import queries as study_queries
 from eie.studies import validation as study_validation
 
 MODULES: tuple[ModuleType, ...] = (
+    impact_inputs,
+    impact_models,
+    impact_sensitivity,
+    impact_validation,
     market,
     study_models,
     aggregation,

@@ -4,8 +4,8 @@ import sqlite3
 
 from eie.core.errors import PersistenceError
 
-STORE_SCHEMA_VERSION = "1.2"
-MIGRATION_VERSIONS = ("1.0", "1.1", "1.2")
+STORE_SCHEMA_VERSION = "1.3"
+MIGRATION_VERSIONS = ("1.0", "1.1", "1.2", "1.3")
 MIGRATIONS: tuple[tuple[str, ...], ...] = (
     (
         "CREATE TABLE schema_migrations(version INTEGER PRIMARY KEY, schema_version TEXT NOT NULL)",
@@ -135,6 +135,32 @@ MIGRATIONS: tuple[tuple[str, ...], ...] = (
         f"CREATE TRIGGER immutable_{table}_{action.lower()} BEFORE {action} ON {table} "
         "BEGIN SELECT RAISE(ABORT,'immutable study artifact'); END"
         for table in ("study_definitions", "study_results", "study_runs")
+        for action in ("UPDATE", "DELETE")
+    ),
+    (
+        "CREATE TABLE impact_models(id TEXT PRIMARY KEY,study_id TEXT NOT NULL REFERENCES "
+        "study_results(id),build_id TEXT NOT NULL REFERENCES dataset_manifests(build_id),"
+        "event_id TEXT NOT NULL,instrument TEXT NOT NULL,anchor INTEGER NOT NULL,"
+        "event_type TEXT NOT NULL,model_type TEXT NOT NULL,inputs TEXT NOT NULL,"
+        "spec BLOB NOT NULL,fit BLOB NOT NULL)",
+        "CREATE INDEX impact_event ON impact_models(event_id,instrument,anchor)",
+        "CREATE INDEX impact_class ON impact_models(build_id,event_type,model_type,anchor)",
+        "CREATE INDEX impact_instrument ON impact_models(instrument,anchor)",
+        "CREATE TABLE impact_results(id TEXT PRIMARY KEY,model_id TEXT NOT NULL UNIQUE "
+        "REFERENCES impact_models(id),available INTEGER NOT NULL,fingerprint TEXT NOT NULL,"
+        "payload BLOB NOT NULL)",
+        "CREATE INDEX impact_available ON impact_results(available,id)",
+        "CREATE TABLE impact_sets(id TEXT PRIMARY KEY,study_id TEXT NOT NULL REFERENCES "
+        "study_results(id),payload BLOB NOT NULL)",
+        "CREATE INDEX impact_set_study ON impact_sets(study_id,id)",
+        "CREATE TABLE impact_runs(id TEXT PRIMARY KEY,build_id TEXT NOT NULL REFERENCES "
+        "dataset_manifests(build_id),payload BLOB NOT NULL)",
+        "CREATE INDEX impact_run_build ON impact_runs(build_id,id)",
+    )
+    + tuple(
+        f"CREATE TRIGGER immutable_{table}_{action.lower()} BEFORE {action} ON {table} "
+        "BEGIN SELECT RAISE(ABORT,'immutable impact artifact'); END"
+        for table in ("impact_models", "impact_results", "impact_sets", "impact_runs")
         for action in ("UPDATE", "DELETE")
     ),
 )

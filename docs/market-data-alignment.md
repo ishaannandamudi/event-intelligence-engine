@@ -66,3 +66,14 @@ Missing action knowledge is not proof that the unadjusted interval is safe. Adju
 is preferable for these studies. Raw ex-dividend price movement is distinct from total
 return. Asset/benchmark comparisons and aggregations reject incompatible adjustment or
 return semantics; log-vs-simple method is independently pinned in the policy/cohort.
+
+## EIE-9 period alignment
+
+Counterfactual fitting/application uses adjacent close-to-close periods from the exact
+validated study dataset, preserving raw EIE-8 reference curves separately. Target and
+benchmark/factors/controls must share timeframe, adjustment, price/total-return and
+simple/log semantics, supplied session geometry and exact period boundaries. Estimation
+uses observations strictly before its explicit cutoff, with a declared exclusion gap.
+Daily parameters are never silently applied intraday. Active-session gaps and partial
+intraday bars invalidate affected periods; declared closures are the only permitted
+bridges. Anchor-spanning periods are excluded. See [abnormal returns](abnormal-returns.md).
