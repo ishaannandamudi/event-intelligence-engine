@@ -1,4 +1,4 @@
-# EIE architecture through EIE-6
+# EIE architecture through EIE-8
 
 ```text
 Source adapter protocol → immutable RawSourceObservation → EventNormalizer protocol
@@ -83,3 +83,12 @@ transaction boundary; historical page commits do not copy live durable sessions.
 Source availability is stored in a wrapper beside honestly acquired domain/raw
 contracts. This preserves established live clock invariants. See
 [historical backfill](historical-backfill.md) and [dataset manifests](dataset-manifests.md).
+
+## EIE-8 study architecture
+
+Frozen event build + explicit revision cutoff → supplied indexed market provider →
+explicit anchor/session/window alignment → raw response measurements + indexed
+contamination → immutable indexed study definitions/results/run manifests → strict-prior
+cohort distributions and sampled influence/decay. Retained bounded input slices permit
+pure recalculation without becoming a market-data warehouse. Domain/live caches and
+existing event identities remain unchanged. See [event studies](event-studies.md).

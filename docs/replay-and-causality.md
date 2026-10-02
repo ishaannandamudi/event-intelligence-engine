@@ -46,3 +46,14 @@ Later discovery/reprocessing does not change an older build. These source projec
 are subject to [reconstruction assumptions](data-completeness.md), including SEC's
 unproven complete metadata-vintage history. They do not replace live knowledge-time
 semantics or establish causal proof.
+
+## EIE-8 descriptive response replay
+
+Study selection pins one historical build and explicit event revision cutoff. Pre bars
+are completed/available at the anchor; event-spanning bars are excluded. Context/surprise
+conditioning cannot use future anchor information. Prior distributions require event,
+anchor and completed-study availability strictly before T; the current event is explicitly
+excludable even after completion. Later corrected events cannot replace an original
+persisted study. Retained market inputs and source fingerprints support byte-identical
+recalculation. Reconstructed study availability is an evidence/replay cutoff, not a
+backdated claim of actual EIE computation. See [alignment](market-data-alignment.md).

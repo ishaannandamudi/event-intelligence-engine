@@ -258,7 +258,7 @@ def _validate(
         != tuple(sorted(Counter(f.quality.value for f in facts.values()).items()))
     ):
         errors.append("INVALID_COMPLETENESS_REPORT")
-    if manifest.store_schema_version != repository.store.schema_version:
+    if manifest.store_schema_version not in ("1.1", repository.store.schema_version):
         errors.append("INVALID_STORE_SCHEMA_VERSION")
     if repository.store.validate():
         errors.append("DATABASE_INTEGRITY_FAILURE")

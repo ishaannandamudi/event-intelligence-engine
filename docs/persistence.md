@@ -120,3 +120,12 @@ builds, including updates that try to move rows into another frozen build. Archi
 byte verification is performed by `validate_dataset` because SQLite alone cannot
 certify filesystem content. See [archive](source-archive.md) and
 [manifests](dataset-manifests.md).
+
+## EIE-8 study persistence (store 1.2)
+
+Ordered migration 3 adds indexed immutable study definitions/results/run manifests and
+historical event lookup indexes. Existing 1.0/1.1 DDL, live rows and session layout remain
+unchanged; failed DDL rolls back. Study results retain bounded exact inputs, definitions,
+source dataset pins and deterministic hashes. Reads verify scalar indexes, content hashes
+and recalculated measurements; writes also bind the historical fact/revision/quality and
+manifest. Completed artifacts have update/delete refusal triggers. See [event studies](event-studies.md).

@@ -57,3 +57,13 @@ raw rebuild capability. `VALID_WITH_KNOWN_GAPS` means all recorded integrity che
 passed and declared limitations remain. `INVALID` means integrity, plan, reference,
 version or content validation failed. Neither result authorizes using unproven
 historical availability in a causal study as if it were verified.
+
+## EIE-8 market/event limitations
+
+Studies propagate EIE-7 semantic gaps and reconstruction quality. Unknown event times
+limit contamination coverage. Market gaps, missing pre/post endpoints, coarse source time,
+closures, partial bars, absent benchmarks/quotes/options and low counts are explicit flags.
+Missing prices never become zero returns. Relative volume requires prior matching supplied
+session buckets; absent/zero baselines remain unavailable. Unadjusted prices carry action
+risk, and known split windows suppress price/volatility measures. Per-offset sample counts
+and unavailable reasons accompany decay/aggregates. See [event studies](event-studies.md).

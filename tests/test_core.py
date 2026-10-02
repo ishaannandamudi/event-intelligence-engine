@@ -15,7 +15,7 @@ from eie.sources.trust import DEFAULT_PRECEDENCE, SourceClass, SourcePrecedenceP
 
 
 def test_versions_and_time_exactness() -> None:
-    assert __version__ == "0.8.0"
+    assert __version__ == "0.9.0"
     assert (EVENT_SCHEMA_VERSION, OBSERVATION_SCHEMA_VERSION, CONFIG_SCHEMA_VERSION) == (
         "1.0",
         "1.0",

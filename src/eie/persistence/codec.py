@@ -41,8 +41,18 @@ from eie.scheduled import coverage, windows
 from eie.scheduled import models as schedules
 from eie.sources import models as sources
 from eie.sources import trust
+from eie.studies import aggregation, decay, market
+from eie.studies import models as study_models
+from eie.studies import queries as study_queries
+from eie.studies import validation as study_validation
 
 MODULES: tuple[ModuleType, ...] = (
+    market,
+    study_models,
+    aggregation,
+    decay,
+    study_queries,
+    study_validation,
     archive_models,
     backfill_models,
     dataset_models,

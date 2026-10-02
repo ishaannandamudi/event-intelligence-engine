@@ -180,3 +180,11 @@ must not be backdated and inserted into a live expectations engine. Current snap
 alone do not establish old consensus or macro correction history; exact historical
 cutoffs require audited provider support. Licensed historical collection and exhaustive
 macro vintage downloading remain absent. See [completeness](data-completeness.md).
+
+## EIE-8 conditioning boundary
+
+A supplied typed EIE-5 `SurpriseObservation` can condition descriptive study distributions.
+It stays bound to its canonical event and measurement, retains its result fingerprint and
+normalization history, and cannot be newer than the study anchor. Bucket boundaries are
+explicit numeric settings; equality goes to the right bucket. There are no bullish/bearish
+labels, future-calibrated quantiles or regime inference. See [event studies](event-studies.md).

@@ -86,3 +86,13 @@ versions, counts, completeness, record digest and database integrity. Results ar
 A valid qualified manifest certifies its recorded gaps and assumptions; it does not
 certify universal source coverage. Metadata-only validation cannot validate absent
 raw bytes. Manifest export uses allowlisted typed JSON.
+
+## EIE-8 linkage
+
+Each study pins a finalized build ID, manifest content fingerprint, selected canonical
+revision and historical fact ID. Study-run manifests seal sorted study IDs/result hashes,
+counts and the event build; each member retains complete market/window/policy provenance.
+Mixing incompatible event builds is refused. Adding store migration 1.2 preserves existing
+1.1 manifests and content fingerprints; validation accepts that supported prior layout.
+Old engine-pinned archive rebuilds still require their matching installed processing code
+or explicit new-version reprocessing. See [event studies](event-studies.md).

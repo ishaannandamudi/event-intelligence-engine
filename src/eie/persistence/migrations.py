@@ -4,8 +4,8 @@ import sqlite3
 
 from eie.core.errors import PersistenceError
 
-STORE_SCHEMA_VERSION = "1.1"
-MIGRATION_VERSIONS = ("1.0", "1.1")
+STORE_SCHEMA_VERSION = "1.2"
+MIGRATION_VERSIONS = ("1.0", "1.1", "1.2")
 MIGRATIONS: tuple[tuple[str, ...], ...] = (
     (
         "CREATE TABLE schema_migrations(version INTEGER PRIMARY KEY, schema_version TEXT NOT NULL)",
@@ -112,6 +112,30 @@ MIGRATIONS: tuple[tuple[str, ...], ...] = (
             "historical_gaps",
         )
         for action, row in (("INSERT", "NEW"), ("UPDATE", "OLD"), ("DELETE", "OLD"))
+    ),
+    (
+        "CREATE TABLE study_definitions(id TEXT PRIMARY KEY,event_id TEXT "
+        "NOT NULL,instrument TEXT NOT NULL,anchor INTEGER NOT NULL,event_t"
+        "ype TEXT NOT NULL,build_id TEXT NOT NULL REFERENCES dataset_manif"
+        "ests(build_id),policy TEXT NOT NULL,payload BLOB NOT NULL)",
+        "CREATE INDEX historical_event_study ON historical_facts"
+        "(build_id,logical_id,kind,available)",
+        "CREATE INDEX study_event ON study_definitions(event_id,instrument,anchor)",
+        "CREATE INDEX study_class ON study_definitions(build_id,event_type,policy,anchor)",
+        "CREATE INDEX study_anchor ON study_definitions(anchor,id)",
+        "CREATE INDEX study_instrument ON study_definitions(instrument,anchor)",
+        "CREATE TABLE study_results(id TEXT PRIMARY KEY REFERENCES study_d"
+        "efinitions(id),available INTEGER NOT NULL,fingerprint TEXT NOT NU"
+        "LL,payload BLOB NOT NULL)",
+        "CREATE INDEX study_available ON study_results(available,id)",
+        "CREATE TABLE study_runs(id TEXT PRIMARY KEY,build_id TEXT NOT NUL"
+        "L REFERENCES dataset_manifests(build_id),payload BLOB NOT NULL)",
+    )
+    + tuple(
+        f"CREATE TRIGGER immutable_{table}_{action.lower()} BEFORE {action} ON {table} "
+        "BEGIN SELECT RAISE(ABORT,'immutable study artifact'); END"
+        for table in ("study_definitions", "study_results", "study_runs")
+        for action in ("UPDATE", "DELETE")
     ),
 )
 

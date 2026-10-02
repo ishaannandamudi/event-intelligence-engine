@@ -2,14 +2,13 @@
 
 EIE is a standalone, provider-neutral foundation for descriptive event intelligence. Its first priority is answering what was knowable at an exact time. It does not produce trade instructions.
 
-**Status:** EIE-7 historical backfill, dataset construction and source archival,
-version `0.8.0`. Bounded resumable jobs, official SEC multi-CIK history traversal,
-retention-controlled content-addressed archives, immutable manifests and explicit
-archive rebuild now complement live ingestion. Runtime providers remain opt-in.
-All domain/runtime schemas remain `1.0`; historical contracts start at `1.0` and
-SQLite store schema is `1.1`. See [historical backfill](docs/historical-backfill.md),
-[manifests](docs/dataset-manifests.md), [archive](docs/source-archive.md),
-[completeness](docs/data-completeness.md) and [completion report](docs/EIE-7-completion.md).
+**Status:** EIE-8 descriptive event studies and influence/decay, version `0.9.0`.
+Supplied historical market data supports explicit anchors/windows, raw responses,
+contamination flags and prior-only descriptors against frozen EIE-7 builds.
+Event-study schema is `1.0`; SQLite store schema is `1.2`. Existing quantitative
+schemas remain `1.0`. Zero runtime dependencies; no market fetcher or trading logic.
+See [event studies](docs/event-studies.md), [alignment](docs/market-data-alignment.md),
+[influence/decay](docs/event-influence-decay.md) and [completion](docs/EIE-8-completion.md).
 
 
 ## Install and check
@@ -26,6 +25,27 @@ python3.11 -m venv .venv
 .venv/bin/ruff format --check .
 .venv/bin/mypy src
 ```
+
+## Offline event studies and deterministic restart
+
+```sh
+PYTHONPATH=src:. python examples/event_studies.py
+```
+
+The [runnable example](examples/event_studies.py) builds a synthetic EIE-7 earnings
+history, supplies minute bars and session metadata, chooses publication anchors,
+computes pre/post returns, volatility and prior-normalized volume, flags a co-occurring
+management event, and adds three earlier studies. It computes prior-only response
+statistics and single/class sampled half-response times, then serializes/reloads
+byte-identical results after a SQLite restart. Every input is offline and synthetic.
+
+Profile 10,000 events, two window definitions and a sector series with:
+
+```sh
+PYTHONPATH=src:. python benchmarks/event_studies.py
+```
+
+EIE-8 measures observed responses; abnormal-return/counterfactual models remain EIE-9.
 
 ## Offline historical build, restart and archive replay
 

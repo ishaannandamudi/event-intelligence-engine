@@ -1,6 +1,6 @@
 # Event Intelligence Engine (EIE) — Master Specification
 
-**Status:** Master design; implementation completed through EIE-7 (`0.8.0`)<br>
+**Status:** Master design; implementation completed through EIE-8 (`0.9.0`)<br>
 **Planned roadmap:** EIE-0 through EIE-17 (updated by the EIE-5 phase specification)<br>
 **Primary language:** Python<br>
 **Repository name:** `event-intelligence-engine`<br>
@@ -1312,7 +1312,7 @@ provider health and foreground operational controls. Current SEC submissions
 and BLS iCalendar are explicit opt-in sources. All quantitative schemas remain
 `1.0`; runtime/ingestion and persistent-store schemas start at `1.0`.
 See [EIE-6 completion](EIE-6-completion.md), [live ingestion](live-ingestion.md)
-and [persistence](persistence.md). EIE-7 is implemented below; EIE-8 and later remain deferred.
+and [persistence](persistence.md). EIE-7 is implemented below; EIE-9 and later remain deferred.
 
 ---
 
@@ -1333,7 +1333,7 @@ Live/domain/runtime/session contracts remain unchanged. SEC complete metadata-vi
 coverage and generic licensed/macro historical collectors are not claimed.
 See [EIE-7 completion](EIE-7-completion.md), [historical backfill](historical-backfill.md),
 [manifests](dataset-manifests.md), [archive](source-archive.md) and
-[completeness](data-completeness.md). EIE-8 remains unimplemented.
+[completeness](data-completeness.md). EIE-8 is implemented below.
 
 
 ---
@@ -1356,6 +1356,17 @@ Add causal rolling/expanding historical impact statistics.
 Add empirical event-influence/decay characterization.
 
 **Acceptance:** prior-only historical market-impact evidence by event family.
+
+**Implemented:** engine `0.9.0` adds provider-neutral supplied market observations,
+explicit anchor/session/window policies, completed-bar raw return/volatility/volume/
+liquidity/options/benchmark responses, event contamination, strict-prior distributions
+and sampled single/class influence/decay. Event-study schema is `1.0`; store migration 3
+raises SQLite to `1.2`. Existing domain/runtime/historical schemas are unchanged.
+No live market collector, causal/counterfactual model or trading logic is introduced.
+See [EIE-8 completion](EIE-8-completion.md), [event studies](event-studies.md),
+[alignment](market-data-alignment.md) and [influence/decay](event-influence-decay.md).
+EIE-9 remains deferred.
+
 
 ---
 

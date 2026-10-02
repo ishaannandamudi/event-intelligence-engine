@@ -27,3 +27,13 @@ acquisition source. SQLite stores claims, corporate/canonical history, registry,
 coverage and identity caches with an atomic checkpoint. Restored sessions expose
 the existing query APIs and preserve prior result bytes. No live commercial
 provider or new corporate semantics are added. See [persistence](persistence.md).
+
+## EIE-8 reaction studies
+
+Publication and exact schedule anchors are explicit. Date-only and BMO/AMC schedules
+are rejected by exact intraday studies; explicit supplied-session endpoint proxies retain
+coarse quality and verify date/session/source facts. Target/acquirer and share classes use
+separate supplied instrument series. Known splits in unadjusted windows suppress returns;
+price and total-return adjustment semantics never silently mix. Co-bundle/same-issuer
+contamination is descriptive and does not allocate a shared movement among events.
+See [alignment](market-data-alignment.md) and [event studies](event-studies.md).
