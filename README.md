@@ -2,15 +2,17 @@
 
 EIE is a standalone, provider-neutral foundation for descriptive event intelligence. Its first priority is answering what was knowable at an exact time. It does not produce trade instructions.
 
-**Status:** EIE-9 abnormal returns and counterfactual impact estimates, version `1.0.0`.
-Supplied historical market/factor/control data supports explicit prior fitting windows,
-five transparent model classes, period abnormal returns, CAR, diagnostics, uncertainty,
-and contamination sensitivity against validated raw EIE-8 studies.
-Impact and event-study schemas are `1.0`; SQLite store schema is `1.3`. Existing quantitative
-schemas remain `1.0`. Zero runtime dependencies; no market fetcher or trading logic.
+**Status:** EIE-10 entity relationships and exposure graph, version `1.1.0`.
+Source-backed bitemporal relationships support typed exposure, bounded traversal,
+separate event propagation candidates and immutable historical restart. EIE-9's
+prior-fitted abnormal returns, CAR, diagnostics and uncertainty remain independent.
+Relationship, impact and event-study schemas are `1.0`; SQLite store schema is `1.4`.
+All prior public schemas remain `1.0`. Zero runtime dependencies.
 See [event studies](docs/event-studies.md), [alignment](docs/market-data-alignment.md),
 [influence/decay](docs/event-influence-decay.md), [counterfactual impact](docs/counterfactual-impact.md)
-and [completion](docs/EIE-9-completion.md).
+and [EIE-10 completion](docs/EIE-10-completion.md). Graph contracts are documented in
+[relationships](docs/entity-relationship-graph.md), [exposure](docs/exposure-graph.md),
+[replay](docs/graph-replay.md) and [event propagation](docs/event-propagation.md).
 
 
 ## Install and check
@@ -425,11 +427,44 @@ The accepted timestamp and EIE knowledge time are distinct when observation or i
 
 ## Scope
 
-EIE-0 through EIE-9 provide canonical/replay contracts, scheduled/official/SEC/corporate
+EIE-0 through EIE-10 provide canonical/replay contracts, scheduled/official/SEC/corporate
 events, numerical surprise, durable acquisition, historical builds, raw studies and
-counterfactual estimates. Relationship/evidence graphs, unscheduled NLP, novelty,
+counterfactual estimates, plus sourced relationship graphs and propagation candidates.
+Arbitrary claim/evidence graphs, unscheduled NLP, novelty,
 materiality, analogues, collision modeling, final services and downstream integration
 remain deferred. Trading and execution are outside the engine's purpose.
 The [master roadmap](docs/EIE_MASTER_SPEC.md) defines later phases.
 
 See [architecture](docs/architecture.md), [event contracts](docs/event-contract.md), [source policy](docs/source-policy.md), and [replay and causality](docs/replay-and-causality.md).
+
+## Offline entity relationship and exposure example
+
+```sh
+PYTHONPATH=src python examples/entity_relationship_graph.py
+```
+
+The deterministic synthetic example ingests directional supplier/customer relations,
+80% and 50% parent ownership, issuer/security links, classifications and explicitly
+carried ETF/index composition snapshots. It queries a graph at T1, adds a supplier
+termination correction at T2 and proves the T1 graph unchanged. It then traverses from
+the issuer, derives a separate ownership path of `0.8 × 0.5 = 0.4`, generates related
+entity candidates, persists them and verifies byte-identical historical restart.
+The source event's direct company scope stays unchanged.
+
+For an indexed repository and retained stable entity ID:
+
+```python
+from eie.graph.history import GraphHistoryQuery
+from eie.graph.queries import GraphQueries
+
+queries = GraphQueries(repository)
+customers = queries.customers(issuer_id, known_as_of_ns=30, valid_at_ns=25)
+revisions = queries.search_history(
+    GraphHistoryQuery(40, node_id=issuer_id, known_interval=(20, 41), valid_interval=(10, 30))
+)
+```
+
+Small timestamps illustrate logical clocks; production inputs use UTC nanoseconds.
+The [offline profile](benchmarks/entity_relationship_graph.py) measures ingestion,
+adjacency, depth-two traversal, paths, propagation, storage and verified restart:
+`PYTHONPATH=src python benchmarks/entity_relationship_graph.py --nodes 2000`.

@@ -1,6 +1,6 @@
 # Event Intelligence Engine (EIE) — Master Specification
 
-**Status:** Master design; implementation completed through EIE-9 (`1.0.0`)<br>
+**Status:** Master design; implementation completed through EIE-10 (`1.1.0`)<br>
 **Planned roadmap:** EIE-0 through EIE-17 (updated by the EIE-5 phase specification)<br>
 **Primary language:** Python<br>
 **Repository name:** `event-intelligence-engine`<br>
@@ -1312,7 +1312,7 @@ provider health and foreground operational controls. Current SEC submissions
 and BLS iCalendar are explicit opt-in sources. All quantitative schemas remain
 `1.0`; runtime/ingestion and persistent-store schemas start at `1.0`.
 See [EIE-6 completion](EIE-6-completion.md), [live ingestion](live-ingestion.md)
-and [persistence](persistence.md). EIE-7 through EIE-9 are implemented below; EIE-10 and later remain deferred.
+and [persistence](persistence.md). EIE-7 through EIE-10 are implemented below; EIE-11 and later remain deferred.
 
 ---
 
@@ -1393,7 +1393,7 @@ model/result/set/run persistence. Impact schema is `1.0`; migration 4 raises sto
 separate. No causal-identification claim, post-event model ranking or trading logic is
 introduced. See [EIE-9 completion](EIE-9-completion.md),
 [counterfactual impact](counterfactual-impact.md), [abnormal returns](abnormal-returns.md)
-and [matched controls](matched-controls.md). EIE-10 remains deferred.
+and [matched controls](matched-controls.md). EIE-10 is implemented below.
 
 
 ---
@@ -1411,6 +1411,21 @@ Build:
 - direct and indirect event applicability
 
 **Acceptance:** deterministic second-order exposure mapping.
+
+**Implemented:** EIE-10 adds typed sourced graph nodes and relationship claims, stable
+foundation identity reuse, canonical inverse/symmetric edges, independent valid/knowledge
+history, append-only corrections/terminations, multi-source alternatives/conflicts,
+fraction/range exposure and explicit composition snapshot policy. Indexed bounded
+queries/traversal produce immutable exact-cutoff paths/snapshots and separate related
+entity propagation candidates. Only compatible forward ownership fractions compose into
+a derived path artifact. Direct event scopes and empirical impact stay independent.
+
+Engine `1.1.0`, relationship schema `1.0`, additive SQLite store `1.4`; prior schemas
+remain `1.0`. Tests, restart/rebuild, byte bounds and source provenance are offline and
+deterministic. Native relationship extraction, arbitrary claim/evidence graphs and
+trading logic are not implemented. See [EIE-10 completion](EIE-10-completion.md),
+[relationships](entity-relationship-graph.md), [exposure](exposure-graph.md),
+[graph replay](graph-replay.md) and [propagation](event-propagation.md).
 
 ---
 

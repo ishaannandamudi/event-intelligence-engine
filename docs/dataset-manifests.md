@@ -107,3 +107,17 @@ builds cannot be silently mixed. Store migration 1.3 preserves earlier manifests
 studies byte-for-byte; it adds separate immutable model/fit/result/sensitivity/run tables.
 Retained exact inputs permit recalculation but do not certify a provider's asserted
 point-in-time completeness. See [counterfactual impact](counterfactual-impact.md).
+
+## EIE-10 graph dataset linkage
+
+`GraphDataset` pins dataset ID, source version and fingerprint on every node/provider
+claim. If it names an EIE-7 build ID, append validation requires that immutable manifest
+and exact content fingerprint. A supplied external dataset fingerprint remains an
+assertion; the graph adapter does not independently authenticate source completeness or
+historical availability. Actual graph ingestion knowledge is not backdated from a build.
+
+Graph source-item receipts retain provider/parser/dataset/policy identity and all revision
+references. Rebuilding an ordered source ledger with the same inputs and versions is
+deterministic. A changed parser or reconstruction uses new lineage and cannot mutate
+frozen snapshots. Store `1.4` preserves earlier dataset tables and manifests unchanged.
+See [graph replay](graph-replay.md).

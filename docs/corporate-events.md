@@ -37,3 +37,14 @@ separate supplied instrument series. Known splits in unadjusted windows suppress
 price and total-return adjustment semantics never silently mix. Co-bundle/same-issuer
 contamination is descriptive and does not allocate a shared movement among events.
 See [alignment](market-data-alignment.md) and [event studies](event-studies.md).
+
+## EIE-10 structural relationships
+
+The graph reuses corporate entity identities and accepts sourced `SPINOFF_FROM`,
+`SUCCESSOR_OF`/`PREDECESSOR_OF` and ownership/control claims with explicit validity.
+Existing corporate event/revision references can be retained as sourced qualifiers.
+These structural edges do not replace the corporate event or imply current ownership.
+An announced, approved or generic closed deal is not automatically converted into a
+parent/subsidiary edge; the source must establish the realized relationship and effective
+semantics. No document extraction or automatic corporate-action graph inference is added.
+See [relationship taxonomy](entity-relationship-graph.md).

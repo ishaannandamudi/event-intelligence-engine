@@ -9,3 +9,17 @@ Resolution uses exact ticker **and** exchange at an explicit valid time, limited
 Overlapping verified listing records can yield an explicit ambiguous result. Current SEC snapshots also can be ambiguous. Neither ambiguity is silently resolved by company name, ticker string alone, or arbitrary ranking. Corporate reorganizations, CIK merges, authoritative security master integration, and complete past ticker reconstruction require further evidence and are outside EIE-3.
 
 EIE-4 corporate identities use this registry directly. Issuer-level facts remain issuer-level, while security-scoped facts require a verified security/issuer relationship; a supplied listing ID must match the issuer and optional security at its valid time. Earnings events from several providers match on stable issuer and fiscal reference period, not on ticker or scheduled date. Deal counterparties and spun-off issuers may be explicitly unresolved with quality flags. A symbol-change event requires one verified old listing, closes that listing at the change's effective time, and opens the new ticker/exchange at that same valid time, with both changes becoming known only at ingestion. A previously observed SEC ticker-map snapshot cannot silently restore a verified listing after that closure. Historical symbol queries preserve the old ticker before the effective time and the old knowledge view before ingestion. See [corporate events](corporate-events.md).
+
+## EIE-10 graph identity reuse
+
+Graph foundation nodes retain the exact issuer/security/listing contracts and IDs above.
+CIK mappings and verified security issuer links cannot be rebound. Other typed entities
+use sourced non-ticker authority/identifier hashes. Explicit primary identifiers permit
+later aliases without creating a duplicate node. Classification identifiers must retain
+their provider/taxonomy/version namespace.
+
+Graph symbol claims pin an exact exchange and valid-time resolution against known listing
+revisions. Ticker changes and reuse do not rewrite old resolved endpoints. Ambiguous or
+missing endpoints remain raw provider claims without a canonical edge. Identity edges
+must agree with the retained foundation links. See [relationship identity and taxonomy](entity-relationship-graph.md)
+and [graph replay](graph-replay.md).

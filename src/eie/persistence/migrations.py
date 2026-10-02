@@ -4,8 +4,8 @@ import sqlite3
 
 from eie.core.errors import PersistenceError
 
-STORE_SCHEMA_VERSION = "1.3"
-MIGRATION_VERSIONS = ("1.0", "1.1", "1.2", "1.3")
+STORE_SCHEMA_VERSION = "1.4"
+MIGRATION_VERSIONS = ("1.0", "1.1", "1.2", "1.3", "1.4")
 MIGRATIONS: tuple[tuple[str, ...], ...] = (
     (
         "CREATE TABLE schema_migrations(version INTEGER PRIMARY KEY, schema_version TEXT NOT NULL)",
@@ -161,6 +161,106 @@ MIGRATIONS: tuple[tuple[str, ...], ...] = (
         f"CREATE TRIGGER immutable_{table}_{action.lower()} BEFORE {action} ON {table} "
         "BEGIN SELECT RAISE(ABORT,'immutable impact artifact'); END"
         for table in ("impact_models", "impact_results", "impact_sets", "impact_runs")
+        for action in ("UPDATE", "DELETE")
+    ),
+    (
+        "CREATE TABLE graph_entities(id TEXT PRIMARY KEY,kind TEXT NOT NULL)",
+        (
+            "CREATE TABLE graph_nodes(id TEXT PRIMARY KEY,node TEXT NOT NULL REFERENCES "
+            "graph_entities(id),known INTEGER NOT NULL,dataset TEXT NOT NULL,payload BLOB NOT "
+            "NULL,UNIQUE(node,known))"
+        ),
+        "CREATE INDEX graph_node_time ON graph_nodes(node,known)",
+        "CREATE INDEX graph_node_known ON graph_nodes(known)",
+        (
+            "CREATE TABLE graph_identifiers(revision TEXT NOT NULL REFERENCES graph_nodes(id),"
+            "authority TEXT NOT NULL,value TEXT NOT NULL,node TEXT NOT NULL REFERENCES "
+            "graph_entities(id),PRIMARY KEY(revision,authority,value))"
+        ),
+        "CREATE INDEX graph_exact_identifier ON graph_identifiers(authority,value,node)",
+        "CREATE TABLE graph_listing_index(revision TEXT PRIMARY KEY REFERENCES graph_nodes(id),"
+        "node TEXT NOT NULL REFERENCES graph_entities(id),ticker TEXT NOT NULL,exchange TEXT "
+        "NOT NULL,issuer TEXT NOT NULL REFERENCES graph_entities(id),valid_from INTEGER NOT "
+        "NULL,valid_to INTEGER)",
+        "CREATE INDEX graph_symbol_time ON graph_listing_index(ticker,exchange,valid_from,"
+        "valid_to)",
+        (
+            "CREATE TABLE graph_edges(id TEXT PRIMARY KEY,kind TEXT NOT NULL,source_node TEXT "
+            "NOT NULL REFERENCES graph_entities(id),target_node TEXT NOT NULL REFERENCES "
+            "graph_entities(id))"
+        ),
+        "CREATE INDEX graph_edge_source ON graph_edges(source_node,kind)",
+        "CREATE INDEX graph_edge_target ON graph_edges(target_node,kind)",
+        (
+            "CREATE TABLE graph_claims(id TEXT PRIMARY KEY,claim_id TEXT NOT NULL,number "
+            "INTEGER NOT NULL,previous TEXT REFERENCES graph_claims(id),edge_id TEXT "
+            "REFERENCES graph_edges(id),provider TEXT NOT NULL,resource TEXT NOT NULL,known "
+            "INTEGER NOT NULL,valid_from INTEGER,valid_to INTEGER,semantics TEXT NOT NULL,kind "
+            "TEXT NOT NULL,source_node TEXT REFERENCES graph_entities(id),target_node TEXT "
+            "REFERENCES graph_entities(id),exposure_type TEXT,observation TEXT NOT NULL "
+            "REFERENCES observations(id),payload BLOB NOT NULL,UNIQUE(claim_id,number))"
+        ),
+        "CREATE INDEX graph_claim_source ON graph_claims(source_node,known)",
+        "CREATE INDEX graph_claim_target ON graph_claims(target_node,known)",
+        "CREATE INDEX graph_claim_edge ON graph_claims(edge_id,known)",
+        "CREATE INDEX graph_claim_history ON graph_claims(claim_id,known,number)",
+        "CREATE INDEX graph_claim_known ON graph_claims(known)",
+        "CREATE INDEX graph_claim_provider ON graph_claims(provider,resource,known)",
+        "CREATE INDEX graph_claim_type_time ON graph_claims(kind,valid_from,valid_to,known)",
+        "CREATE INDEX graph_claim_exposure ON graph_claims(exposure_type,known)",
+        (
+            "CREATE TABLE graph_edge_revisions(id TEXT PRIMARY KEY,edge_id TEXT NOT NULL "
+            "REFERENCES graph_edges(id),known INTEGER NOT NULL,active INTEGER NOT NULL,"
+            "exposure_type TEXT,payload BLOB NOT NULL)"
+        ),
+        "CREATE INDEX graph_canonical_history ON graph_edge_revisions(edge_id,known)",
+        (
+            "CREATE TABLE graph_batches(id TEXT PRIMARY KEY,provider TEXT NOT NULL,resource "
+            "TEXT NOT NULL,known INTEGER NOT NULL,snapshot TEXT NOT NULL,observation TEXT NOT "
+            "NULL REFERENCES observations(id),generation INTEGER NOT NULL,fingerprint TEXT NOT "
+            "NULL,payload BLOB NOT NULL,UNIQUE(provider,resource,generation))"
+        ),
+        "CREATE INDEX graph_batch_time ON graph_batches(provider,resource,known)",
+        "CREATE INDEX graph_batch_known ON graph_batches(known)",
+        "CREATE INDEX graph_source_snapshot ON graph_batches(snapshot)",
+        (
+            "CREATE TABLE graph_snapshots(id TEXT PRIMARY KEY,known INTEGER NOT NULL,valid "
+            "INTEGER NOT NULL,fingerprint TEXT NOT NULL,payload BLOB NOT NULL)"
+        ),
+        "CREATE INDEX graph_snapshot_time ON graph_snapshots(known,valid)",
+        (
+            "CREATE TABLE graph_snapshot_edges(snapshot TEXT NOT NULL REFERENCES "
+            "graph_snapshots(id),revision TEXT NOT NULL REFERENCES graph_edge_revisions(id),"
+            "PRIMARY KEY(snapshot,revision))"
+        ),
+        (
+            "CREATE TABLE graph_snapshot_nodes(snapshot TEXT NOT NULL REFERENCES "
+            "graph_snapshots(id),revision TEXT NOT NULL REFERENCES graph_nodes(id),PRIMARY "
+            "KEY(snapshot,revision))"
+        ),
+        (
+            "CREATE TABLE graph_propagation(id TEXT PRIMARY KEY,snapshot TEXT REFERENCES "
+            "graph_snapshots(id),event_revision TEXT NOT NULL,payload BLOB NOT NULL)"
+        ),
+        "CREATE INDEX graph_propagation_event ON graph_propagation(event_revision)",
+    )
+    + tuple(
+        f"CREATE TRIGGER immutable_{table}_{action.lower()} BEFORE {action} ON {table} "
+        "BEGIN SELECT RAISE(ABORT,'immutable graph artifact'); END"
+        for table in (
+            "graph_entities",
+            "graph_nodes",
+            "graph_identifiers",
+            "graph_listing_index",
+            "graph_edges",
+            "graph_claims",
+            "graph_edge_revisions",
+            "graph_batches",
+            "graph_snapshots",
+            "graph_snapshot_edges",
+            "graph_snapshot_nodes",
+            "graph_propagation",
+        )
         for action in ("UPDATE", "DELETE")
     ),
 )

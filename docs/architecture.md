@@ -1,4 +1,4 @@
-# EIE architecture through EIE-9
+# EIE architecture through EIE-10
 
 ```text
 Source adapter protocol → immutable RawSourceObservation → EventNormalizer protocol
@@ -103,3 +103,20 @@ regression/fitting, controls, abnormal, uncertainty, diagnostics, sensitivity, e
 queries, repository and validation. Every result preserves its raw study and historical
 fact/build/reconstruction qualification. No model winner is chosen from post-event
 performance. See [counterfactual impact](counterfactual-impact.md).
+
+## EIE-10 relationship architecture
+
+Verified EIE-3 identities + configured structured relationship source → raw observation
+→ append-only provider claims → categorical multi-source canonical resolution → indexed
+two-time adjacency → bounded immutable paths/snapshots → separate event propagation
+candidates. Raw/source-item/claim/canonical/checkpoint changes share one SQLite transaction.
+Store migration 5 is additive (`1.3` → `1.4`); graph schema is `1.0`.
+
+`graph` separates taxonomy, nodes, exposure, claims, canonical/traversal contracts,
+history, queries, traversal, propagation, ingestion, repository and validation.
+`providers/relationships` contains the bounded static interchange adapter, configured
+capabilities/snapshot policy and normalization. Graph knowledge is explicit and ordered;
+persisted snapshots seal their cutoff against later backdated inserts. Local traversal
+uses indexed adjacency rather than a permanent in-memory copy of the whole graph.
+Prior event scopes, studies and impact contracts stay independent. See
+[relationships](entity-relationship-graph.md) and [graph replay](graph-replay.md).

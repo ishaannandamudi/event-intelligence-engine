@@ -46,3 +46,20 @@ Acquisition clock, source availability and replay clock are separately recorded.
 Exact availability claims require provider evidence and are qualified by coverage/
 reconstruction labels. See [archive policy](source-archive.md) and
 [completeness](data-completeness.md).
+
+## EIE-10 relationship source policy
+
+Relationship adapters accept explicitly structured claims from configured source classes
+and capabilities. Source bytes cannot set trust or enable implied removal. Primary,
+commercial and audited supplied claims retain alternatives; categorical precedence,
+confirmation counts, disagreement, estimated values and freshness are descriptive.
+No opaque confidence or empirical-return edge weight is added.
+
+Raw graph observations retain payload hashes and metadata; the adapter never archives
+native vendor documents or invokes transport. Source-item receipts retain the normalized
+typed interchange and lineage needed for deterministic validation. Callers must have
+permission to retain those normalized fields. Optional acquisition/archival of original
+vendor bytes still uses the EIE-6/EIE-7 retention and license policy; this adapter does
+not grant an entitlement or enable archival. Structured identifiers/exposures may be
+supplied from a SEC disclosure, but filing prose is not parsed or fuzzy-resolved here.
+See [relationships](entity-relationship-graph.md) and [exposure](exposure-graph.md).

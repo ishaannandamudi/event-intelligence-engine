@@ -28,6 +28,14 @@ from eie.expectations import consensus, guidance, normalization, observations, q
 from eie.expectations import models as measurements
 from eie.expectations import settings as expectations_settings
 from eie.filings import models as filings
+from eie.graph import claims as graph_claims
+from eie.graph import exposure as graph_exposure
+from eie.graph import history as graph_history
+from eie.graph import models as graph_models
+from eie.graph import nodes as graph_nodes
+from eie.graph import propagation as graph_propagation
+from eie.graph import taxonomy as graph_taxonomy
+from eie.graph import validation as graph_validation
 from eie.impact import inputs as impact_inputs
 from eie.impact import models as impact_models
 from eie.impact import sensitivity as impact_sensitivity
@@ -38,6 +46,7 @@ from eie.providers.common import models as official
 from eie.providers.common import settings as official_settings
 from eie.providers.corporate import adapter as corporate_adapter
 from eie.providers.estimates import adapter as estimates_adapter
+from eie.providers.relationships import models as relationship_sources
 from eie.providers.sec import adapter as sec_adapter
 from eie.providers.sec import models as sec
 from eie.providers.sec import settings as sec_settings
@@ -51,6 +60,15 @@ from eie.studies import queries as study_queries
 from eie.studies import validation as study_validation
 
 MODULES: tuple[ModuleType, ...] = (
+    graph_claims,
+    graph_exposure,
+    graph_history,
+    graph_models,
+    graph_nodes,
+    graph_propagation,
+    graph_taxonomy,
+    graph_validation,
+    relationship_sources,
     impact_inputs,
     impact_models,
     impact_sensitivity,

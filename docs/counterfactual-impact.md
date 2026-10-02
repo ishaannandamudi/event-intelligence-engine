@@ -139,4 +139,13 @@ storage; matching scans at most 1,000 candidates, 16 features, K ≤ 100, no mas
 
 Run [the example](../examples/counterfactual_impact.py) and
 [the profile](../benchmarks/counterfactual_impact.py). See [abnormal returns](abnormal-returns.md)
-and [matched controls](matched-controls.md). EIE-10 remains deferred.
+and [matched controls](matched-controls.md). EIE-10 is described below.
+
+## EIE-10 relationship boundary
+
+Relationships, sourced exposure, graph-derived related-entity candidates and measured
+impact are separate artifacts. EIE-10 does not import impact estimates to choose graph
+weights, infer supply/ownership, predict direction or rank candidates. A retained path
+may identify an entity to evaluate, but does not establish causal attribution of its
+abnormal return. Existing EIE-9 schemas and numerical behavior remain unchanged.
+See [exposure](exposure-graph.md) and [event propagation](event-propagation.md).

@@ -69,3 +69,17 @@ do not replace a historical model. As-of impact queries require anchor and compl
 result availability strictly before T. Replay availability is an evidence cutoff, not
 an assertion that EIE actually computed a reconstructed result in the past. Model-based
 residuals are descriptive and do not prove causation. See [counterfactual impact](counterfactual-impact.md).
+
+## EIE-10 graph replay
+
+Graph queries take explicit knowledge and valid timestamps. Retroactive effective dates
+cannot backdate ingestion knowledge. Corrections/terminations retain prior claims and
+cutoff-aware derived knowledge intervals. ETF/index snapshot points do not become
+continuous truth without an explicit flagged carry policy; omitted partial members
+do not imply removal.
+
+Snapshot identities pin exact edge revisions, source/traversal policies, both clocks,
+bounded paths and processing/schema versions. Sealed persisted cutoffs reject subsequent
+backdated graph writes, including empty source checkpoints. Graph-derived candidates
+retain the original direct event scope and cannot use future relationships. See
+[graph replay](graph-replay.md) and [propagation](event-propagation.md).

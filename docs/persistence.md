@@ -139,3 +139,19 @@ leave no partial artifacts. Reloads compare scalar indexes, separately retained 
 fit payloads, member/raw-study references, exact recalculation and fingerprints. UPDATE/
 DELETE triggers enforce completed-artifact immutability. As-of result availability is
 strictly prior to the query. See [counterfactual impact](counterfactual-impact.md).
+
+## EIE-10 graph persistence (store 1.4)
+
+Migration 5 adds graph entity/node/identifier/listing indexes, semantic edges, provider
+claims, canonical edge revisions, source-item receipts, snapshots with exact node/edge
+membership, and propagation results. Every graph table has update/delete refusal
+triggers. Foreign keys link raw observations, endpoints, predecessor revisions and
+snapshot members. Existing migration DDL and stored study/impact payloads are preserved;
+a failing migration rolls back its tables and migration record together.
+
+Indexed source/target/type/valid/known/provider/exposure searches support bounded local
+adjacency. Raw evidence, all item claims/closures, canonical resolution and checkpoint
+generation commit atomically. Restart validates typed payloads against indexes and
+references, then recalculates snapshots/candidates at their pinned cutoff. Graph writes
+respect an ordered knowledge ledger and persisted snapshots seal their cutoff. No graph
+database dependency or live graph transport is introduced. See [graph replay](graph-replay.md).

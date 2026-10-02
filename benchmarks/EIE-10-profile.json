@@ -1,0 +1,23 @@
+{
+  "adjacency_samples": 100,
+  "adjacent_edges_returned": 600,
+  "all_reloaded_fingerprints_verified": true,
+  "artifact_persistence_seconds": 11.24688766701729,
+  "atomic_source_ingestion_and_storage_seconds": 154.98411054199096,
+  "claim_revisions": 6500,
+  "database_bytes_including_wal_at_sample": 194440192,
+  "depth_2_traversal_samples": 100,
+  "depth_2_traversal_seconds": 8.348402207979234,
+  "mean_adjacency_seconds": 0.005744583749910817,
+  "node_ingestion_seconds": 0.21441133299958892,
+  "nodes": 2000,
+  "ownership_path_seconds": 0.012492000008933246,
+  "point_in_time_adjacency_seconds": 0.5744583749910817,
+  "propagation_samples": 20,
+  "propagation_seconds": 3.970910042000469,
+  "restart_and_verified_queries_seconds": 83.74719995900523,
+  "semantic_edges": 6200,
+  "source_items": 2,
+  "validation_seconds": 5.391296875022817,
+  "workload": "deterministic synthetic generic issuers, cyclic supply network, sourced ownership chain; bounded local queries; no CI threshold"
+}
