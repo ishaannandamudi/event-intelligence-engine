@@ -1,6 +1,6 @@
 # Event Intelligence Engine (EIE) — Master Specification
 
-**Status:** Master design; implementation completed through EIE-12 (`1.3.0`)<br>
+**Status:** Master design; implementation completed through EIE-13 (`1.4.0`)<br>
 **Planned roadmap:** EIE-0 through EIE-17 (updated by the EIE-5 phase specification)<br>
 **Primary language:** Python<br>
 **Repository name:** `event-intelligence-engine`<br>
@@ -1312,7 +1312,7 @@ provider health and foreground operational controls. Current SEC submissions
 and BLS iCalendar are explicit opt-in sources. All quantitative schemas remain
 `1.0`; runtime/ingestion and persistent-store schemas start at `1.0`.
 See [EIE-6 completion](EIE-6-completion.md), [live ingestion](live-ingestion.md)
-and [persistence](persistence.md). EIE-7 through EIE-11 are implemented below; EIE-12 and later remain deferred.
+and [persistence](persistence.md). EIE-7 through EIE-13 are implemented below; EIE-14 and later remain deferred.
 
 ---
 
@@ -1722,6 +1722,23 @@ all preceding public schema versions and runtime dependency policy remain unchan
 See [text ingestion](text-ingestion.md), [structured extraction](structured-extraction.md),
 [model assistance](model-assisted-extraction.md), [security](nlp-security.md),
 [unscheduled events](unscheduled-events.md) and [completion](EIE-12-completion.md).
-Novelty/materiality/uncertainty decomposition is proposed for EIE-13 and is not
-implemented here. Analogue retrieval, collision modeling, final service/API,
+EIE-13 implements the descriptive intelligence consumer described below.
+Analogue retrieval, collision modeling, final service/API,
 MCE/AME integration and trading remain outside this implementation.
+
+## EIE-13 implementation boundary
+
+EIE-13 adds six separate novelty dimensions, strict-prior compatible reporting-period
+baselines, explicit static-importance and event-materiality policies, eight separate
+uncertainty components, immutable reference lineage, bounded indexed queries and
+exact recalculation validation. It consumes existing EIE-11 resolution, EIE-12 accepted
+source evidence, pinned EIE-10 graph context and separately sourced EIE-5 information.
+Real EIE-9 results attach as separate ex-post audit references; market reactions never
+change ex-ante materiality. Engine `1.4.0`, intelligence schema `1.0`, store `1.7`;
+earlier schemas stay unchanged and runtime dependencies remain empty.
+
+See [novelty](novelty-intelligence.md), [materiality](materiality-intelligence.md),
+[uncertainty](uncertainty-decomposition.md), [replay](intelligence-replay.md) and
+[completion](EIE-13-completion.md). Implementation stops here. EIE-14's proposed
+boundary is causal historical analogue retrieval and separate market-reaction
+surprise using supplied context, with distributions/diagnostics and no trading logic.

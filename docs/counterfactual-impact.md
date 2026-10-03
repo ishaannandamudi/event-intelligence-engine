@@ -149,3 +149,12 @@ weights, infer supply/ownership, predict direction or rank candidates. A retaine
 may identify an entity to evaluate, but does not establish causal attribution of its
 abnormal return. Existing EIE-9 schemas and numerical behavior remain unchanged.
 See [exposure](exposure-graph.md) and [event propagation](event-propagation.md).
+
+## EIE-13 impact attachments
+
+`IntelligenceRepository.attach_impact` accepts actual retained same-event EIE-9
+results with verified IDs/fingerprints and availability. A later result creates a
+separate immutable ex-post audit. EIE-9 fit/contamination/data diagnostics populate
+only impact uncertainty; original ex-ante novelty, static importance, materiality
+and extraction quality remain unchanged. No reaction scalar is fabricated. See
+[intelligence replay](intelligence-replay.md).

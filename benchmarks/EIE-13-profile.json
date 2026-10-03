@@ -1,0 +1,91 @@
+{
+  "historical_events": 10000,
+  "historical_families": 10,
+  "intelligence_results": 13,
+  "ingestion_seconds": 202.27036570897326,
+  "stage_seconds": {
+    "prior_query": 378.31694154115394,
+    "novelty": 2.537507417029701,
+    "materiality": 0.011910209082998335,
+    "uncertainty": 0.004940499027725309,
+    "assembly": 2.511757999949623,
+    "persistence": 64.10251350101316
+  },
+  "history_query_seconds": 16.405665041995235,
+  "restart_and_two_recalculations_seconds": 43.220616375037935,
+  "database_bytes": 344371200,
+  "result_bytes": 71990120,
+  "table_counts": {
+    "events": 10003,
+    "ce_claims": 10008,
+    "ce_assertions": 10008,
+    "te_documents": 1,
+    "ei_inputs": 13,
+    "ei_results": 13,
+    "ei_measurements": 10
+  },
+  "dominant_cumulative_seconds": [
+    [
+      "intelligence/collection.py:101:collect",
+      378.20752608400005
+    ],
+    [
+      "core/serialization.py:37:canonical_json_bytes",
+      288.20715590000003
+    ],
+    [
+      "core/fingerprints.py:8:fingerprint",
+      257.81135524900003
+    ],
+    [
+      "core/serialization.py:14:json_value",
+      225.610271533
+    ],
+    [
+      "core/serialization.py:18:<dictcomp>",
+      187.44481379700002
+    ],
+    [
+      "intelligence/collection.py:231:resolutions",
+      151.43113529000001
+    ],
+    [
+      "evidence/claims.py:392:observation_id",
+      135.92613315900002
+    ],
+    [
+      "evidence/repository.py:320:assertion",
+      124.49535143300001
+    ],
+    [
+      "intelligence/collection.py:201:<genexpr>",
+      123.975916819
+    ],
+    [
+      "persistence/codec.py:279:loads",
+      123.591013755
+    ],
+    [
+      "persistence/codec.py:215:unpack",
+      112.77805050500001
+    ],
+    [
+      "evidence/resolution.py:140:resolve_claim",
+      111.265379433
+    ],
+    [
+      "evidence/repository.py:278:validate_assertion",
+      93.736499644
+    ],
+    [
+      "evidence/repository.py:57:_one",
+      83.953514494
+    ],
+    [
+      "evidence/repository.py:22:typed",
+      79.590004191
+    ]
+  ],
+  "restart_byte_identical": true,
+  "measurement_note": "Assembly recalculates components to check staged equality; profiling overhead is included."
+}

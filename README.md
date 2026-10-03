@@ -2,7 +2,7 @@
 
 EIE is a standalone, provider-neutral foundation for descriptive event intelligence. Its first priority is answering what was knowable at an exact time. It does not produce trade instructions.
 
-**Status:** EIE-12 source-backed text intelligence and verified extraction, version `1.3.0`.
+**Status:** EIE-13 novelty, materiality and uncertainty decomposition, version `1.4.0`.
 Source-backed claims preserve alternatives, categorical field resolution, independent
 corroboration, conservative event aliases and historical correction/merge/split replay.
 Relationship exposure and empirical impact remain separate.
@@ -427,12 +427,12 @@ The accepted timestamp and EIE knowledge time are distinct when observation or i
 
 ## Scope
 
-EIE-0 through EIE-12 provide canonical/replay contracts, scheduled/official/SEC/corporate
+EIE-0 through EIE-13 provide canonical/replay contracts, scheduled/official/SEC/corporate
 events, numerical surprise, durable acquisition, historical builds, raw studies and
 counterfactual estimates, sourced relationship graphs, propagation candidates,
 structured claim/evidence resolution with conservative event deduplication and
-verified unscheduled text extraction. Novelty, materiality, analogues, collision
-modeling, final services and downstream integration
+verified unscheduled text extraction and prior-only novelty, materiality and separate
+uncertainty components. Analogues, collision modeling, final services and downstream integration
 remain deferred. Trading and execution are outside the engine's purpose.
 The [master roadmap](docs/EIE_MASTER_SPEC.md) defines later phases.
 
@@ -555,5 +555,38 @@ See [text ingestion](docs/text-ingestion.md), [structured extraction](docs/struc
 The [offline profile](benchmarks/text_extraction.py) measures 10,000 documents with
 fake model assistance on a subset, 25 persisted documents, audit/restart and storage:
 `PYTHONPATH=src:. python benchmarks/text_extraction.py`.
-Text-extraction schema is `1.0`, SQLite store is `1.6`, all prior public schemas remain
-`1.0`, and runtime dependencies remain empty. Work stops at EIE-12.
+Text-extraction schema remains `1.0`; event-intelligence schema is `1.0`, SQLite store
+is `1.7`, and all prior public schemas remain `1.0`. Runtime dependencies remain empty.
+
+## Offline novelty, materiality and uncertainty
+
+```sh
+PYTHONPATH=src:. python examples/intelligence_demo.py
+PYTHONPATH=src:. python benchmarks/event_intelligence.py --events 10000 --output /tmp/eie13-profile.json
+```
+
+The demonstration constructs three sourced prior financial quarters, extracts a
+new multi-event document, and calculates all six novelty dimensions. Current
+revenue of USD 5.2 billion has a USD 0.4 billion change from the latest comparable
+quarter, prior median USD 4.7 billion and MAD USD 0.1 billion. EPS without a prior
+cohort reports `NO_BASELINE`. Document/factual/entity/cross-source results retain
+their separate states and evidence references.
+
+Static earnings importance is HIGH. The explicit amount policy yields VERY_HIGH
+event materiality while missing company scale and exposure stay unknown. All eight
+uncertainty components retain their own state/reasons, including unresolved event
+or entity context and analogue readiness.
+
+An existing EIE-5 surprise result is attached separately. Missing analyst consensus
+retains `CONSENSUS_MISSING`; novelty remains available. A second historical
+build-bound example attaches a **real persisted EIE-9 impact result** as an
+`EX_POST_AUDIT`, proves that the original ex-ante materiality and result bytes did
+not change, restarts SQLite and verifies byte-identical intelligence and audit.
+Historical source cutoff and actual local availability are shown separately.
+
+This covers prior history, new-event processing, document/factual/numeric novelty,
+static importance, materiality, uncertainty, separate surprise/impact references,
+impact separation, persistence/restart and identical bytes. See
+[novelty](docs/novelty-intelligence.md), [materiality](docs/materiality-intelligence.md),
+[uncertainty](docs/uncertainty-decomposition.md), [replay](docs/intelligence-replay.md)
+and [completion](docs/EIE-13-completion.md). Work stops at EIE-13.

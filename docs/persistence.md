@@ -180,3 +180,14 @@ once by hash only when entitled. `nlp.validation.validate_store` recalculates so
 normalization, mentions, spans, verification, processing metadata and accepted values.
 
 See [structured extraction](structured-extraction.md) and [text ingestion](text-ingestion.md).
+
+## EIE-13 intelligence persistence (store 1.7)
+
+Ordered migration 8 adds immutable `ei_*` policies, reference manifests, results,
+entity/source/measurement memberships, novelty/materiality/uncertainty indexes,
+separate EIE-5 information artifacts, EIE-9 audit references and run manifests.
+Previous DDL and public payload schemas remain intact. Scalar/member indexes,
+source/policy hashes and exact recalculation are verified. One owned transaction
+collects inputs, calculates, appends resolutions/results and seals the cutoff.
+All added tables have UPDATE/DELETE refusal triggers. Source bodies remain with
+their owners. See [intelligence replay](intelligence-replay.md).

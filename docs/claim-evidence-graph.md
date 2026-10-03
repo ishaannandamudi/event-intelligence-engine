@@ -82,3 +82,12 @@ The internal event-link clock check now uses max(acquisition ingestion, lineage 
 availability), retaining existing historical semantics while admitting later processing.
 
 See [structured extraction](structured-extraction.md) and [text ingestion](text-ingestion.md).
+
+## EIE-13 consumer boundary
+
+EIE-13 consumes these categorical claim resolutions and explicitly pinned alias
+runs for descriptive novelty and uncertainty. It preserves alternatives, corrections,
+source families and unresolved identities. Its semantic comparison slots do not
+merge canonical events or replace EIE-11 resolution/false-merge safeguards. Results
+store source references rather than copies of complete claims or document bodies.
+See [novelty intelligence](novelty-intelligence.md).

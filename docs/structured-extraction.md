@@ -86,3 +86,13 @@ materiality, source-trust upgrade or permanent relationship edge is inferred.
 accepted assertions and event audits. `audit(run_id, known_as_of_ns)` traces
 candidate → verification → claim/assertion → original evidence → segment/map →
 document → raw observation. Audits omit source bodies.
+
+## EIE-13 consumer boundary
+
+EIE-13 compares retained original/normalized/segment hashes and accepted structured
+fields for document novelty. Model-only/rejected candidates cannot contribute factual
+fields. Partial/failed extraction remains an uncertainty reason, and unresolved
+person/role names stay unresolved. Document/bundle provenance supports several
+distinct events without collapsing them. Existing verification and EIE-11 grouping
+are unchanged. See [novelty](novelty-intelligence.md) and
+[uncertainty](uncertainty-decomposition.md).

@@ -131,3 +131,13 @@ Evidence claims can reference existing relationship edge/node IDs and typed expo
 this does not add inferred relationships, compose exposures or alter direct event scope.
 Source-family corroboration and field-level unresolved resolution belong to the evidence
 layer. EIE-10 behavior remains stable. See [claim/evidence](claim-evidence-graph.md).
+
+## EIE-13 graph context
+
+Entity novelty accepts an explicitly pinned graph snapshot strictly before the
+intelligence cutoff. Materiality accepts an available current snapshot and only
+direct active edges touching event entities. Exposure type, bounds, estimates,
+conflicts and graph truncation remain explicit. Missing exposure is unknown; no
+indirect propagation weight or permanent relationship is inferred from text.
+Future disclosures cannot alter a saved intelligence result. See
+[materiality intelligence](materiality-intelligence.md).

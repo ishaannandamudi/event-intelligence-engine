@@ -34,6 +34,7 @@ from eie.evidence import schema as evidence_schema
 from eie.expectations import consensus, guidance, normalization, observations, queries, units
 from eie.expectations import models as measurements
 from eie.expectations import settings as expectations_settings
+from eie.expectations import surprise as information_surprise
 from eie.filings import models as filings
 from eie.graph import claims as graph_claims
 from eie.graph import exposure as graph_exposure
@@ -48,6 +49,9 @@ from eie.impact import models as impact_models
 from eie.impact import sensitivity as impact_sensitivity
 from eie.impact import validation as impact_validation
 from eie.ingestion import models as operations
+from eie.intelligence import models as intelligence_models
+from eie.intelligence import policy as intelligence_policy
+from eie.intelligence import schema as intelligence_schema
 from eie.nlp import audit as text_audit
 from eie.nlp import documents as text_documents
 from eie.nlp import entities as text_entities
@@ -80,6 +84,10 @@ from eie.studies import queries as study_queries
 from eie.studies import validation as study_validation
 
 MODULES: tuple[ModuleType, ...] = (
+    intelligence_models,
+    intelligence_policy,
+    intelligence_schema,
+    information_surprise,
     text_documents,
     text_entities,
     text_mentions,

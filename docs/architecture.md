@@ -1,4 +1,4 @@
-# EIE architecture through EIE-11
+# EIE architecture through EIE-13
 
 ```text
 Source adapter protocol → immutable RawSourceObservation → EventNormalizer protocol
@@ -147,3 +147,17 @@ EIE-11 retains source trust, conflict resolution, corroboration and event aliase
 No model/vendor transport or new cross-source resolver is introduced.
 
 See [structured extraction](structured-extraction.md) and [text ingestion](text-ingestion.md).
+
+## EIE-13 intelligence architecture
+
+Pinned event revision + EIE-11 resolved source claims/alias history + accepted EIE-12
+documents + optional pinned EIE-10 graph and sourced EIE-5 references → strict-prior
+reference manifest → six novelty dimensions + static importance + event materiality
++ eight independent uncertainty components → append-only indexed result/run artifacts.
+Existing EIE-9 impact results attach as separate explicit audits.
+
+`intelligence` separates schema/models/policies, transient inputs and transactional
+collection, numeric/novelty/materiality/uncertainty calculations, engine, repository,
+queries and validation. Migration 8 raises the store to `1.7`. It introduces no
+dependency on sibling engines, transport, embeddings or new model authority.
+See [novelty](novelty-intelligence.md) and [intelligence replay](intelligence-replay.md).

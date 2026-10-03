@@ -135,3 +135,11 @@ reference-price curve is never summed to form CAR. The impact layer derives comp
 period returns and applies a declared prior-fitted benchmark/factor/control model.
 Information surprise, raw response and abnormal response stay separate. See
 [counterfactual impact](counterfactual-impact.md) and [abnormal returns](abnormal-returns.md).
+
+## EIE-13 intelligence boundary
+
+Raw market-response studies remain separate from information novelty and materiality.
+EIE-13 can retain the EIE-7 historical event/build provenance used by studies, with
+source cutoff and actual local availability separated. It does not add post-event
+study returns to an information baseline or reinterpret a missing study as zero
+impact. See [intelligence replay](intelligence-replay.md).

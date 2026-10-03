@@ -4,8 +4,8 @@ import sqlite3
 
 from eie.core.errors import PersistenceError
 
-STORE_SCHEMA_VERSION = "1.6"
-MIGRATION_VERSIONS = ("1.0", "1.1", "1.2", "1.3", "1.4", "1.5", "1.6")
+STORE_SCHEMA_VERSION = "1.7"
+MIGRATION_VERSIONS = ("1.0", "1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7")
 MIGRATIONS: tuple[tuple[str, ...], ...] = (
     (
         "CREATE TABLE schema_migrations(version INTEGER PRIMARY KEY, schema_version TEXT NOT NULL)",
@@ -506,6 +506,107 @@ MIGRATIONS += (
             "te_accepted",
             "te_retractions",
             "te_span_evidence",
+        )
+        for action in ("UPDATE", "DELETE")
+    ),
+)
+
+
+MIGRATIONS += (
+    (
+        (
+            "CREATE TABLE ei_policies(id TEXT PRIMARY KEY,fingerprint TEXT NOT NULL,payload "
+            "BLOB NOT NULL)"
+        ),
+        (
+            "CREATE TABLE ei_inputs(id TEXT PRIMARY KEY,dataset TEXT NOT NULL REFERENCES "
+            "ce_datasets(id),policy TEXT NOT NULL REFERENCES ei_policies(id),known INTEGER "
+            "NOT NULL,fingerprint TEXT NOT NULL,payload BLOB NOT NULL)"
+        ),
+        (
+            "CREATE TABLE ei_results(id TEXT PRIMARY KEY,event TEXT NOT NULL,revision INTEGER"
+            " NOT NULL,dataset TEXT NOT NULL REFERENCES ce_datasets(id),build TEXT,family "
+            "TEXT NOT NULL,event_type TEXT NOT NULL,known INTEGER NOT NULL,available INTEGER "
+            "NOT NULL,policy TEXT NOT NULL REFERENCES ei_policies(id),materiality TEXT NOT "
+            "NULL,inputs TEXT NOT NULL REFERENCES ei_inputs(id),fingerprint TEXT NOT "
+            "NULL,payload BLOB NOT NULL,FOREIGN KEY(event,revision) REFERENCES "
+            "events(id,revision))"
+        ),
+        "CREATE INDEX ei_event_history ON ei_results(dataset,event,known,available,id)",
+        "CREATE INDEX ei_type_history ON ei_results(dataset,family,event_type,known,id)",
+        "CREATE INDEX ei_materiality_history ON ei_results(materiality,known,id)",
+        "CREATE INDEX ei_build_policy ON ei_results(dataset,build,policy,known,id)",
+        (
+            "CREATE TABLE ei_entities(result TEXT NOT NULL REFERENCES ei_results(id),entity "
+            "TEXT NOT NULL,PRIMARY KEY(result,entity))"
+        ),
+        "CREATE INDEX ei_entity_history ON ei_entities(entity,result)",
+        (
+            "CREATE TABLE ei_sources(result TEXT NOT NULL REFERENCES ei_results(id),family "
+            "TEXT NOT NULL,PRIMARY KEY(result,family))"
+        ),
+        "CREATE INDEX ei_source_history ON ei_sources(family,result)",
+        (
+            "CREATE TABLE ei_measurements(result TEXT NOT NULL REFERENCES ei_results(id),"
+            "measurement TEXT NOT NULL,claim TEXT NOT NULL REFERENCES ce_claims(id),"
+            "PRIMARY KEY(result,measurement,claim))"
+        ),
+        "CREATE INDEX ei_measurement_history ON ei_measurements(measurement,result)",
+        (
+            "CREATE TABLE ei_novelty(result TEXT NOT NULL REFERENCES ei_results(id),dimension"
+            " TEXT NOT NULL,subject TEXT NOT NULL,state TEXT NOT NULL,component TEXT NOT "
+            "NULL,PRIMARY KEY(result,dimension,subject))"
+        ),
+        "CREATE INDEX ei_novelty_state ON ei_novelty(dimension,state,result)",
+        (
+            "CREATE TABLE ei_materiality(result TEXT NOT NULL REFERENCES ei_results(id),kind "
+            "TEXT NOT NULL,subject TEXT NOT NULL,category TEXT NOT NULL,PRIMARY "
+            "KEY(result,kind,subject))"
+        ),
+        "CREATE INDEX ei_materiality_component ON ei_materiality(kind,category,result)",
+        (
+            "CREATE TABLE ei_uncertainty(result TEXT NOT NULL REFERENCES ei_results(id),kind "
+            "TEXT NOT NULL,state TEXT NOT NULL,PRIMARY KEY(result,kind))"
+        ),
+        "CREATE INDEX ei_uncertainty_state ON ei_uncertainty(kind,state,result)",
+        (
+            "CREATE TABLE ei_information(id TEXT PRIMARY KEY,kind TEXT NOT NULL,event TEXT "
+            "NOT NULL,known INTEGER NOT NULL,fingerprint TEXT NOT NULL,payload BLOB NOT NULL)"
+        ),
+        "CREATE INDEX ei_information_history ON ei_information(kind,event,known,id)",
+        (
+            "CREATE TABLE ei_audits(id TEXT PRIMARY KEY,result TEXT NOT NULL REFERENCES "
+            "ei_results(id),available INTEGER NOT NULL,fingerprint TEXT NOT NULL,payload BLOB"
+            " NOT NULL)"
+        ),
+        "CREATE INDEX ei_audit_history ON ei_audits(result,available,id)",
+        (
+            "CREATE TABLE ei_runs(id TEXT PRIMARY KEY,dataset TEXT NOT NULL REFERENCES "
+            "ce_datasets(id),policy TEXT NOT NULL REFERENCES ei_policies(id),available "
+            "INTEGER NOT NULL,fingerprint TEXT NOT NULL,payload BLOB NOT NULL)"
+        ),
+        (
+            "CREATE TABLE ei_run_members(run TEXT NOT NULL REFERENCES ei_runs(id),result TEXT"
+            " NOT NULL REFERENCES ei_results(id),PRIMARY KEY(run,result))"
+        ),
+    )
+    + tuple(
+        f"CREATE TRIGGER immutable_{table}_{action.lower()} BEFORE {action} ON {table} "
+        "BEGIN SELECT RAISE(ABORT,'immutable event intelligence artifact'); END"
+        for table in (
+            "ei_policies",
+            "ei_inputs",
+            "ei_results",
+            "ei_entities",
+            "ei_sources",
+            "ei_measurements",
+            "ei_novelty",
+            "ei_materiality",
+            "ei_uncertainty",
+            "ei_information",
+            "ei_audits",
+            "ei_runs",
+            "ei_run_members",
         )
         for action in ("UPDATE", "DELETE")
     ),

@@ -105,3 +105,13 @@ immutable runs and updates; earlier cutoff audits do not change. Separately sele
 historical re-extractions should use explicit new build/dataset lineage.
 
 See [structured extraction](structured-extraction.md) and [text ingestion](text-ingestion.md).
+
+## EIE-13 prior-only intelligence
+
+Independent novelty pools exclude the current event, pinned EIE-11 aliases, same-time
+and future inputs. Older proposition vintages remain available for corrections and
+guidance changes. Exact references, policy and prior/current graph cutoffs pin every
+result. Historical source cutoff is separate from local result availability; queries
+enforce both. Later impact audits never change ex-ante materiality. Calculation and
+append share one SQLite snapshot and seal the evidence cutoff. See
+[intelligence replay](intelligence-replay.md).
