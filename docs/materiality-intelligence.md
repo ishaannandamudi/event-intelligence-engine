@@ -39,3 +39,7 @@ EIE-5 surprise and EIE-9 abnormal returns are separate references. Neither feeds
 this calculation. Adding an impact audit cannot change the original materiality,
 importance, novelty or extraction quality. These categories are descriptive policy
 outputs, not forecasts or recommendations.
+
+## EIE-14 consumer
+
+Analogue policies can request categorical materiality or a named financial/scale/guidance magnitude component from immutable ex-ante EIE-13 results. Later market response never changes these features. Missing or ambiguous metrics stay unavailable. See [historical analogues](historical-analogues.md).

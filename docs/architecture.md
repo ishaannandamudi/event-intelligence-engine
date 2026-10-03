@@ -161,3 +161,7 @@ collection, numeric/novelty/materiality/uncertainty calculations, engine, reposi
 queries and validation. Migration 8 raises the store to `1.7`. It introduces no
 dependency on sibling engines, transport, embeddings or new model authority.
 See [novelty](novelty-intelligence.md) and [intelligence replay](intelligence-replay.md).
+
+## EIE-14 historical comparisons
+
+Immutable ex-ante feature rows feed indexed strict-prior blocking, explicit distances, frozen analogue sets and separate ex-post reaction comparisons. EIE-13 collection runs at feature construction, not for every historical row on each query. See [historical analogues](historical-analogues.md).

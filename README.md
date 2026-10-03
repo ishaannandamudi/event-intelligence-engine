@@ -2,7 +2,7 @@
 
 EIE is a standalone, provider-neutral foundation for descriptive event intelligence. Its first priority is answering what was knowable at an exact time. It does not produce trade instructions.
 
-**Status:** EIE-13 novelty, materiality and uncertainty decomposition, version `1.4.0`.
+**Status:** EIE-14 historical analogues and market-reaction surprise, version `1.5.0`.
 Source-backed claims preserve alternatives, categorical field resolution, independent
 corroboration, conservative event aliases and historical correction/merge/split replay.
 Relationship exposure and empirical impact remain separate.
@@ -589,4 +589,27 @@ static importance, materiality, uncertainty, separate surprise/impact references
 impact separation, persistence/restart and identical bytes. See
 [novelty](docs/novelty-intelligence.md), [materiality](docs/materiality-intelligence.md),
 [uncertainty](docs/uncertainty-decomposition.md), [replay](docs/intelligence-replay.md)
-and [completion](docs/EIE-13-completion.md). Work stops at EIE-13.
+and [completion](docs/EIE-13-completion.md). Historical comparisons are added below in EIE-14.
+
+## Historical analogues and market-reaction surprise (EIE-14)
+
+```bash
+PYTHONPATH=src:. python examples/historical_analogues.py
+```
+
+The offline example builds real historical event/intelligence/study artifacts,
+selects strictly prior analogues with visible feature distances, freezes their
+response distribution and later compares the exact target response. It displays
+signed and magnitude percentiles and residual separately from an EIE-5 information
+surprise object and a real EIE-9 counterfactual impact. Metadata-only source fixtures
+have no numeric actual/consensus, so information surprise explicitly remains missing.
+Persist/restart proves byte-identical analogue and reaction artifacts. Historical
+source cutoff remains distinct from actual build/processing availability.
+
+Engine `1.5.0`, historical-analogue schema `1.0`, SQLite store `1.8`; all previous
+public schemas stay `1.0` and runtime dependencies remain empty. No response
+forecast, collision model, service/API, sibling integration or trading logic is added.
+See [historical analogues](docs/historical-analogues.md),
+[distance](docs/analogue-distance.md), [reaction surprise](docs/market-reaction-surprise.md)
+and [uncertainty](docs/analogue-uncertainty.md), with the
+[A–AQ completion report](docs/EIE-14-completion.md).

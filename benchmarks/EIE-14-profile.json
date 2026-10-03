@@ -1,0 +1,143 @@
+{
+  "blocked_counts": [
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25
+  ],
+  "dominant_functions": [
+    [
+      "profile",
+      1,
+      434.40422979100003
+    ],
+    [
+      "fixture",
+      1,
+      425.825013375
+    ],
+    [
+      "compute",
+      250,
+      305.926681846
+    ],
+    [
+      "collect",
+      250,
+      274.229224708
+    ],
+    [
+      "canonical_json_bytes",
+      24749269,
+      273.850898244
+    ],
+    [
+      "fingerprint",
+      9363407,
+      236.44937326800002
+    ],
+    [
+      "json_value",
+      179767719,
+      203.660055354
+    ],
+    [
+      "loads",
+      573017,
+      151.79381289100002
+    ],
+    [
+      "<dictcomp>",
+      26973037,
+      150.468163857
+    ],
+    [
+      "unpack",
+      21323087,
+      140.702823181
+    ],
+    [
+      "event_id",
+      5722178,
+      104.58073918900001
+    ],
+    [
+      "event_id",
+      5722178,
+      103.65272531800001
+    ],
+    [
+      "<dictcomp>",
+      2739498,
+      99.39903077700001
+    ],
+    [
+      "fact",
+      31375,
+      96.32422254400001
+    ],
+    [
+      "<genexpr>",
+      62750,
+      96.07522888300001
+    ]
+  ],
+  "family_count": 10,
+  "ordinary_queries_recompute_historical_intelligence": false,
+  "qualification": "Representative real source/intelligence/study workload; no 100k-row latency claim. Staged distance/distribution calculations are repeated by checked result assembly.",
+  "query_plan": [
+    [
+      2,
+      0,
+      46,
+      "SEARCH analogue_features USING COVERING INDEX analogue_type_block (dataset=? AND policy=? AND event_type=? AND event_available<?)"
+    ]
+  ],
+  "restart_byte_identical": true,
+  "result_bytes": 630123,
+  "rows": {
+    "analogue_features": 250,
+    "analogue_responses": 250,
+    "analogue_results": 10,
+    "ei_results": 250,
+    "study_results": 250
+  },
+  "selected_counts": [
+    20,
+    20,
+    20,
+    20,
+    20,
+    20,
+    20,
+    20,
+    20,
+    20
+  ],
+  "sqlite_bytes": 113078272,
+  "stages_seconds": {
+    "deep_validation": 3.3963776670279913,
+    "distance_calculation": 0.11666454095393419,
+    "distribution_calculation": 0.0024023340665735304,
+    "evidence_ingestion": 30.45208410359919,
+    "feature_index_construction": 20.39729398104828,
+    "historical_build": 0.6332602910115384,
+    "indexed_blocked_retrieval": 0.38743920892011374,
+    "intelligence_construction": 306.0286798683228,
+    "prior_scaling": 0.026466043025720865,
+    "reaction_comparison_and_persistence": 0.07799012499162927,
+    "response_index_construction": 12.009915626200382,
+    "restart_query": 0.8784324169973843,
+    "result_persistence": 1.346002625010442,
+    "study_construction_and_persistence": 56.87099796655821,
+    "top_k": 0.0001726248301565647
+  },
+  "target_queries": 10,
+  "workload": 250
+}

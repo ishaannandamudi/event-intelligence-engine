@@ -69,7 +69,7 @@ def test_atomic_models_fits_results_sets_runs_queries_restart(tmp_path):
     store.close()
     with SQLiteEventStore(tmp_path / "studies.sqlite") as restarted:
         repo = ImpactRepository(restarted)
-        assert restarted.schema_version == "1.7"
+        assert restarted.schema_version == "1.8"
         assert codec.dumps(repo.get(market.impact_id)) == payload
         assert repo.run(run.run_id) == run
         assert repo.sensitivity(value.set_id) == value
@@ -172,7 +172,7 @@ def test_store_1_2_migration_preserves_frozen_build_and_studies_and_rollback(tmp
     connection.close()
     monkeypatch.setattr(migrations, "MIGRATIONS", original)
     with SQLiteEventStore(tmp_path / "studies.sqlite") as upgraded:
-        assert upgraded.schema_version == "1.7"
+        assert upgraded.schema_version == "1.8"
         assert DatasetReader(DatasetRepository(upgraded), build.job.build_id).manifest == build
         assert StudyRepository(upgraded).get(study.study_id) == study
         assert ImpactRepository(upgraded).append(impact(base))

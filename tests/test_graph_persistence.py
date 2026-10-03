@@ -183,7 +183,7 @@ def test_additive_1_3_migration_retains_study_impact_and_history(tmp_path, monke
     connection.close()
     monkeypatch.setattr(migrations, "MIGRATIONS", original)
     with SQLiteEventStore(path) as upgraded:
-        assert upgraded.schema_version == "1.7"
+        assert upgraded.schema_version == "1.8"
         assert upgraded._rows("SELECT payload FROM impact_results ORDER BY id") == old_rows
         assert upgraded._rows("SELECT payload FROM study_results ORDER BY id") == old_studies
         assert old_result["restart_byte_identical"] and not upgraded._rows(

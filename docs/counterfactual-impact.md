@@ -158,3 +158,7 @@ separate immutable ex-post audit. EIE-9 fit/contamination/data diagnostics popul
 only impact uncertainty; original ex-ante novelty, static importance, materiality
 and extraction quality remain unchanged. No reaction scalar is fabricated. See
 [intelligence replay](intelligence-replay.md).
+
+## EIE-14 response reuse
+
+Abnormal/CAR analogue observations pin the exact EIE-9 result and model specification. Cohorts compare complete common model configuration and compatible return/window semantics; market-model and sector-model responses remain separate. Reaction surprise compares a frozen historical distribution and does not replace counterfactual impact. See [market-reaction surprise](market-reaction-surprise.md).

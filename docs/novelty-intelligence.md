@@ -38,3 +38,7 @@ explicit placeholder states when its inputs are absent.
 
 See [materiality](materiality-intelligence.md), [uncertainty](uncertainty-decomposition.md)
 and [replay](intelligence-replay.md).
+
+## EIE-14 consumer
+
+Historical analogue features can read an exact frozen numeric/guidance novelty metric, with an explicit measurement and matching semantic/unit signature. Candidate features use their own ex-ante source cutoff. Retrieval does not rebuild novelty using later history. See [distance](analogue-distance.md).

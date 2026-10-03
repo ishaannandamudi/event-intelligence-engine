@@ -31,8 +31,8 @@ def test_manifest_lineage_versions_export_and_rebuild_immutability(tmp_path):
         assert dict(manifest.record_counts)["CanonicalEvents"] == 2
         assert dict(manifest.record_counts)["RawSourceObservations"] == 2
         assert (
-            manifest.job.definition.engine_version == "1.4.0"
-            and manifest.store_schema_version == "1.7"
+            manifest.job.definition.engine_version == "1.5.0"
+            and manifest.store_schema_version == "1.8"
         )
         assert len(repo.lineage(job.build_id)) == 2
         for lineage in repo.lineage(job.build_id):

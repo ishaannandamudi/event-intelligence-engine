@@ -143,3 +143,7 @@ EIE-13 can retain the EIE-7 historical event/build provenance used by studies, w
 source cutoff and actual local availability separated. It does not add post-event
 study returns to an information baseline or reinterpret a missing study as zero
 impact. See [intelligence replay](intelligence-replay.md).
+
+## EIE-14 response reuse
+
+Retained completed EIE-8 response points, volatility differences, relative volume, supplied IV and quoted spread changes can supply explicitly compatible analogue distributions. The target study cannot select its analogue cohort by its observed response. See [market-reaction surprise](market-reaction-surprise.md).

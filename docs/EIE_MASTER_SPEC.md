@@ -1,6 +1,6 @@
 # Event Intelligence Engine (EIE) — Master Specification
 
-**Status:** Master design; implementation completed through EIE-13 (`1.4.0`)<br>
+**Status:** Master design; implementation completed through EIE-14 (`1.5.0`)<br>
 **Planned roadmap:** EIE-0 through EIE-17 (updated by the EIE-5 phase specification)<br>
 **Primary language:** Python<br>
 **Repository name:** `event-intelligence-engine`<br>
@@ -1312,7 +1312,7 @@ provider health and foreground operational controls. Current SEC submissions
 and BLS iCalendar are explicit opt-in sources. All quantitative schemas remain
 `1.0`; runtime/ingestion and persistent-store schemas start at `1.0`.
 See [EIE-6 completion](EIE-6-completion.md), [live ingestion](live-ingestion.md)
-and [persistence](persistence.md). EIE-7 through EIE-13 are implemented below; EIE-14 and later remain deferred.
+and [persistence](persistence.md). EIE-7 through EIE-14 are implemented below; EIE-15 and later remain deferred.
 
 ---
 
@@ -1739,6 +1739,25 @@ earlier schemas stay unchanged and runtime dependencies remain empty.
 
 See [novelty](novelty-intelligence.md), [materiality](materiality-intelligence.md),
 [uncertainty](uncertainty-decomposition.md), [replay](intelligence-replay.md) and
-[completion](EIE-13-completion.md). Implementation stops here. EIE-14's proposed
+[completion](EIE-13-completion.md). The EIE-13 phase stopped here. EIE-14's
 boundary is causal historical analogue retrieval and separate market-reaction
 surprise using supplied context, with distributions/diagnostics and no trading logic.
+
+## EIE-14 implementation boundary
+
+EIE-14 implements immutable provider-neutral ex-ante feature/context rows, indexed
+strict-prior historical candidate retrieval, explicit type/sector/context conditioning,
+transparent categorical/ordinal/numeric distances, prior MAD/IQR scaling, missing and
+zero-scale policies, bounded top-K and typed exclusions. Real completed EIE-8/EIE-9
+responses supply compatible unweighted descriptive distributions. Later target response
+comparison pins an unchanged frozen analogue set and retains separate signed/magnitude
+percentiles and residuals. Eight analogue uncertainty diagnostics remain independent.
+
+Engine `1.5.0`, historical-analogue schema `1.0`, additive SQLite store `1.8`; all prior
+schemas and empty runtime dependency policy remain unchanged. Ordinary retrieval uses
+prevalidated small indexed rows and does not rebuild each historical EIE-13 calculation.
+Source reconstruction and actual availability remain separate. See [historical analogues](historical-analogues.md),
+[distance](analogue-distance.md), [reaction surprise](market-reaction-surprise.md) and
+[uncertainty](analogue-uncertainty.md). Implementation stops after EIE-14. EIE-15 collision,
+interaction and propagation chronology, final service/API, MCE/AME integration and
+trading functionality remain deferred.

@@ -191,3 +191,7 @@ source/policy hashes and exact recalculation are verified. One owned transaction
 collects inputs, calculates, appends resolutions/results and seals the cutoff.
 All added tables have UPDATE/DELETE refusal triggers. Source bodies remain with
 their owners. See [intelligence replay](intelligence-replay.md).
+
+## EIE-14 additive store 1.8
+
+Migration 9 adds fifteen immutable analogue tables: policies, small feature rows and entity/measurement/context indices, response references, queries, frozen results, pool/selected/uncertainty membership, reactions, runs/members and sealed cutoffs. Existing payloads and prior migrations remain unchanged. Results retain IDs, fingerprints and small comparison values instead of complete historical intelligence/study/event objects. See [historical analogues](historical-analogues.md).

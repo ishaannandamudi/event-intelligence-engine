@@ -259,7 +259,7 @@ def test_additive_15_migration_preserves_raw_and_prior_ddl(tmp_path, monkeypatch
     monkeypatch.setattr(migrations, "MIGRATIONS", all_migrations)
     with SQLiteEventStore(path) as store:
         assert (
-            store.schema_version == "1.7"
+            store.schema_version == "1.8"
             and store._rows("SELECT payload FROM observations") == before
         )
         assert validate_store(TextRepository(store)).status is ValidationStatus.VALID

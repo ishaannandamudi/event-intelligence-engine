@@ -115,3 +115,7 @@ result. Historical source cutoff is separate from local result availability; que
 enforce both. Later impact audits never change ex-ante materiality. Calculation and
 append share one SQLite snapshot and seal the evidence cutoff. See
 [intelligence replay](intelligence-replay.md).
+
+## EIE-14 frozen analogue pools
+
+Candidates and complete response data require availability strictly before the target cutoff. Source reconstruction retains its actual build/processing availability. The target response is excluded from retrieval input; later comparison pins the frozen result. Future context/revisions cannot replace old rows. SQLite collection and freeze are transactional, and backdated index insertions into sealed cutoffs fail. See [historical analogues](historical-analogues.md).

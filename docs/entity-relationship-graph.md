@@ -141,3 +141,7 @@ conflicts and graph truncation remain explicit. Missing exposure is unknown; no
 indirect propagation weight or permanent relationship is inferred from text.
 Future disclosures cannot alter a saved intelligence result. See
 [materiality intelligence](materiality-intelligence.md).
+
+## EIE-14 supplied graph conditioning
+
+An explicitly requested retained snapshot can supply exact sector/industry/relationship categories at the candidate event cutoff. Snapshot knowledge cannot follow that cutoff, and valid time must equal it. Conflicted, ambiguous, unresolved and truncated memberships cannot establish a category. Other retained graph qualifiers remain visible on the feature row. No new relationship inference or sibling integration is introduced. See [historical analogues](historical-analogues.md).

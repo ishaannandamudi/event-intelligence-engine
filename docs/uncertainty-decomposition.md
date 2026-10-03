@@ -27,3 +27,7 @@ An accepted source can simultaneously have LOW source uncertainty, HIGH entity
 uncertainty, MODERATE numeric uncertainty and UNKNOWN materiality. Callers must
 inspect the relevant component and reasons. No trading, portfolio sizing or
 execution logic consumes these states here.
+
+## EIE-14 analogue diagnostics
+
+EIE-13 readiness remains unchanged. EIE-14 adds eight independently named diagnostics for an actual historical comparison, without replacing EIE-13 uncertainty or producing a master confidence. See [analogue uncertainty](analogue-uncertainty.md).

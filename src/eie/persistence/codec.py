@@ -7,6 +7,8 @@ from enum import Enum
 from types import ModuleType
 from typing import cast
 
+from eie.analogues import models as analogue_models
+from eie.analogues import schema as analogue_schema
 from eie.archive import models as archive_models
 from eie.backfill import models as backfill_models
 from eie.config import settings as config
@@ -84,6 +86,8 @@ from eie.studies import queries as study_queries
 from eie.studies import validation as study_validation
 
 MODULES: tuple[ModuleType, ...] = (
+    analogue_models,
+    analogue_schema,
     intelligence_models,
     intelligence_policy,
     intelligence_schema,

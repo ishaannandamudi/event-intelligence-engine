@@ -4,8 +4,8 @@ import sqlite3
 
 from eie.core.errors import PersistenceError
 
-STORE_SCHEMA_VERSION = "1.7"
-MIGRATION_VERSIONS = ("1.0", "1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7")
+STORE_SCHEMA_VERSION = "1.8"
+MIGRATION_VERSIONS = ("1.0", "1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8")
 MIGRATIONS: tuple[tuple[str, ...], ...] = (
     (
         "CREATE TABLE schema_migrations(version INTEGER PRIMARY KEY, schema_version TEXT NOT NULL)",
@@ -607,6 +607,145 @@ MIGRATIONS += (
             "ei_audits",
             "ei_runs",
             "ei_run_members",
+        )
+        for action in ("UPDATE", "DELETE")
+    ),
+)
+
+
+MIGRATIONS += (
+    (
+        (
+            "CREATE TABLE analogue_policies(id TEXT PRIMARY KEY,fingerprint TEXT NOT NUL"
+            "L,payload BLOB NOT NULL)"
+        ),
+        (
+            "CREATE TABLE analogue_features(id TEXT PRIMARY KEY,event TEXT NOT NULL,revi"
+            "sion INTEGER NOT NULL,dataset TEXT NOT NULL REFERENCES ce_datasets(id),buil"
+            "d TEXT,family TEXT NOT NULL,event_type TEXT NOT NULL,event_available INTEGE"
+            "R NOT NULL,known INTEGER NOT NULL,available INTEGER NOT NULL,policy TEXT NO"
+            "T NULL REFERENCES analogue_policies(id),intelligence TEXT NOT NULL REFERENC"
+            "ES ei_results(id),sector TEXT,industry TEXT,materiality TEXT NOT NULL,finge"
+            "rprint TEXT NOT NULL,payload BLOB NOT NULL,FOREIGN KEY(event,revision) REFE"
+            "RENCES events(id,revision))"
+        ),
+        (
+            "CREATE INDEX analogue_type_block ON analogue_features(dataset,policy,event_"
+            "type,event_available,id)"
+        ),
+        (
+            "CREATE INDEX analogue_family_block ON analogue_features(dataset,policy,fami"
+            "ly,event_available,id)"
+        ),
+        (
+            "CREATE INDEX analogue_sector_block ON analogue_features(dataset,policy,sect"
+            "or,event_available,id)"
+        ),
+        "CREATE INDEX analogue_industry_block ON analogue_features(industry,event_available,id)",
+        (
+            "CREATE INDEX analogue_materiality_block ON analogue_features(materiality,ev"
+            "ent_available,id)"
+        ),
+        "CREATE INDEX analogue_known ON analogue_features(dataset,policy,known,id)",
+        (
+            "CREATE TABLE analogue_entities(row TEXT NOT NULL REFERENCES analogue_featur"
+            "es(id),entity TEXT NOT NULL,PRIMARY KEY(row,entity))"
+        ),
+        "CREATE INDEX analogue_entity_block ON analogue_entities(entity,row)",
+        (
+            "CREATE TABLE analogue_measurements(row TEXT NOT NULL REFERENCES analogue_fe"
+            "atures(id),measurement TEXT NOT NULL,PRIMARY KEY(row,measurement))"
+        ),
+        "CREATE INDEX analogue_measurement_block ON analogue_measurements(measurement,row)",
+        (
+            "CREATE TABLE analogue_contexts(row TEXT NOT NULL REFERENCES analogue_featur"
+            "es(id),dimension TEXT NOT NULL,category TEXT NOT NULL,fingerprint TEXT NOT "
+            "NULL,PRIMARY KEY(row,dimension))"
+        ),
+        "CREATE INDEX analogue_context_block ON analogue_contexts(dimension,category,row)",
+        (
+            "CREATE TABLE analogue_responses(id TEXT PRIMARY KEY,row TEXT NOT NULL REFER"
+            "ENCES analogue_features(id),event TEXT NOT NULL,spec TEXT NOT NULL,metric T"
+            "EXT NOT NULL,study TEXT NOT NULL REFERENCES study_results(id),impact TEXT R"
+            "EFERENCES impact_results(id),completed INTEGER NOT NULL,available INTEGER N"
+            "OT NULL,fingerprint TEXT NOT NULL,payload BLOB NOT NULL)"
+        ),
+        "CREATE INDEX analogue_response_block ON analogue_responses(row,spec,available,id)",
+        "CREATE INDEX analogue_metric_block ON analogue_responses(metric,available,id)",
+        (
+            "CREATE TABLE analogue_queries(id TEXT PRIMARY KEY,target_row TEXT NOT NULL "
+            "REFERENCES analogue_features(id),known INTEGER NOT NULL,fingerprint TEXT NO"
+            "T NULL,payload BLOB NOT NULL)"
+        ),
+        (
+            "CREATE TABLE analogue_results(id TEXT PRIMARY KEY,query TEXT NOT NULL UNIQU"
+            "E REFERENCES analogue_queries(id),target TEXT NOT NULL,revision INTEGER NOT"
+            " NULL,dataset TEXT NOT NULL,known INTEGER NOT NULL,available INTEGER NOT NU"
+            "LL,policy TEXT NOT NULL REFERENCES analogue_policies(id),fingerprint TEXT N"
+            "OT NULL,payload BLOB NOT NULL)"
+        ),
+        "CREATE INDEX analogue_target_history ON analogue_results(target,known,available,id)",
+        (
+            "CREATE INDEX analogue_result_history ON analogue_results(dataset,policy,kno"
+            "wn,available,id)"
+        ),
+        (
+            "CREATE TABLE analogue_members(result TEXT NOT NULL REFERENCES analogue_resu"
+            "lts(id),row TEXT NOT NULL REFERENCES analogue_features(id),response TEXT RE"
+            "FERENCES analogue_responses(id),exclusion TEXT,fingerprint TEXT NOT NULL,PR"
+            "IMARY KEY(result,row))"
+        ),
+        (
+            "CREATE TABLE analogue_selected(result TEXT NOT NULL REFERENCES analogue_res"
+            "ults(id),row TEXT NOT NULL REFERENCES analogue_features(id),distance REAL N"
+            "OT NULL,fingerprint TEXT NOT NULL,PRIMARY KEY(result,row))"
+        ),
+        (
+            "CREATE TABLE analogue_uncertainty(result TEXT NOT NULL REFERENCES analogue_"
+            "results(id),kind TEXT NOT NULL,state TEXT NOT NULL,PRIMARY KEY(result,kind)"
+            ")"
+        ),
+        (
+            "CREATE TABLE analogue_reactions(id TEXT PRIMARY KEY,result TEXT NOT NULL RE"
+            "FERENCES analogue_results(id),response TEXT REFERENCES analogue_responses(i"
+            "d),available INTEGER NOT NULL,fingerprint TEXT NOT NULL,payload BLOB NOT NU"
+            "LL)"
+        ),
+        "CREATE INDEX analogue_reaction_history ON analogue_reactions(result,available,id)",
+        (
+            "CREATE TABLE analogue_runs(id TEXT PRIMARY KEY,dataset TEXT NOT NULL,availa"
+            "ble INTEGER NOT NULL,fingerprint TEXT NOT NULL,payload BLOB NOT NULL)"
+        ),
+        (
+            "CREATE TABLE analogue_run_members(run TEXT NOT NULL REFERENCES analogue_run"
+            "s(id),result TEXT NOT NULL REFERENCES analogue_results(id),PRIMARY KEY(run,"
+            "result))"
+        ),
+        (
+            "CREATE TABLE analogue_seals(dataset TEXT NOT NULL,policy TEXT NOT NULL REFE"
+            "RENCES analogue_policies(id),known INTEGER NOT NULL,query TEXT NOT NULL REF"
+            "ERENCES analogue_queries(id),PRIMARY KEY(dataset,policy,known,query))"
+        ),
+    )
+    + tuple(
+        f"CREATE TRIGGER immutable_{table}_{action.lower()} BEFORE {action} ON {table} "
+        "BEGIN SELECT RAISE(ABORT,'immutable analogue artifact'); END"
+        for table in (
+            "analogue_policies",
+            "analogue_features",
+            "analogue_entities",
+            "analogue_measurements",
+            "analogue_contexts",
+            "analogue_responses",
+            "analogue_queries",
+            "analogue_results",
+            "analogue_members",
+            "analogue_selected",
+            "analogue_uncertainty",
+            "analogue_reactions",
+            "analogue_runs",
+            "analogue_run_members",
+            "analogue_seals",
         )
         for action in ("UPDATE", "DELETE")
     ),
