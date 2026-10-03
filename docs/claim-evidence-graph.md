@@ -69,3 +69,16 @@ assertions, contradictions, field resolutions, source-item audit and event/sourc
 Bounded traversal starts from a raw item, follows its assertions and claim relationships,
 and returns reference/claim/link IDs with explicit truncation. All source content is inert.
 No NLP, model invocation, executable deserialization or provider-issued tools are involved.
+
+
+## EIE-12 text extraction
+
+EIE-12 verified candidates produce the existing `Claim`, `ProviderClaimObservation`,
+`EvidenceReference` and `EvidenceBatch` contracts. Exact original CHARACTER spans
+and fragment hashes connect to segments, normalization maps and documents. Models
+remain processing metadata; source independence and canonical field resolution stay
+in EIE-11. Accepted links, source checkpoint and extraction artifacts commit atomically.
+The internal event-link clock check now uses max(acquisition ingestion, lineage known
+availability), retaining existing historical semantics while admitting later processing.
+
+See [structured extraction](structured-extraction.md) and [text ingestion](text-ingestion.md).

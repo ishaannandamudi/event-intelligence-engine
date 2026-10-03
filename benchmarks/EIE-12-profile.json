@@ -1,0 +1,31 @@
+{
+  "audit_query_seconds": 60.693514208018314,
+  "candidates": 30150,
+  "characters": 2250000,
+  "characters_per_second": 35738.49341424687,
+  "database_bytes": 16629760,
+  "deterministic_proposals_seconds": 3.421385304478463,
+  "docs_per_second": 158.83774850776388,
+  "documents_persisted": 25,
+  "documents_preprocessed": 10000,
+  "fake_model_calls": 50,
+  "full_extraction_and_verification_seconds": 39.310428632597905,
+  "network_calls": 0,
+  "normalization_and_mentions_seconds": 19.655613545153756,
+  "persistence_seconds": 75.66718420799589,
+  "preprocessing_seconds": 62.95732654200401,
+  "restart_and_validation_seconds": 162.0042902919813,
+  "restart_byte_identical": true,
+  "spans": 160000,
+  "tables": {
+    "ce_assertions": 200,
+    "ce_claims": 152,
+    "ce_references": 350,
+    "te_accepted": 208,
+    "te_artifacts": 806,
+    "te_contents": 20,
+    "te_documents": 25,
+    "te_runs": 25
+  },
+  "timing_threshold": null
+}

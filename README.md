@@ -2,7 +2,7 @@
 
 EIE is a standalone, provider-neutral foundation for descriptive event intelligence. Its first priority is answering what was knowable at an exact time. It does not produce trade instructions.
 
-**Status:** EIE-11 structured claim/evidence and multi-source resolution, version `1.2.0`.
+**Status:** EIE-12 source-backed text intelligence and verified extraction, version `1.3.0`.
 Source-backed claims preserve alternatives, categorical field resolution, independent
 corroboration, conservative event aliases and historical correction/merge/split replay.
 Relationship exposure and empirical impact remain separate.
@@ -427,11 +427,12 @@ The accepted timestamp and EIE knowledge time are distinct when observation or i
 
 ## Scope
 
-EIE-0 through EIE-11 provide canonical/replay contracts, scheduled/official/SEC/corporate
+EIE-0 through EIE-12 provide canonical/replay contracts, scheduled/official/SEC/corporate
 events, numerical surprise, durable acquisition, historical builds, raw studies and
-counterfactual estimates, sourced relationship graphs, propagation candidates and
-structured claim/evidence resolution with conservative event deduplication. Unscheduled NLP, novelty,
-materiality, analogues, collision modeling, final services and downstream integration
+counterfactual estimates, sourced relationship graphs, propagation candidates,
+structured claim/evidence resolution with conservative event deduplication and
+verified unscheduled text extraction. Novelty, materiality, analogues, collision
+modeling, final services and downstream integration
 remain deferred. Trading and execution are outside the engine's purpose.
 The [master roadmap](docs/EIE_MASTER_SPEC.md) defines later phases.
 
@@ -502,3 +503,57 @@ See [claim/evidence](docs/claim-evidence-graph.md), [deduplication](docs/multi-s
 [claim resolution](docs/claim-resolution.md) and [evidence replay](docs/evidence-replay.md).
 Run the representative [profile](benchmarks/evidence_profile.py):
 `PYTHONPATH=src:. python benchmarks/evidence_profile.py`.
+
+
+## Offline source-backed text example
+
+```sh
+PYTHONPATH=src:. python examples/text_demo.py
+```
+
+The executable example performs these twelve steps:
+
+1. Creates a synthetic press release with trusted source/retention configuration.
+2. Normalizes UTF-8 and segments the document with original-offset mapping.
+3. Extracts explicit CIK, numeric values, units, dates, period and person/role.
+4. Uses a deterministic fake model to propose structured events.
+5. Verifies exact spans, hashes, entities, units, context and time precision.
+6. Rejects one hallucinated numeric proposal.
+7. Accepts verified earnings, buyback and management claims.
+8. Commits those claims through EIE-11 with original source evidence.
+9. Ingests a second source document with a conflicting revenue value.
+10. Asserts that EIE-11 preserves the disagreement.
+11. Persists and restarts the store.
+12. Asserts byte-identical historical extraction/audit results.
+
+```python
+from eie.nlp.engine import TextEngine
+from eie.nlp.queries import TextQueries
+from eie.nlp.repository import TextRepository
+
+repository = TextRepository(sqlite_store)
+run = TextEngine(repository).ingest(
+    text_provider,
+    text_document,
+    source_bytes,
+    entity_catalog,
+    extraction_available_ns,
+    model=optional_model,
+)
+queries = TextQueries(repository, text_document.dataset_id)
+audit = queries.audit(run.run_id, known_as_of_ns=extraction_available_ns)
+```
+
+The named inputs are typed contracts; the executable example supplies them.
+Source text is untrusted data and model output is a proposal. Failed extraction
+never certifies event absence. Model provenance is distinct from provider provenance.
+Extraction quality never upgrades source reliability or rumor/denial into confirmation.
+
+See [text ingestion](docs/text-ingestion.md), [structured extraction](docs/structured-extraction.md),
+[model assistance](docs/model-assisted-extraction.md), [security](docs/nlp-security.md),
+[unscheduled events](docs/unscheduled-events.md) and [EIE-12 completion](docs/EIE-12-completion.md).
+The [offline profile](benchmarks/text_extraction.py) measures 10,000 documents with
+fake model assistance on a subset, 25 persisted documents, audit/restart and storage:
+`PYTHONPATH=src:. python benchmarks/text_extraction.py`.
+Text-extraction schema is `1.0`, SQLite store is `1.6`, all prior public schemas remain
+`1.0`, and runtime dependencies remain empty. Work stops at EIE-12.

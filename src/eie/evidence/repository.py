@@ -310,7 +310,10 @@ class EvidenceRepository:
                 raise ValidationError("assertion evidence parser/source mismatch")
         if (
             value.event_id is not None
-            and self.store.get_event(value.event_id, lineage.ingested_at_ns) is None
+            and self.store.get_event(
+                value.event_id, max(lineage.ingested_at_ns, lineage.known_from_ns)
+            )
+            is None
         ):
             raise ValidationError("claim-to-event link requires retained known canonical event")
 

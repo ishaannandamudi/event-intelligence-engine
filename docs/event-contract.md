@@ -58,3 +58,15 @@ semantic proposition slots, provider assertions and canonical field resolutions 
 identities. Event aliases retain each original event/revision rather than rewriting scope or
 facts. Claims supporting a group can be queried as field-specific resolutions. See
 [claim/evidence](claim-evidence-graph.md) and [claim resolution](claim-resolution.md).
+
+
+## EIE-12 text extraction
+
+Verified text candidates create source-local event envelopes with reported
+confirmation and original raw evidence. Exact period and explicit person/role help
+keep distinct source events separate. Candidate method/quality/model metadata stays
+in extraction artifacts. Rumor, denial, plans, conditions, allegations and negation
+remain unaccepted artifacts; an announcement does not imply deal completion.
+Measurement proposition identity is separate from each assertion's source event link.
+
+See [structured extraction](structured-extraction.md) and [text ingestion](text-ingestion.md).

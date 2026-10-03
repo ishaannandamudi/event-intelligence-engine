@@ -93,3 +93,15 @@ Completed item clocks cannot backdate; independent providers may commit at one u
 clock. Freeze a complete cutoff atomically before relying on an unfinished ingest wave's
 view as immutable. Historical acquisitions pin their EIE-7 build/fact/acquisition and retain actual local
 clocks separately from qualified source availability. See [evidence replay](evidence-replay.md).
+
+
+## EIE-12 text extraction
+
+Extraction knowledge cannot precede source acquisition or actual processing
+availability. The additive `ExtractionAcquisition` preserves original observed,
+ingested and historical source-availability clocks and adds processing availability.
+Historical text pins the EIE-7 build/fact/acquisition. Later reprocessing creates new
+immutable runs and updates; earlier cutoff audits do not change. Separately selected
+historical re-extractions should use explicit new build/dataset lineage.
+
+See [structured extraction](structured-extraction.md) and [text ingestion](text-ingestion.md).

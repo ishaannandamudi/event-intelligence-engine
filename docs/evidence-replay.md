@@ -58,3 +58,14 @@ PYTHONPATH=src:. python examples/evidence_demo.py
 The [profile](../benchmarks/evidence_profile.py) measures ingestion, blocked candidates,
 resolution, reference lookup, historical replay, fully checked restart and storage size.
 No CI timing threshold or claim of production-scale throughput is implied.
+
+
+## EIE-12 text extraction
+
+`TextQueries.audit(run_id, known_as_of_ns)` traces accepted candidate/verification,
+claim/assertion, original reference, segment/map, document and raw observation.
+Processing versions and extraction availability are explicit. Corrections/retractions
+and later model runs append history without changing earlier views. Metadata-only
+validation reports the inability to recalculate source-body spans.
+
+See [structured extraction](structured-extraction.md) and [text ingestion](text-ingestion.md).

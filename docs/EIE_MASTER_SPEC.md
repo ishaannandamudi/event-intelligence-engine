@@ -1,6 +1,6 @@
 # Event Intelligence Engine (EIE) — Master Specification
 
-**Status:** Master design; implementation completed through EIE-11 (`1.2.0`)<br>
+**Status:** Master design; implementation completed through EIE-12 (`1.3.0`)<br>
 **Planned roadmap:** EIE-0 through EIE-17 (updated by the EIE-5 phase specification)<br>
 **Primary language:** Python<br>
 **Repository name:** `event-intelligence-engine`<br>
@@ -1705,3 +1705,23 @@ EIE itself remains a causal, descriptive, event-intelligence system rather than 
 Do not start EIE-1 until EIE-0 has been reviewed and accepted.
 
 The first Codex implementation should establish the contracts that every later phase depends upon; it should not attempt live ingestion, advanced NLP, event studies, relationship graphs, or downstream integration prematurely.
+
+
+## EIE-12 implementation boundary
+
+EIE-12 implements source-backed unscheduled text intelligence and structured extraction:
+immutable documents, bounded mapped normalization, segmentation, numeric/date/entity
+mentions, controlled event families, optional provider-neutral model proposals,
+strict output schema, source span verification, categorical extraction quality,
+append-only processing/version history, explicit failures and atomic EIE-11 linkage.
+Model output is processing provenance. Source text remains inert untrusted data.
+Knowledge includes actual extraction availability; historical text pins its EIE-7
+build/fact/acquisition. SQLite store `1.6`, extraction schema `1.0`, engine `1.3.0`;
+all preceding public schema versions and runtime dependency policy remain unchanged.
+
+See [text ingestion](text-ingestion.md), [structured extraction](structured-extraction.md),
+[model assistance](model-assisted-extraction.md), [security](nlp-security.md),
+[unscheduled events](unscheduled-events.md) and [completion](EIE-12-completion.md).
+Novelty/materiality/uncertainty decomposition is proposed for EIE-13 and is not
+implemented here. Analogue retrieval, collision modeling, final service/API,
+MCE/AME integration and trading remain outside this implementation.

@@ -72,3 +72,14 @@ Categorical precedence retains every alternative, and equal-rank disagreement ca
 unresolved. Predicate-specific policies resolve fields independently. Normalized retention
 requires configured entitlement; raw bytes remain under EIE-6/7 archive policy. See
 [claim resolution](claim-resolution.md) and [claim/evidence](claim-evidence-graph.md).
+
+
+## EIE-12 text extraction
+
+Text providers explicitly configure normalized-field entitlement, raw retention,
+source family, currency and reference timezone. Models are processing provenance,
+never a new source class. Original licensed bytes are content-addressed once under
+bounded raw permission; metadata-only queries cannot gain another provider's retained
+body. Missing content produces a validation warning, not fabricated verification.
+
+See [structured extraction](structured-extraction.md) and [text ingestion](text-ingestion.md).

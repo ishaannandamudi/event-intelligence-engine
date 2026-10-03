@@ -75,7 +75,7 @@ def test_result_definition_run_immutability_restart_and_queries(tmp_path):
             tuple(r.result_fingerprint for r in loaded.studies_as_of(values[-1].available_ns + 1))
             == fingerprints
         )
-        assert restarted.schema_version == "1.5"
+        assert restarted.schema_version == "1.6"
 
 
 def test_atomic_run_rollback_and_provenance_refusal(tmp_path, monkeypatch):
@@ -168,7 +168,7 @@ def test_migration_1_1_to_1_2_and_failed_ddl_rollback(tmp_path, monkeypatch):
     connection.close()
     monkeypatch.setattr(migrations, "MIGRATIONS", original)
     with SQLiteEventStore(path) as store:
-        assert store.schema_version == "1.5"
+        assert store.schema_version == "1.6"
         assert store._rows("SELECT payload FROM sessions WHERE namespace='old'") == [(old_session,)]
         assert store.validate() == ()
 
@@ -192,7 +192,7 @@ def test_existing_historical_manifest_survives_additive_store_migration(tmp_path
         repo = DatasetRepository(migrated)
         manifest = repo.manifest(build_id)
         assert manifest.content_fingerprint == original_fingerprint
-        assert migrated.schema_version == "1.5"
+        assert migrated.schema_version == "1.6"
         assert validate_dataset(repo, archive, build_id).status is ValidationStatus.VALID
         reader = DatasetReader(repo, build_id)
         r = result(reader, ids[-1])

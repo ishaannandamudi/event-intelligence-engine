@@ -166,3 +166,17 @@ be updated. No raw body or fragment is copied into claim rows. Earlier migration
 payload bytes remain unchanged. Checks cover scalar/index agreement, references, causal
 chains, exact artifact recalculation, atomic rollback and two-connection races. See
 [claim/evidence](claim-evidence-graph.md) and [evidence replay](evidence-replay.md).
+
+
+## EIE-12 text extraction
+
+Migration seven adds `te_contents`, documents, maps, segments, catalogs, templates,
+artifacts, entity memberships, runs, run memberships/segments, accepted assertion
+links, withdrawals and span/evidence links. Indexes cover source items/content hashes,
+publication/acquisition time, family/entity, model/prompt versions and accepted claims.
+Foreign keys, immutable triggers, typed JSON identities and complete membership checks
+protect restart. All six preceding migrations are unchanged. Text content is stored
+once by hash only when entitled. `nlp.validation.validate_store` recalculates source
+normalization, mentions, spans, verification, processing metadata and accepted values.
+
+See [structured extraction](structured-extraction.md) and [text ingestion](text-ingestion.md).

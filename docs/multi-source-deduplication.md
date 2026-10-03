@@ -57,3 +57,14 @@ Source descriptors are append-only. A later explicit descriptor correction can c
 split→merge or merge→split. Historical runs retain exact input descriptor, candidate and
 group membership links. Earlier event revisions, raw observations and evidence remain.
 See [evidence replay](evidence-replay.md) for cutoff/sealing and build boundaries.
+
+
+## EIE-12 text extraction
+
+Text candidates and source-local event descriptors remain distinct for each source.
+Exact duplicate content can reuse bytes without combining observations. Configured
+source families preserve syndication lineage. EIE-12 performs no fuzzy article matching
+or event alias selection. EIE-11 alone compares descriptors and resolves multi-source
+facts; measurement slots include exact issuer/period/metric qualifiers and units.
+
+See [structured extraction](structured-extraction.md) and [text ingestion](text-ingestion.md).

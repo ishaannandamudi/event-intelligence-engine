@@ -310,7 +310,7 @@ def test_additive_migration_from_14_preserves_original_bytes(tmp_path, monkeypat
         before = store._rows("SELECT payload FROM observations")[0][0]
     monkeypatch.setattr(migrations, "MIGRATIONS", original)
     with SQLiteEventStore(path) as store:
-        assert store.schema_version == "1.5"
+        assert store.schema_version == "1.6"
         assert store._rows("SELECT payload FROM observations")[0][0] == before
         assert store.get_observation(raw.observation_id) == raw
         setup(store)[1].ingest(source("BETA"), item(source("BETA"), 200))

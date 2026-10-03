@@ -48,6 +48,17 @@ from eie.impact import models as impact_models
 from eie.impact import sensitivity as impact_sensitivity
 from eie.impact import validation as impact_validation
 from eie.ingestion import models as operations
+from eie.nlp import audit as text_audit
+from eie.nlp import documents as text_documents
+from eie.nlp import entities as text_entities
+from eie.nlp import mentions as text_mentions
+from eie.nlp import models as text_models
+from eie.nlp import normalization as text_normalization
+from eie.nlp import prompts as text_prompts
+from eie.nlp import schema as text_schema
+from eie.nlp import segmentation as text_segmentation
+from eie.nlp import spans as text_spans
+from eie.nlp import validation_models as text_validation_models
 from eie.providers.common import ingestion as official_ingestion
 from eie.providers.common import models as official
 from eie.providers.common import settings as official_settings
@@ -58,6 +69,7 @@ from eie.providers.relationships import models as relationship_sources
 from eie.providers.sec import adapter as sec_adapter
 from eie.providers.sec import models as sec
 from eie.providers.sec import settings as sec_settings
+from eie.providers.text import models as text_sources
 from eie.scheduled import coverage, windows
 from eie.scheduled import models as schedules
 from eie.sources import models as sources
@@ -68,6 +80,18 @@ from eie.studies import queries as study_queries
 from eie.studies import validation as study_validation
 
 MODULES: tuple[ModuleType, ...] = (
+    text_documents,
+    text_entities,
+    text_mentions,
+    text_models,
+    text_normalization,
+    text_prompts,
+    text_schema,
+    text_segmentation,
+    text_spans,
+    text_validation_models,
+    text_audit,
+    text_sources,
     evidence_claims,
     evidence_dedup,
     evidence_graph,

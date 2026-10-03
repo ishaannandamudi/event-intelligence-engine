@@ -4,8 +4,8 @@ import sqlite3
 
 from eie.core.errors import PersistenceError
 
-STORE_SCHEMA_VERSION = "1.5"
-MIGRATION_VERSIONS = ("1.0", "1.1", "1.2", "1.3", "1.4", "1.5")
+STORE_SCHEMA_VERSION = "1.6"
+MIGRATION_VERSIONS = ("1.0", "1.1", "1.2", "1.3", "1.4", "1.5", "1.6")
 MIGRATIONS: tuple[tuple[str, ...], ...] = (
     (
         "CREATE TABLE schema_migrations(version INTEGER PRIMARY KEY, schema_version TEXT NOT NULL)",
@@ -418,6 +418,94 @@ MIGRATIONS += (
             "ce_group_members",
             "ce_receipts",
             "ce_seals",
+        )
+        for action in ("UPDATE", "DELETE")
+    ),
+)
+
+
+MIGRATIONS += (
+    (
+        "CREATE TABLE te_contents(id TEXT PRIMARY KEY, content BLOB NOT NULL)",
+        "CREATE TABLE te_documents(id TEXT PRIMARY KEY, dataset TEXT NOT NULL REFERENCES "
+        "ce_datasets(id),"
+        " raw TEXT NOT NULL REFERENCES observations(id), thread TEXT NOT NULL, "
+        "content_hash TEXT NOT NULL,"
+        " published INTEGER, observed INTEGER NOT NULL, payload BLOB NOT NULL)",
+        "CREATE INDEX te_document_source ON te_documents(dataset,thread,observed,id)",
+        "CREATE INDEX te_document_content ON te_documents(content_hash,id)",
+        "CREATE INDEX te_document_published ON te_documents(published,id)",
+        "CREATE TABLE te_maps(id TEXT PRIMARY KEY, original_hash TEXT NOT NULL, "
+        "normalized_hash TEXT NOT NULL, payload BLOB NOT NULL)",
+        "CREATE TABLE te_segments(id TEXT PRIMARY KEY, document TEXT NOT NULL REFERENCES "
+        "te_documents(id),"
+        " map TEXT NOT NULL REFERENCES te_maps(id), number INTEGER NOT NULL, start "
+        "INTEGER NOT NULL,"
+        " end INTEGER NOT NULL, payload BLOB NOT NULL, UNIQUE(document,map,number))",
+        "CREATE INDEX te_segment_document ON te_segments(document,map,number)",
+        "CREATE TABLE te_catalogs(id TEXT PRIMARY KEY, payload BLOB NOT NULL)",
+        "CREATE TABLE te_templates(id TEXT PRIMARY KEY, template TEXT NOT NULL, version "
+        "TEXT NOT NULL, payload BLOB NOT NULL)",
+        "CREATE INDEX te_template_version ON te_templates(template,version,id)",
+        "CREATE TABLE te_artifacts(id TEXT PRIMARY KEY, document TEXT NOT NULL "
+        "REFERENCES te_documents(id),"
+        " map TEXT NOT NULL REFERENCES te_maps(id), kind TEXT NOT NULL, segment TEXT "
+        "REFERENCES te_segments(id),"
+        " family TEXT, payload BLOB NOT NULL)",
+        "CREATE INDEX te_artifact_document ON te_artifacts(document,kind,id)",
+        "CREATE INDEX te_candidate_family ON te_artifacts(family,document,id)",
+        "CREATE TABLE te_entity_members(artifact TEXT NOT NULL REFERENCES "
+        "te_artifacts(id), entity TEXT NOT NULL,"
+        " PRIMARY KEY(artifact,entity))",
+        "CREATE INDEX te_entity_lookup ON te_entity_members(entity,artifact)",
+        "CREATE TABLE te_runs(id TEXT PRIMARY KEY, document TEXT NOT NULL REFERENCES "
+        "te_documents(id),"
+        " map TEXT NOT NULL REFERENCES te_maps(id), catalog TEXT NOT NULL REFERENCES "
+        "te_catalogs(id),"
+        " known INTEGER NOT NULL, model TEXT, model_version TEXT, template TEXT "
+        "REFERENCES te_templates(id),"
+        " status TEXT NOT NULL, fingerprint TEXT NOT NULL, payload BLOB NOT NULL)",
+        "CREATE INDEX te_run_knowledge ON te_runs(document,known,id)",
+        "CREATE INDEX te_run_model ON te_runs(model,model_version,template,known,id)",
+        "CREATE INDEX te_run_status ON te_runs(status,known,id)",
+        "CREATE TABLE te_members(run TEXT NOT NULL REFERENCES te_runs(id), artifact TEXT "
+        "NOT NULL REFERENCES te_artifacts(id),"
+        " kind TEXT NOT NULL, PRIMARY KEY(run,artifact))",
+        "CREATE TABLE te_run_segments(run TEXT NOT NULL REFERENCES te_runs(id), segment "
+        "TEXT NOT NULL REFERENCES te_segments(id),"
+        " PRIMARY KEY(run,segment))",
+        "CREATE TABLE te_accepted(run TEXT NOT NULL REFERENCES te_runs(id), candidate "
+        "TEXT NOT NULL REFERENCES te_artifacts(id),"
+        " event TEXT NOT NULL, claim TEXT NOT NULL REFERENCES ce_claims(id), assertion "
+        "TEXT NOT NULL REFERENCES ce_assertions(id),"
+        " PRIMARY KEY(run,candidate,claim,assertion))",
+        "CREATE INDEX te_accepted_claim ON te_accepted(claim,run,candidate)",
+        "CREATE INDEX te_accepted_event ON te_accepted(event,run,candidate)",
+        "CREATE TABLE te_retractions(run TEXT NOT NULL REFERENCES te_runs(id), assertion "
+        "TEXT NOT NULL REFERENCES ce_assertions(id),"
+        " PRIMARY KEY(run,assertion))",
+        "CREATE TABLE te_span_evidence(run TEXT NOT NULL REFERENCES te_runs(id), span "
+        "TEXT NOT NULL REFERENCES te_artifacts(id),"
+        " evidence TEXT NOT NULL REFERENCES ce_references(id), PRIMARY KEY(run,span,evidence))",
+    )
+    + tuple(
+        f"CREATE TRIGGER immutable_{table}_{action.lower()} BEFORE {action} ON {table} "
+        "BEGIN SELECT RAISE(ABORT,'immutable text extraction artifact'); END"
+        for table in (
+            "te_contents",
+            "te_documents",
+            "te_maps",
+            "te_segments",
+            "te_catalogs",
+            "te_templates",
+            "te_artifacts",
+            "te_entity_members",
+            "te_runs",
+            "te_members",
+            "te_run_segments",
+            "te_accepted",
+            "te_retractions",
+            "te_span_evidence",
         )
         for action in ("UPDATE", "DELETE")
     ),

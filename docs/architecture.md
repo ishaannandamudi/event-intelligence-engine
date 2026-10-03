@@ -135,3 +135,15 @@ resolution, matching/blocking, grouping, history, queries, repository, validatio
 The exposure graph keeps its own semantics. Saved evidence views seal their cutoff;
 independent provider writes at a shared unsealed clock retain both alternatives.
 See [claim/evidence](claim-evidence-graph.md) and [deduplication](multi-source-deduplication.md).
+
+
+## EIE-12 text extraction
+
+The EIE-12 `nlp` package owns documents, syntactic normalization, mentions, proposals,
+source verification and processing manifests. `providers.text` owns trusted offline
+source envelopes. Verified artifacts pass through the existing `EvidenceEngine`;
+EIE-11 retains source trust, conflict resolution, corroboration and event aliases.
+`TextRepository` shares the SQLite transaction and additive store migration `1.6`.
+No model/vendor transport or new cross-source resolver is introduced.
+
+See [structured extraction](structured-extraction.md) and [text ingestion](text-ingestion.md).
