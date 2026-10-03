@@ -119,3 +119,8 @@ append share one SQLite snapshot and seal the evidence cutoff. See
 ## EIE-14 frozen analogue pools
 
 Candidates and complete response data require availability strictly before the target cutoff. Source reconstruction retains its actual build/processing availability. The target response is excluded from retrieval input; later comparison pins the frozen result. Future context/revisions cannot replace old rows. SQLite collection and freeze are transactional, and backdated index insertions into sealed cutoffs fail. See [historical analogues](historical-analogues.md).
+
+
+## EIE-15 interaction consumer
+
+EIE-15 contexts pin visible event revisions, exact EIE-11 alias groups, explicit window policy and EIE-10 root paths. Future source, alias, schedule or relationship updates cannot change frozen contexts. Same-time/coarse events remain tied/unordered. Occurrence and information chronology remain separate. Indexed backdating into sealed cutoffs is refused; deep validation re-collects exact pinned inputs.

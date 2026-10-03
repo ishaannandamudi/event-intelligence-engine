@@ -1,6 +1,6 @@
 # Event Intelligence Engine (EIE) — Master Specification
 
-**Status:** Master design; implementation completed through EIE-14 (`1.5.0`)<br>
+**Status:** Master design; implementation completed through EIE-15 (`1.6.0`)<br>
 **Planned roadmap:** EIE-0 through EIE-17 (updated by the EIE-5 phase specification)<br>
 **Primary language:** Python<br>
 **Repository name:** `event-intelligence-engine`<br>
@@ -1312,7 +1312,7 @@ provider health and foreground operational controls. Current SEC submissions
 and BLS iCalendar are explicit opt-in sources. All quantitative schemas remain
 `1.0`; runtime/ingestion and persistent-store schemas start at `1.0`.
 See [EIE-6 completion](EIE-6-completion.md), [live ingestion](live-ingestion.md)
-and [persistence](persistence.md). EIE-7 through EIE-14 are implemented below; EIE-15 and later remain deferred.
+and [persistence](persistence.md). EIE-7 through EIE-15 are implemented below; EIE-16 and later remain deferred.
 
 ---
 
@@ -1758,6 +1758,23 @@ schemas and empty runtime dependency policy remain unchanged. Ordinary retrieval
 prevalidated small indexed rows and does not rebuild each historical EIE-13 calculation.
 Source reconstruction and actual availability remain separate. See [historical analogues](historical-analogues.md),
 [distance](analogue-distance.md), [reaction surprise](market-reaction-surprise.md) and
-[uncertainty](analogue-uncertainty.md). Implementation stops after EIE-14. EIE-15 collision,
-interaction and propagation chronology, final service/API, MCE/AME integration and
-trading functionality remain deferred.
+[uncertainty](analogue-uncertainty.md). The EIE-14 phase stopped here. EIE-15 collision,
+interaction and propagation chronology are implemented below. Final service/API,
+MCE/AME integration and trading functionality remain deferred.
+
+
+## EIE-15 implementation boundary
+
+Engine `1.6.0`, event-interaction schema `1.0`, additive SQLite store `1.9`.
+EIE-15 implements immutable collision sets and explicit elapsed/session/coarse window
+policies, distinct occurrence and knowledge sequence layers, source-bundle contamination,
+closed structured lifecycle/correction/retraction relations, exact historical graph
+path references and finite subsequent-related-event chronology. EIE-11 alias runs own
+identity. Collection, calculation, persistence and cutoff sealing are atomic; indexed
+blocking and hard count/byte/hop limits prevent global pair explosion. Materiality,
+novelty, studies, counterfactual impact and analogue response artifacts stay separate.
+No summed severity, reaction allocation, causal attribution, price-inferred event,
+recursive unbounded propagation, runtime dependency or trading logic is introduced.
+See [completion](EIE-15-completion.md), [collisions](event-collisions.md),
+[sequences](event-sequences.md), [chronology](propagation-chronology.md) and
+[contamination](interaction-aware-contamination.md). EIE-16 remains proposed only.

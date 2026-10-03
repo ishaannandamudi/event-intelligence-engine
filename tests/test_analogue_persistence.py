@@ -296,12 +296,12 @@ def test_migration_17_to_18_preserves_prior_bytes_and_rolls_back(tmp_path, monke
     from eie.persistence import migrations
 
     original = migrations.MIGRATIONS
-    monkeypatch.setattr(migrations, "MIGRATIONS", original[:-1])
+    monkeypatch.setattr(migrations, "MIGRATIONS", original[:8])
     path = tmp_path / "legacy.sqlite"
     with SQLiteEventStore(path) as store:
         assert store.schema_version == "1.7"
         store._connection.execute("INSERT INTO sessions VALUES ('old','1.0',?)", (b"unchanged",))
-    monkeypatch.setattr(migrations, "MIGRATIONS", (*original[:-1], (*original[-1], "invalid SQL")))
+    monkeypatch.setattr(migrations, "MIGRATIONS", (*original[:8], (*original[8], "invalid SQL")))
     with pytest.raises(PersistenceError):
         SQLiteEventStore(path)
     connection = sqlite3.connect(path)
@@ -314,7 +314,7 @@ def test_migration_17_to_18_preserves_prior_bytes_and_rolls_back(tmp_path, monke
     connection.close()
     monkeypatch.setattr(migrations, "MIGRATIONS", original)
     with SQLiteEventStore(path) as store:
-        assert store.schema_version == "1.8"
+        assert store.schema_version == "1.9"
         assert store._rows("SELECT payload FROM sessions WHERE namespace='old'") == [
             (b"unchanged",)
         ]

@@ -145,3 +145,8 @@ Future disclosures cannot alter a saved intelligence result. See
 ## EIE-14 supplied graph conditioning
 
 An explicitly requested retained snapshot can supply exact sector/industry/relationship categories at the candidate event cutoff. Snapshot knowledge cannot follow that cutoff, and valid time must equal it. Conflicted, ambiguous, unresolved and truncated memberships cannot establish a category. Other retained graph qualifiers remain visible on the feature row. No new relationship inference or sibling integration is introduced. See [historical analogues](historical-analogues.md).
+
+
+## EIE-15 interaction consumer
+
+EIE-15 consumes exact historical root snapshots and path/edge revision references for graph and sector collisions. Graph validity at the root and knowledge at cutoff remain separate; future and already-terminated relationships cannot supply earlier chronology. No full graph payload is duplicated in each interaction.

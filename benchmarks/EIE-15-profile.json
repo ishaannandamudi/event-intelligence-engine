@@ -1,0 +1,43 @@
+{
+  "artifact_bytes": 913245,
+  "blocked_rows_per_query": [
+    69,
+    69,
+    69,
+    69,
+    62
+  ],
+  "chronology_counts": [
+    99,
+    79,
+    59,
+    39,
+    19
+  ],
+  "collision_counts": [
+    6,
+    6,
+    6,
+    6,
+    6
+  ],
+  "context_bytes": 97237,
+  "events": 1000,
+  "issuer_blocks": 10,
+  "macro_events": 10,
+  "profile_calls": 82844753,
+  "profile_total_seconds": 13.370930052000013,
+  "qualification": "local supplied sources and two-hop graph; no CI threshold",
+  "queries": 5,
+  "restart_bytes_identical": true,
+  "sqlite_bytes": 13361152,
+  "timings": {
+    "blocking_seconds": 0.6416089170379564,
+    "deep_validation_seconds": 2.9803672489942983,
+    "pair_sequence_chronology_seconds": 1.364850833953824,
+    "persistence_snapshot_seconds": 2.3827620410593227,
+    "query_seconds": 1.8007590830675326,
+    "restart_query_seconds": 1.8557910000090487,
+    "source_and_index_seconds": 2.0020485420245677
+  }
+}

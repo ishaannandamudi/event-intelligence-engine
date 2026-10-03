@@ -4,8 +4,8 @@ import sqlite3
 
 from eie.core.errors import PersistenceError
 
-STORE_SCHEMA_VERSION = "1.8"
-MIGRATION_VERSIONS = ("1.0", "1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8")
+STORE_SCHEMA_VERSION = "1.9"
+MIGRATION_VERSIONS = ("1.0", "1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9")
 MIGRATIONS: tuple[tuple[str, ...], ...] = (
     (
         "CREATE TABLE schema_migrations(version INTEGER PRIMARY KEY, schema_version TEXT NOT NULL)",
@@ -746,6 +746,102 @@ MIGRATIONS += (
             "analogue_runs",
             "analogue_run_members",
             "analogue_seals",
+        )
+        for action in ("UPDATE", "DELETE")
+    ),
+)
+
+
+# EIE-15 is additive; previous migration statements and payloads remain unchanged.
+MIGRATIONS += (
+    (
+        (
+            "CREATE TABLE interaction_events(id TEXT PRIMARY KEY,dataset TEXT NOT NUL"
+            "L,event TEXT NOT NULL,revision INTEGER NOT NULL,revision_id TEXT NOT NUL"
+            "L,family TEXT NOT NULL,type TEXT NOT NULL,scope TEXT NOT NULL,known INTE"
+            "GER NOT NULL,source_time INTEGER,lo INTEGER,hi INTEGER,schedule_lo INTEG"
+            "ER,schedule_hi INTEGER,thread TEXT NOT NULL,fingerprint TEXT NOT NULL,pa"
+            "yload BLOB NOT NULL,UNIQUE(dataset,event,revision),FOREIGN KEY(event,rev"
+            "ision) REFERENCES events(id,revision))"
+        ),
+        (
+            "CREATE INDEX interaction_event_version ON interaction_events(dataset,eve"
+            "nt,known,revision)"
+        ),
+        "CREATE INDEX interaction_event_time ON interaction_events(dataset,lo,hi,known)",
+        (
+            "CREATE INDEX interaction_schedule_time ON interaction_events(dataset,sch"
+            "edule_lo,schedule_hi,known)"
+        ),
+        "CREATE INDEX interaction_source_time ON interaction_events(dataset,source_time,known)",
+        "CREATE INDEX interaction_knowledge ON interaction_events(dataset,known)",
+        "CREATE INDEX interaction_scope_time ON interaction_events(dataset,scope,lo,known)",
+        "CREATE INDEX interaction_type_time ON interaction_events(dataset,type,lo,known)",
+        "CREATE INDEX interaction_thread ON interaction_events(dataset,thread,known)",
+        (
+            "CREATE TABLE interaction_entities(row TEXT NOT NULL REFERENCES interacti"
+            "on_events(id),entity TEXT NOT NULL,PRIMARY KEY(row,entity))"
+        ),
+        "CREATE INDEX interaction_entity ON interaction_entities(entity,row)",
+        (
+            "CREATE TABLE interaction_bundles(row TEXT NOT NULL REFERENCES interactio"
+            "n_events(id),bundle TEXT NOT NULL,PRIMARY KEY(row,bundle))"
+        ),
+        "CREATE INDEX interaction_bundle ON interaction_bundles(bundle,row)",
+        (
+            "CREATE TABLE interaction_artifacts(id TEXT PRIMARY KEY,kind TEXT NOT NUL"
+            "L,event TEXT,known INTEGER NOT NULL,fingerprint TEXT NOT NULL,payload BL"
+            "OB NOT NULL)"
+        ),
+        "CREATE INDEX interaction_artifact_kind ON interaction_artifacts(kind,event,known)",
+        (
+            "CREATE TABLE interaction_contexts(id TEXT PRIMARY KEY,request TEXT NOT N"
+            "ULL UNIQUE,dataset TEXT NOT NULL,target TEXT NOT NULL,known INTEGER NOT "
+            "NULL,policy TEXT NOT NULL REFERENCES interaction_artifacts(id),manifest "
+            "TEXT NOT NULL REFERENCES interaction_artifacts(id),fingerprint TEXT NOT "
+            "NULL,payload BLOB NOT NULL)"
+        ),
+        "CREATE INDEX interaction_context_cutoff ON interaction_contexts(dataset,target,known)",
+        (
+            "CREATE TABLE interaction_members(owner TEXT NOT NULL REFERENCES interact"
+            "ion_contexts(id),kind TEXT NOT NULL,member TEXT NOT NULL,PRIMARY KEY(own"
+            "er,kind,member))"
+        ),
+        "CREATE INDEX interaction_member ON interaction_members(member,kind,owner)",
+        (
+            "CREATE TABLE interaction_pairs(collision TEXT NOT NULL REFERENCES intera"
+            "ction_artifacts(id),left_row TEXT NOT NULL REFERENCES interaction_events"
+            "(id),right_row TEXT NOT NULL REFERENCES interaction_events(id),type TEXT"
+            " NOT NULL,PRIMARY KEY(collision,type))"
+        ),
+        "CREATE INDEX interaction_pair_type ON interaction_pairs(type,left_row,right_row)",
+        "CREATE INDEX interaction_pair_right ON interaction_pairs(right_row,left_row)",
+        (
+            "CREATE TABLE interaction_chronology(id TEXT PRIMARY KEY REFERENCES inter"
+            "action_artifacts(id),root TEXT NOT NULL REFERENCES interaction_events(id"
+            "),later TEXT NOT NULL REFERENCES interaction_events(id),path TEXT NOT NU"
+            "LL REFERENCES interaction_artifacts(id))"
+        ),
+        "CREATE INDEX interaction_chronology_root ON interaction_chronology(root,later)",
+        "CREATE INDEX interaction_chronology_later ON interaction_chronology(later,root)",
+        (
+            "CREATE TABLE interaction_seals(dataset TEXT NOT NULL,known INTEGER NOT N"
+            "ULL,PRIMARY KEY(dataset,known))"
+        ),
+    )
+    + tuple(
+        f"CREATE TRIGGER immutable_{table}_{action.lower()} BEFORE {action} ON {table} "
+        "BEGIN SELECT RAISE(ABORT,'immutable interaction artifact'); END"
+        for table in (
+            "interaction_events",
+            "interaction_entities",
+            "interaction_bundles",
+            "interaction_artifacts",
+            "interaction_contexts",
+            "interaction_members",
+            "interaction_pairs",
+            "interaction_chronology",
+            "interaction_seals",
         )
         for action in ("UPDATE", "DELETE")
     ),

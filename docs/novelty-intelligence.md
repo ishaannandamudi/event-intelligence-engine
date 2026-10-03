@@ -42,3 +42,8 @@ and [replay](intelligence-replay.md).
 ## EIE-14 consumer
 
 Historical analogue features can read an exact frozen numeric/guidance novelty metric, with an explicit measurement and matching semantic/unit signature. Candidate features use their own ex-ante source cutoff. Retrieval does not rebuild novelty using later history. See [distance](analogue-distance.md).
+
+
+## EIE-15 interaction consumer
+
+EIE-15 consumes existing event identity and time evidence independently of novelty. Repetition, confirmation, correction and retraction remain EIE-13/EIE-11 information states; collision membership does not rewrite novelty or upgrade source confirmation.

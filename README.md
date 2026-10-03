@@ -2,11 +2,11 @@
 
 EIE is a standalone, provider-neutral foundation for descriptive event intelligence. Its first priority is answering what was knowable at an exact time. It does not produce trade instructions.
 
-**Status:** EIE-14 historical analogues and market-reaction surprise, version `1.5.0`.
+**Status:** EIE-15 event collision, interaction and propagation chronology, version `1.6.0`.
 Source-backed claims preserve alternatives, categorical field resolution, independent
 corroboration, conservative event aliases and historical correction/merge/split replay.
 Relationship exposure and empirical impact remain separate.
-Claim/evidence, relationship, impact and event-study schemas are `1.0`; SQLite is `1.5`.
+Claim/evidence, relationship, impact and event-study schemas are `1.0`; SQLite is `1.9`.
 All prior public schemas remain `1.0`. Zero runtime dependencies.
 See [event studies](docs/event-studies.md), [alignment](docs/market-data-alignment.md),
 [influence/decay](docs/event-influence-decay.md), [counterfactual impact](docs/counterfactual-impact.md)
@@ -427,12 +427,13 @@ The accepted timestamp and EIE knowledge time are distinct when observation or i
 
 ## Scope
 
-EIE-0 through EIE-13 provide canonical/replay contracts, scheduled/official/SEC/corporate
+EIE-0 through EIE-15 provide canonical/replay contracts, scheduled/official/SEC/corporate
 events, numerical surprise, durable acquisition, historical builds, raw studies and
 counterfactual estimates, sourced relationship graphs, propagation candidates,
 structured claim/evidence resolution with conservative event deduplication and
 verified unscheduled text extraction and prior-only novelty, materiality and separate
-uncertainty components. Analogues, collision modeling, final services and downstream integration
+uncertainty components, historical analogues, separate reaction surprise and immutable
+collision/sequence/propagation contexts. Final services and downstream integration
 remain deferred. Trading and execution are outside the engine's purpose.
 The [master roadmap](docs/EIE_MASTER_SPEC.md) defines later phases.
 
@@ -613,3 +614,31 @@ See [historical analogues](docs/historical-analogues.md),
 [distance](docs/analogue-distance.md), [reaction surprise](docs/market-reaction-surprise.md)
 and [uncertainty](docs/analogue-uncertainty.md), with the
 [A–AQ completion report](docs/EIE-14-completion.md).
+
+
+## Event collision, interaction and propagation chronology (EIE-15)
+
+```sh
+PYTHONPATH=src:. python examples/event_interactions.py
+PYTHONPATH=src:. python benchmarks/event_interactions.py --count 1000
+```
+
+The [offline example](examples/event_interactions.py) retains distinct same-source
+earnings and buyback events, an explicitly timed overlapping CPI release, and a
+historical supplier/customer edge. A later cutoff adds a subsequent customer event.
+Real EIE-13 materiality results stay separate per event; there is no combined severity
+or causal attribution. Both historical snapshots survive restart with identical bytes.
+
+Immutable windows, collision categories, independent occurrence/knowledge sequences,
+partial ordering, structured lifecycle/correction/retraction relations, graph path
+references and finite propagation chains use event-interaction schema `1.0`.
+Engine `1.6.0`; additive SQLite store `1.9`; prior public schemas remain unchanged.
+Indexed time/entity/bundle/scope searches and explicit hard bounds prevent global
+pairwise history comparison. EIE-11 owns aliases, EIE-10 owns graph history, and
+EIE-8/9/13/14 remain independent. No new runtime dependency is introduced.
+
+See [collisions](docs/event-collisions.md), [sequences](docs/event-sequences.md),
+[propagation chronology](docs/propagation-chronology.md),
+[contamination](docs/interaction-aware-contamination.md) and
+[A–AQ completion report](docs/EIE-15-completion.md). EIE-16 reliability and latency,
+final services, sibling integration and trading functionality remain deferred.

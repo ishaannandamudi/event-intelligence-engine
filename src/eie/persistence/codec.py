@@ -54,6 +54,8 @@ from eie.ingestion import models as operations
 from eie.intelligence import models as intelligence_models
 from eie.intelligence import policy as intelligence_policy
 from eie.intelligence import schema as intelligence_schema
+from eie.interactions import models as interaction_models
+from eie.interactions import schema as interaction_schema
 from eie.nlp import audit as text_audit
 from eie.nlp import documents as text_documents
 from eie.nlp import entities as text_entities
@@ -86,6 +88,8 @@ from eie.studies import queries as study_queries
 from eie.studies import validation as study_validation
 
 MODULES: tuple[ModuleType, ...] = (
+    interaction_models,
+    interaction_schema,
     analogue_models,
     analogue_schema,
     intelligence_models,

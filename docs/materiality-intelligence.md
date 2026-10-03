@@ -43,3 +43,8 @@ outputs, not forecasts or recommendations.
 ## EIE-14 consumer
 
 Analogue policies can request categorical materiality or a named financial/scale/guidance magnitude component from immutable ex-ante EIE-13 results. Later market response never changes these features. Missing or ambiguous metrics stay unavailable. See [historical analogues](historical-analogues.md).
+
+
+## EIE-15 interaction consumer
+
+EIE-15 stores descriptive interaction sets/counts. Individual materiality artifacts stay separate per event. Colliding MAJOR/VERY_HIGH events produce no summed or ranked combined severity. Changing a materiality policy cannot create a collision or reorder an event sequence.

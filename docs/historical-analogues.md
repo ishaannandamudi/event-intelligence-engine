@@ -83,3 +83,8 @@ Ordinary retrieval does not rerun historical EIE-13 calculations.
 See [distance](analogue-distance.md), [reaction comparison](market-reaction-surprise.md),
 [uncertainty](analogue-uncertainty.md), and the offline
 [example](../examples/historical_analogues.py).
+
+
+## EIE-15 interaction consumer
+
+EIE-15 event collision/chronology is independent of analogue distance, selected responses and reaction surprise. EIE-14 frozen results remain unchanged. No market response is queried to construct EIE-15 membership, and no interaction score is added to historical distances.

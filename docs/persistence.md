@@ -195,3 +195,8 @@ their owners. See [intelligence replay](intelligence-replay.md).
 ## EIE-14 additive store 1.8
 
 Migration 9 adds fifteen immutable analogue tables: policies, small feature rows and entity/measurement/context indices, response references, queries, frozen results, pool/selected/uncertainty membership, reactions, runs/members and sealed cutoffs. Existing payloads and prior migrations remain unchanged. Results retain IDs, fingerprints and small comparison values instead of complete historical intelligence/study/event objects. See [historical analogues](historical-analogues.md).
+
+
+## EIE-15 interaction consumer
+
+Additive transactional migration 10 advances store 1.8 to 1.9 with nine interaction tables: compact event rows, entity and bundle memberships, typed artifacts, contexts, context members, collision categories, chronology indices and cutoff seals. UPDATE/DELETE triggers protect every table. Event/revision, occurrence/schedule/source/knowledge time, scope/type, thread, bundle, entity, root/later event and cutoff indices support bounded queries. Earlier migrations/payloads are unchanged. No full source text, intelligence, response or graph payload is replicated into collisions. See [collisions](event-collisions.md) for index sealing and namespace boundaries.

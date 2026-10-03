@@ -75,7 +75,7 @@ within explicit contamination durations. IDs, revisions, clock basis, timestamps
 availability are retained. Same-time ordering cannot change flags. No event is assigned
 unique responsibility for a shared raw response. Unknown event times and EIE-7 gaps remain
 explicit limitations. Contaminants are limited to the same historical selection cutoff;
-new information cannot silently alter a persisted result. A full interaction model is deferred.
+new information cannot silently alter a persisted result. EIE-15 supplies a separate interaction model described below.
 
 ## Aggregation and queries
 
@@ -147,3 +147,8 @@ impact. See [intelligence replay](intelligence-replay.md).
 ## EIE-14 response reuse
 
 Retained completed EIE-8 response points, volatility differences, relative volume, supplied IV and quoted spread changes can supply explicitly compatible analogue distributions. The target study cannot select its analogue cohort by its observed response. See [market-reaction surprise](market-reaction-surprise.md).
+
+
+## EIE-15 interaction consumer
+
+EIE-15 adds separately retained interaction-aware contamination contexts. They describe bundle, issuer, macro, sector/market and graph overlaps, plus ordering ambiguity. An existing EIE-8 study is never overwritten. Movement is not allocated among bundle events, and no additive materiality or causal attribution is supplied.

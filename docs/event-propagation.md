@@ -57,3 +57,8 @@ Observed raw studies and model-dependent abnormal returns remain in the separate
 and EIE-9 packages. They are not imported to select graph edge strength or direction.
 No impact-derived weights, causal attribution, automatic aggregate exposure or trading
 functionality are added.
+
+
+## EIE-15 interaction consumer
+
+EIE-15 now records subsequent canonical events along pinned EIE-10 root paths under explicit finite horizons and hop/entry limits. Structural paths and temporal event chronology are separate. Ties remain ties, cycles use bounded simple paths, and direct parties/root aliases are excluded. See [propagation chronology](propagation-chronology.md).

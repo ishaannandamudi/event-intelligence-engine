@@ -165,3 +165,8 @@ See [novelty](novelty-intelligence.md) and [intelligence replay](intelligence-re
 ## EIE-14 historical comparisons
 
 Immutable ex-ante feature rows feed indexed strict-prior blocking, explicit distances, frozen analogue sets and separate ex-post reaction comparisons. EIE-13 collection runs at feature construction, not for every historical row on each query. See [historical analogues](historical-analogues.md).
+
+
+## EIE-15 interaction consumer
+
+The `interactions` package projects compact retained event rows and uses indexed window/entity/bundle/scope blocking. Atomic collection, calculation and persistence retain collision, independent-clock sequence, typed transition and graph chronology artifacts. EIE-11 aliases and EIE-10 paths retain their owners; no materiality or market score enters membership.
