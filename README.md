@@ -2,11 +2,11 @@
 
 EIE is a standalone, provider-neutral foundation for descriptive event intelligence. Its first priority is answering what was knowable at an exact time. It does not produce trade instructions.
 
-**Status:** EIE-15 event collision, interaction and propagation chronology, version `1.6.0`.
+**Status:** EIE-16 bitemporal intelligence, source reliability and information latency, version `1.7.0`.
 Source-backed claims preserve alternatives, categorical field resolution, independent
 corroboration, conservative event aliases and historical correction/merge/split replay.
 Relationship exposure and empirical impact remain separate.
-Claim/evidence, relationship, impact and event-study schemas are `1.0`; SQLite is `1.9`.
+Claim/evidence, relationship, impact and event-study schemas are `1.0`; SQLite is `2.0`.
 All prior public schemas remain `1.0`. Zero runtime dependencies.
 See [event studies](docs/event-studies.md), [alignment](docs/market-data-alignment.md),
 [influence/decay](docs/event-influence-decay.md), [counterfactual impact](docs/counterfactual-impact.md)
@@ -427,13 +427,13 @@ The accepted timestamp and EIE knowledge time are distinct when observation or i
 
 ## Scope
 
-EIE-0 through EIE-15 provide canonical/replay contracts, scheduled/official/SEC/corporate
+EIE-0 through EIE-16 provide canonical/replay contracts, scheduled/official/SEC/corporate
 events, numerical surprise, durable acquisition, historical builds, raw studies and
 counterfactual estimates, sourced relationship graphs, propagation candidates,
 structured claim/evidence resolution with conservative event deduplication and
 verified unscheduled text extraction and prior-only novelty, materiality and separate
 uncertainty components, historical analogues, separate reaction surprise and immutable
-collision/sequence/propagation contexts. Final services and downstream integration
+collision/sequence/propagation contexts, local two-time audits, separate latency and empirical source components. Final services and downstream integration
 remain deferred. Trading and execution are outside the engine's purpose.
 The [master roadmap](docs/EIE_MASTER_SPEC.md) defines later phases.
 
@@ -640,5 +640,31 @@ EIE-8/9/13/14 remain independent. No new runtime dependency is introduced.
 See [collisions](docs/event-collisions.md), [sequences](docs/event-sequences.md),
 [propagation chronology](docs/propagation-chronology.md),
 [contamination](docs/interaction-aware-contamination.md) and
-[A–AQ completion report](docs/EIE-15-completion.md). EIE-16 reliability and latency,
-final services, sibling integration and trading functionality remain deferred.
+[A–AQ completion report](docs/EIE-15-completion.md). EIE-16 reliability and latency
+are implemented below; final services, sibling integration and trading remain deferred.
+
+
+## Bitemporal intelligence, source reliability and latency (EIE-16)
+
+```sh
+PYTHONPATH=src:. python examples/source_reliability.py
+PYTHONPATH=src:. python benchmarks/source_reliability.py --count 1000
+```
+
+The [offline example](examples/source_reliability.py) ingests independent A/B source
+claims through EIE-11, retains A's explicit correction, measures separate clock gaps,
+keeps both OFFICIAL_PRIMARY source classes unchanged, and preserves distinct coverage
+states under a pinned expected universe. Earlier reliability/audit bytes remain unchanged
+after correction and restart. There is no master reliability score or provider ranking.
+
+Event type, predicate, scope, resource and rolling periods remain explicit. Later timing
+instrumentation appends a diagnostic frame while sample identity and original local
+availability remain stable. Expected revisions, retractions, corrections, consistency,
+timeliness, coverage and independent-source evidence stay separate. Market impact,
+content uncertainty, source precedence and canonical truth retain their owners.
+
+Engine `1.7.0`, source-reliability schema `1.0`, SQLite `2.0`; prior schemas unchanged.
+See [bitemporal intelligence](docs/bitemporal-intelligence.md),
+[reliability](docs/source-reliability.md), [latency](docs/information-latency.md),
+[coverage](docs/source-coverage.md) and [A–AM completion](docs/EIE-16-completion.md).
+EIE-17 final service/integration/hardening and trading execution remain deferred.

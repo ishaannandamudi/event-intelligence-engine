@@ -4,8 +4,8 @@ import sqlite3
 
 from eie.core.errors import PersistenceError
 
-STORE_SCHEMA_VERSION = "1.9"
-MIGRATION_VERSIONS = ("1.0", "1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9")
+STORE_SCHEMA_VERSION = "2.0"
+MIGRATION_VERSIONS = ("1.0", "1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "2.0")
 MIGRATIONS: tuple[tuple[str, ...], ...] = (
     (
         "CREATE TABLE schema_migrations(version INTEGER PRIMARY KEY, schema_version TEXT NOT NULL)",
@@ -842,6 +842,93 @@ MIGRATIONS += (
             "interaction_pairs",
             "interaction_chronology",
             "interaction_seals",
+        )
+        for action in ("UPDATE", "DELETE")
+    ),
+)
+
+
+# EIE-16 is additive; prior migration statements remain byte-for-byte unchanged.
+MIGRATIONS += (
+    (
+        (
+            "CREATE TABLE reliability_rows(id TEXT PRIMARY KEY,dataset TEXT NOT NULL,kind T"
+            "EXT NOT NULL,subject TEXT NOT NULL,thread TEXT NOT NULL,source_revision TEXT N"
+            "OT NULL,provider TEXT NOT NULL,resource TEXT NOT NULL,family TEXT NOT NULL,eve"
+            "nt_type TEXT NOT NULL,field TEXT NOT NULL,scope TEXT NOT NULL,number INTEGER N"
+            "OT NULL,known INTEGER NOT NULL,available INTEGER NOT NULL,sample_available INT"
+            "EGER NOT NULL,publication INTEGER,observed INTEGER,fingerprint TEXT NOT NULL,p"
+            "ayload BLOB NOT NULL,UNIQUE(dataset,kind,provider,resource,source_revision,ava"
+            "ilable))"
+        ),
+        (
+            "CREATE INDEX reliability_prior ON reliability_rows(dataset,kind,provider,resou"
+            "rce,available)"
+        ),
+        (
+            "CREATE INDEX reliability_field ON reliability_rows(dataset,provider,resource,f"
+            "ield,available)"
+        ),
+        (
+            "CREATE INDEX reliability_type ON reliability_rows(dataset,provider,resource,ev"
+            "ent_type,available)"
+        ),
+        (
+            "CREATE INDEX reliability_scope ON reliability_rows(dataset,provider,resource,s"
+            "cope,available)"
+        ),
+        ("CREATE INDEX reliability_thread ON reliability_rows(dataset,thread,known,number)"),
+        ("CREATE INDEX reliability_subject ON reliability_rows(dataset,subject,available)"),
+        (
+            "CREATE INDEX reliability_revision ON reliability_rows(dataset,source_revision,"
+            "available)"
+        ),
+        ("CREATE INDEX reliability_family ON reliability_rows(dataset,family,available)"),
+        ("CREATE INDEX reliability_publication ON reliability_rows(provider,resource,publication)"),
+        ("CREATE INDEX reliability_observed ON reliability_rows(provider,resource,observed)"),
+        (
+            "CREATE TABLE reliability_artifacts(id TEXT PRIMARY KEY,kind TEXT NOT NULL,data"
+            "set TEXT,provider TEXT,resource TEXT,subject TEXT,known INTEGER NOT NULL,polic"
+            "y TEXT,fingerprint TEXT NOT NULL,payload BLOB NOT NULL)"
+        ),
+        (
+            "CREATE INDEX reliability_history ON reliability_artifacts(kind,dataset,provide"
+            "r,resource,known)"
+        ),
+        ("CREATE INDEX reliability_policy ON reliability_artifacts(policy,known)"),
+        (
+            "CREATE INDEX reliability_coverage_scope ON reliability_artifacts(kind,provider"
+            ",resource,subject,known)"
+        ),
+        (
+            "CREATE TABLE reliability_requests(request TEXT PRIMARY KEY,result TEXT NOT NUL"
+            "L REFERENCES reliability_artifacts(id))"
+        ),
+        (
+            "CREATE TABLE reliability_assessments(id TEXT PRIMARY KEY,universe TEXT NOT NUL"
+            "L REFERENCES reliability_artifacts(id),slot TEXT NOT NULL,known INTEGER NOT NU"
+            "LL,fingerprint TEXT NOT NULL,payload BLOB NOT NULL,UNIQUE(universe,slot,known)"
+            ")"
+        ),
+        ("CREATE INDEX reliability_assessment ON reliability_assessments(universe,known,slot)"),
+        (
+            "CREATE TABLE reliability_seals(dataset TEXT NOT NULL,cutoff INTEGER NOT NULL,m"
+            "ode TEXT NOT NULL,PRIMARY KEY(dataset,cutoff,mode))"
+        ),
+        (
+            "CREATE INDEX reliability_sample ON reliability_rows(dataset,kind,provider,reso"
+            "urce,sample_available)"
+        ),
+    )
+    + tuple(
+        f"CREATE TRIGGER immutable_{table}_{action.lower()} BEFORE {action} ON {table} "
+        "BEGIN SELECT RAISE(ABORT,'immutable reliability artifact'); END"
+        for table in (
+            "reliability_rows",
+            "reliability_artifacts",
+            "reliability_requests",
+            "reliability_assessments",
+            "reliability_seals",
         )
         for action in ("UPDATE", "DELETE")
     ),

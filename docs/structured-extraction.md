@@ -96,3 +96,11 @@ person/role names stay unresolved. Document/bundle provenance supports several
 distinct events without collapsing them. Existing verification and EIE-11 grouping
 are unchanged. See [novelty](novelty-intelligence.md) and
 [uncertainty](uncertainty-decomposition.md).
+
+
+## EIE-16 source diagnostics
+
+EIE-16 retains actual document acquisition separately from EIE-12 accepted extracted-claim processing availability. The latter supplies normalized-field availability and includes extraction/verification; generic ingestion or query cutoffs never substitute for missing clocks. Reliability cannot upgrade unsupported factual fields, entity identity or source class.
+
+See [source reliability](source-reliability.md), [latency](information-latency.md),
+[bitemporal audit](bitemporal-intelligence.md) and [coverage](source-coverage.md).

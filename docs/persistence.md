@@ -200,3 +200,11 @@ Migration 9 adds fifteen immutable analogue tables: policies, small feature rows
 ## EIE-15 interaction consumer
 
 Additive transactional migration 10 advances store 1.8 to 1.9 with nine interaction tables: compact event rows, entity and bundle memberships, typed artifacts, contexts, context members, collision categories, chronology indices and cutoff seals. UPDATE/DELETE triggers protect every table. Event/revision, occurrence/schedule/source/knowledge time, scope/type, thread, bundle, entity, root/later event and cutoff indices support bounded queries. Earlier migrations/payloads are unchanged. No full source text, intelligence, response or graph payload is replicated into collisions. See [collisions](event-collisions.md) for index sealing and namespace boundaries.
+
+
+## EIE-16 source diagnostics
+
+Additive transactional migration 11 advances SQLite 1.9 to 2.0. Five immutable tables retain compact source frames, typed artifacts/policies/results, request mappings, explicit coverage assessments and cutoff seals. Indices cover provider/resource/family/type/field/scope, publication/observation/source/diagnostic time, revision, cutoff and policy. Prior DDL and payloads remain unchanged. Later clock instrumentation appends a frame for the same revision; strict-cutoff frame selection preserves sample identity.
+
+See [source reliability](source-reliability.md), [latency](information-latency.md),
+[bitemporal audit](bitemporal-intelligence.md) and [coverage](source-coverage.md).

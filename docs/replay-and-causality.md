@@ -124,3 +124,11 @@ Candidates and complete response data require availability strictly before the t
 ## EIE-15 interaction consumer
 
 EIE-15 contexts pin visible event revisions, exact EIE-11 alias groups, explicit window policy and EIE-10 root paths. Future source, alias, schedule or relationship updates cannot change frozen contexts. Same-time/coarse events remain tied/unordered. Occurrence and information chronology remain separate. Indexed backdating into sealed cutoffs is refused; deep validation re-collects exact pinned inputs.
+
+
+## EIE-16 source diagnostics
+
+EIE-16 audits retain both valid-at and known-as-of. Original local source availability anchors strict-prior metrics; later instrumentation appends a visible-at-cutoff frame without inflating samples. EIE-7 reconstruction never fabricates historical local observation. Sealed transactional queries preserve old bytes after corrections and future acquisitions.
+
+See [source reliability](source-reliability.md), [latency](information-latency.md),
+[bitemporal audit](bitemporal-intelligence.md) and [coverage](source-coverage.md).

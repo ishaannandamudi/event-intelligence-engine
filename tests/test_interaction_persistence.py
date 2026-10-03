@@ -214,7 +214,7 @@ def test_additive_migration_18_to_19_and_transactional_rollback(tmp_path, monkey
     conn.close()
     monkeypatch.setattr(migrations, "MIGRATIONS", original)
     with SQLiteEventStore(path) as store:
-        assert store.schema_version == "1.9" and store._rows(
+        assert store.schema_version == "2.0" and store._rows(
             "SELECT payload FROM sessions WHERE namespace='old'"
         ) == [(b"unchanged",)]
 

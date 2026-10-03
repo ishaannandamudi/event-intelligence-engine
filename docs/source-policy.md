@@ -83,3 +83,11 @@ bounded raw permission; metadata-only queries cannot gain another provider's ret
 body. Missing content produces a validation warning, not fabricated verification.
 
 See [structured extraction](structured-extraction.md) and [text ingestion](text-ingestion.md).
+
+
+## EIE-16 source diagnostics
+
+EIE-16 now measures concrete provider/resource behavior, independently grouped by event type, predicate and scope. Source class remains categorical. Expected revisions, corrections, retractions, timeliness, consistency, explicit coverage and source-family corroboration/conflict remain separate components. No master score, automatic source precedence change or objective ground-truth claim is introduced.
+
+See [source reliability](source-reliability.md), [latency](information-latency.md),
+[bitemporal audit](bitemporal-intelligence.md) and [coverage](source-coverage.md).

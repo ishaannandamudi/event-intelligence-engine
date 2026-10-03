@@ -91,7 +91,7 @@ def test_queries_runs_restart_and_current_versions(tmp_path):
         run_id = run.run_id
     with SQLiteEventStore(path) as store:
         repo = IntelligenceRepository(store)
-        assert store.schema_version == "1.9" and dumps(repo.get(identity)) == saved
+        assert store.schema_version == "2.0" and dumps(repo.get(identity)) == saved
         assert repo.run(run_id) == run and validate(repo, identity).state.value != "INVALID"
 
 
@@ -214,12 +214,12 @@ def test_migration_from_16_preserves_old_raw_events_and_failed_ddl_is_atomic(tmp
     connection.commit()
     connection.close()
     with SQLiteEventStore(path) as store:
-        assert store.schema_version == "1.9"
+        assert store.schema_version == "2.0"
         assert dumps(store.get_event(event.event_id, 10)) == dumps(event)
         assert dumps(store.get_observation(raw.observation_id)) == dumps(raw)
         assert store._rows("SELECT schema_version FROM schema_migrations ORDER BY version")[
             -2:
-        ] == [("1.8",), ("1.9",)]
+        ] == [("1.9",), ("2.0",)]
         p = source()
         b = batch(p, 20)
         ingest(store, p, b)

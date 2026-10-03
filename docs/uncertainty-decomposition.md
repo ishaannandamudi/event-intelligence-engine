@@ -31,3 +31,11 @@ execution logic consumes these states here.
 ## EIE-14 analogue diagnostics
 
 EIE-13 readiness remains unchanged. EIE-14 adds eight independently named diagnostics for an actual historical comparison, without replacing EIE-13 uncertainty or producing a master confidence. See [analogue uncertainty](analogue-uncertainty.md).
+
+
+## EIE-16 source diagnostics
+
+EIE-16 latency uncertainty identifies missing/coarse clocks, skew and reconstruction. Source diagnostics separately retain low sample, incomplete universe, ambiguous source family and unknown conflict ground truth. They do not replace EIE-13 content uncertainty, extraction confidence or market-impact diagnostics.
+
+See [source reliability](source-reliability.md), [latency](information-latency.md),
+[bitemporal audit](bitemporal-intelligence.md) and [coverage](source-coverage.md).

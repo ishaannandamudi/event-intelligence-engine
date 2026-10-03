@@ -91,3 +91,11 @@ source families and unresolved identities. Its semantic comparison slots do not
 merge canonical events or replace EIE-11 resolution/false-merge safeguards. Results
 store source references rather than copies of complete claims or document bodies.
 See [novelty intelligence](novelty-intelligence.md).
+
+
+## EIE-16 source diagnostics
+
+EIE-16 consumes exact retained claim IDs, provider-thread revisions, correction/retraction statuses and configured source families. Compatible time refinements retain EIE-11 semantics; syndicated origins are not independent confirmations. Compact diagnostic references do not duplicate full evidence payloads or modify resolution.
+
+See [source reliability](source-reliability.md), [latency](information-latency.md),
+[bitemporal audit](bitemporal-intelligence.md) and [coverage](source-coverage.md).

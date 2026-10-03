@@ -69,3 +69,11 @@ and later model runs append history without changing earlier views. Metadata-onl
 validation reports the inability to recalculate source-body spans.
 
 See [structured extraction](structured-extraction.md) and [text ingestion](text-ingestion.md).
+
+
+## EIE-16 source diagnostics
+
+EIE-16 adds explicit local bitemporal audit results over retained EIE-11 revisions. Claim validity remains separate from owner knowledge and actual acquisition/processing availability. Historical source reconstruction is qualified and cannot enter an earlier local reliability baseline. Later corrections and instrumentation create new diagnostic frames/results.
+
+See [source reliability](source-reliability.md), [latency](information-latency.md),
+[bitemporal audit](bitemporal-intelligence.md) and [coverage](source-coverage.md).

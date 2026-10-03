@@ -1,0 +1,30 @@
+{
+  "aggregation_seconds": 0.6808355000102893,
+  "artifact_count": 1044,
+  "calculation_and_persistence_seconds": 2.3162106670206413,
+  "compact_validation_seconds": 2.0741188329993747,
+  "corrections": 20,
+  "coverage_calculation_seconds": 0.0007874589646235108,
+  "deep_validation_seconds": 9.644327207992319,
+  "indexed_collection_seconds": 1.6037453329772688,
+  "indexed_rows": 2078,
+  "latency_extraction_seconds": 0.365757541032508,
+  "ordinary_query_seconds": 0.024823457992170006,
+  "original_observations": 1000,
+  "prior_filter_seconds": 0.07455545797711238,
+  "profile_calls": 313241885,
+  "profile_total_seconds": 57.41904706300002,
+  "providers": 3,
+  "queries": 3,
+  "restart_and_query_seconds": 0.04519674996845424,
+  "restart_bytes_identical": true,
+  "result_bytes": 187465,
+  "retractions": 19,
+  "sample_counts": [
+    250,
+    250,
+    250
+  ],
+  "source_ingestion_and_index_seconds": 41.087467917008325,
+  "sqlite_bytes": 36802560
+}

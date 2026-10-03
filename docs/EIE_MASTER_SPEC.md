@@ -1,6 +1,6 @@
 # Event Intelligence Engine (EIE) — Master Specification
 
-**Status:** Master design; implementation completed through EIE-15 (`1.6.0`)<br>
+**Status:** Master design; implementation completed through EIE-16 (`1.7.0`)<br>
 **Planned roadmap:** EIE-0 through EIE-17 (updated by the EIE-5 phase specification)<br>
 **Primary language:** Python<br>
 **Repository name:** `event-intelligence-engine`<br>
@@ -1312,7 +1312,7 @@ provider health and foreground operational controls. Current SEC submissions
 and BLS iCalendar are explicit opt-in sources. All quantitative schemas remain
 `1.0`; runtime/ingestion and persistent-store schemas start at `1.0`.
 See [EIE-6 completion](EIE-6-completion.md), [live ingestion](live-ingestion.md)
-and [persistence](persistence.md). EIE-7 through EIE-15 are implemented below; EIE-16 and later remain deferred.
+and [persistence](persistence.md). EIE-7 through EIE-16 are implemented below; EIE-17 remains deferred.
 
 ---
 
@@ -1777,4 +1777,21 @@ No summed severity, reaction allocation, causal attribution, price-inferred even
 recursive unbounded propagation, runtime dependency or trading logic is introduced.
 See [completion](EIE-15-completion.md), [collisions](event-collisions.md),
 [sequences](event-sequences.md), [chronology](propagation-chronology.md) and
-[contamination](interaction-aware-contamination.md). EIE-16 remains proposed only.
+[contamination](interaction-aware-contamination.md). EIE-16 is implemented below.
+
+
+## EIE-16 implementation boundary
+
+Engine `1.7.0`, source-reliability schema `1.0`, additive SQLite store `2.0`.
+Typed clocks, local valid/knowledge audits, signed exact/coarse latency artifacts,
+explicit correction/retraction/expected-revision classifications, source consistency,
+strict-prior timeliness, pinned coverage universes and independent family corroboration/
+conflict metrics are retained as immutable descriptive components. Source availability
+and later diagnostic frames are distinct; repeated instrumentation cannot inflate samples.
+Indexed bounded queries, atomic runs, seals and compact/deep validation preserve historical
+views. Source class, content uncertainty, market impact and canonical truth retain their
+owners. No master score, automatic precedence change, sibling dependency, new runtime
+dependency, source-driven action or trading logic is introduced. See
+[completion](EIE-16-completion.md), [bitemporal audit](bitemporal-intelligence.md),
+[reliability](source-reliability.md), [latency](information-latency.md) and
+[coverage](source-coverage.md). EIE-17 remains proposed only.

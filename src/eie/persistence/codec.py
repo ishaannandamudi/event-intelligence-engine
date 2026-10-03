@@ -78,6 +78,8 @@ from eie.providers.sec import adapter as sec_adapter
 from eie.providers.sec import models as sec
 from eie.providers.sec import settings as sec_settings
 from eie.providers.text import models as text_sources
+from eie.reliability import models as reliability_models
+from eie.reliability import schema as reliability_schema
 from eie.scheduled import coverage, windows
 from eie.scheduled import models as schedules
 from eie.sources import models as sources
@@ -88,6 +90,8 @@ from eie.studies import queries as study_queries
 from eie.studies import validation as study_validation
 
 MODULES: tuple[ModuleType, ...] = (
+    reliability_models,
+    reliability_schema,
     interaction_models,
     interaction_schema,
     analogue_models,

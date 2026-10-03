@@ -170,3 +170,11 @@ Immutable ex-ante feature rows feed indexed strict-prior blocking, explicit dist
 ## EIE-15 interaction consumer
 
 The `interactions` package projects compact retained event rows and uses indexed window/entity/bundle/scope blocking. Atomic collection, calculation and persistence retain collision, independent-clock sequence, typed transition and graph chronology artifacts. EIE-11 aliases and EIE-10 paths retain their owners; no materiality or market score enters membership.
+
+
+## EIE-16 source diagnostics
+
+A separate `reliability` consumer projects compact retained source revisions, pins explicit clocks and coverage universes, and retains immutable audits and empirical component results. Source availability and later instrumentation frames are independent. Indexed strict-prior queries preserve EIE-11 source-family semantics and never rewrite canonical truth or source precedence.
+
+See [source reliability](source-reliability.md), [latency](information-latency.md),
+[bitemporal audit](bitemporal-intelligence.md) and [coverage](source-coverage.md).
