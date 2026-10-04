@@ -1,4 +1,4 @@
-# EIE-6 operations
+# EIE operations
 
 The minimal CLI is available as `eie` after installation or `python -m eie`.
 Every database path and endpoint comes from trusted operator configuration.
@@ -37,8 +37,7 @@ PYTHONPATH=src python -m eie --database /tmp/eie-bls.sqlite ingest-once BLS --li
 These examples intentionally perform real acquisition only when invoked.
 The SEC contact environment variable must be set before SEC live commands.
 `run` stays in the foreground. SIGINT/SIGTERM request bounded graceful shutdown;
-previous signal handlers are restored. There is no daemonization, service API,
-hot reload, distributed scheduler or deployment step.
+previous signal handlers are restored. The ingestion runtime has no daemonization, hot reload, distributed scheduler or deployment step. The optional final snapshot service is described below.
 
 ## Embedded API and configuration
 
@@ -150,3 +149,37 @@ Profile: `PYTHONPATH=src:. python benchmarks/historical_build.py` (200 partition
 10,000 synthetic records, no timing threshold). See [historical backfill](historical-backfill.md),
 [manifests](dataset-manifests.md), [archive](source-archive.md),
 [completeness](data-completeness.md) and [completion report](EIE-7-completion.md).
+
+## Final snapshot serving (EIE-17)
+
+Opening a store applies additive transactional migration 12 (2.0 → 2.1). Back up before upgrading; unknown newer/partial schema fails closed. Source ingestion continues through established explicit operator commands. Publish supported retained owners through the typed catalog bridge, supplying an actual publication clock; final service publication does not replace upstream ingestion or resolution.
+
+```sh
+PYTHONPATH=src:. python examples/final_snapshot.py
+PYTHONPATH=src python -m eie --database /tmp/eie.sqlite version
+PYTHONPATH=src python -m eie --database /tmp/eie.sqlite health
+PYTHONPATH=src python -m eie --database /tmp/eie.sqlite ready
+PYTHONPATH=src python -m eie --database /tmp/eie.sqlite snapshot /trusted/request.json
+PYTHONPATH=src python -m eie --database /tmp/eie.sqlite snapshots /trusted/batch.json
+PYTHONPATH=src python -m eie --database /tmp/eie.sqlite validate eies_SNAPSHOT_ID --deep
+PYTHONPATH=src python -m eie --database /tmp/eie.sqlite serve --host 127.0.0.1 --port 8765
+```
+
+The example creates a temporary offline database and closes it. Retain `examples.final_snapshot.build(Path(...))` under a trusted directory when inspecting a durable example. All CLI output is canonical JSON. Validation returns an explicit result and exit status; setup/persistence failures emit a generic message. `serve` owns one foreground worker. Stop it with Ctrl-C; the HTTP context and CLI finally block close resources. It does not launch ingestion automatically.
+
+Health means process alive. Readiness checks store schema/integrity/readability and optional configured catalog presence. Typed callers can report `live_ingestion=False`: this is DEGRADED with historical queries still available. A closed, corrupt or missing configured store/catalog is NOT_READY. The HTTP adapter reports historical readiness; runtime/provider diagnostics are read through their established owner. Source outages do not erase retained history.
+
+### Backup and restore
+
+```sh
+PYTHONPATH=src python -m eie --database /trusted/eie.sqlite backup /trusted/new-backup.sqlite
+PYTHONPATH=src python -m eie --database /trusted/operator.sqlite restore /trusted/new-backup.sqlite /trusted/restored.sqlite
+```
+
+Outputs must be new paths in trusted existing directories. Backup uses SQLite's consistent backup API, rather than copying an active WAL database file. Restore verifies a copied candidate before exposing its exclusive destination. Stop serving before switching the active path; open the restored store, run readiness and deep validation of important retained snapshots, then point the service at it. Preserve source archive directories, retention permissions and external operator settings separately. Check free disk space and file permissions. Backups neither overwrite existing files nor bypass schema compatibility.
+
+### Failure recovery and telemetry
+
+Failed publication/snapshot/batch transactions roll back. Do not repair corrupt typed owner bytes or immutable snapshots in place. Restore an independently verified backup or reconstruct a new catalog/build lineage using retained permitted source evidence. New data cannot be backdated into a sealed catalog cutoff. Keep earlier audits intact.
+
+Logs use fixed metadata categories and hashed request correlation, with no raw source bodies/errors/secrets. `/metrics` exposes counts and accumulated durations outside snapshot identity. Connection timeouts bound read/write, not calculation runtime. Request limits, serial service work and original owner policy caps bound workload; place any remotely exposed service behind separately managed authorization, TLS and admission control. See [API](service-api.md), [security](security.md), [compatibility](compatibility.md) and [performance](final-performance.md).

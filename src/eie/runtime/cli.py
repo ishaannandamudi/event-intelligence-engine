@@ -22,6 +22,7 @@ from eie.runtime.coordinator import IngestionCoordinator
 from eie.runtime.providers import ProviderRegistration, bls_provider, sec_provider
 from eie.runtime.shutdown import termination_signals
 from eie.runtime.sources import AcquiredPayload, FixtureSource
+from eie.service import cli as service_cli
 from eie.transport.models import HttpResponse
 
 
@@ -43,6 +44,7 @@ def parser() -> argparse.ArgumentParser:
         mode.add_argument("--live", action="store_true")
         mode.add_argument("--fixture", type=Path)
     add_commands(commands)
+    service_cli.add_commands(commands)
     return result
 
 
@@ -94,7 +96,9 @@ def main(argv: Sequence[str] | None = None) -> int:
         configured = registration(args, clock) if args.command in ("ingest-once", "run") else None
         store = SQLiteEventStore(args.database)
         output: object
-        if args.command == "validate-store":
+        if args.command in service_cli.COMMANDS:
+            output, code = service_cli.execute(args, store)
+        elif args.command == "validate-store":
             errors = store.validate()
             output = {
                 "errors": errors,

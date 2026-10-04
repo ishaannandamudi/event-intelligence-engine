@@ -82,6 +82,8 @@ from eie.reliability import models as reliability_models
 from eie.reliability import schema as reliability_schema
 from eie.scheduled import coverage, windows
 from eie.scheduled import models as schedules
+from eie.service import models as service_models
+from eie.service import schema as service_schema
 from eie.sources import models as sources
 from eie.sources import trust
 from eie.studies import aggregation, decay, market
@@ -90,6 +92,8 @@ from eie.studies import queries as study_queries
 from eie.studies import validation as study_validation
 
 MODULES: tuple[ModuleType, ...] = (
+    service_models,
+    service_schema,
     reliability_models,
     reliability_schema,
     interaction_models,

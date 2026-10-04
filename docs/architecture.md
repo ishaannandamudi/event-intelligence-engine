@@ -1,4 +1,4 @@
-# EIE architecture through EIE-13
+# EIE architecture through EIE-17
 
 ```text
 Source adapter protocol → immutable RawSourceObservation → EventNormalizer protocol
@@ -178,3 +178,32 @@ A separate `reliability` consumer projects compact retained source revisions, pi
 
 See [source reliability](source-reliability.md), [latency](information-latency.md),
 [bitemporal audit](bitemporal-intelligence.md) and [coverage](source-coverage.md).
+
+## Final architecture — EIE-17
+
+```mermaid
+flowchart LR
+  S[Official / SEC / corporate / estimates / text sources] --> O[Immutable raw observations and provenance]
+  O --> C[Canonical event revisions and verified EIE-11/12 claims]
+  O --> D[EIE-7 historical builds and actual acquisition lineage]
+  C --> G[EIE-10 bounded relationship graph]
+  C --> I[EIE-13 novelty / materiality / uncertainty]
+  D --> R[EIE-8 studies / EIE-9 model-specific impact]
+  I --> A[EIE-14 analogues / frozen reaction comparison]
+  C --> X[EIE-15 interaction context]
+  G --> X
+  C --> Q[EIE-16 reliability / latency / coverage]
+  G --> P[Verified immutable catalog publications]
+  I --> P
+  R --> P
+  A --> P
+  X --> P
+  Q --> P
+  C --> P
+  D --> P
+  P --> F[EIE-17 causal typed snapshot / completeness / provenance]
+  F --> API[Provider-neutral protocol / bounded JSON / optional local HTTP]
+  API --> U[Independent downstream research consumers]
+```
+
+The `service` package adds contracts, static owner bridges, indexed publication and scope membership, identity resolution, assembly, transactional queries/batch/expansion, compatibility, compact/deep validation, recovery, evaluation, observability and optional HTTP/CLI adapters. `integration` owns the neutral typed protocol. All original calculation, resolution, extraction and source precedence algorithms retain their owners. Final snapshots contain references and small summaries; deep detail remains in the original retained artifact tables. There is no final master score or downstream trading subsystem.

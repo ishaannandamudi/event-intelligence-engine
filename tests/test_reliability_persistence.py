@@ -75,7 +75,7 @@ def test_migration_19_to_20_is_transactional_and_preserves_sources(tmp_path, mon
     conn.close()
     monkeypatch.setattr(migrations, "MIGRATIONS", original)
     with SQLiteEventStore(path) as store:
-        assert store.schema_version == "2.0"
+        assert store.schema_version == "2.1"
         assert store._rows("SELECT payload FROM sessions WHERE namespace='old'") == [(b"frozen",)]
 
 

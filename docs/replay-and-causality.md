@@ -132,3 +132,13 @@ EIE-16 audits retain both valid-at and known-as-of. Original local source availa
 
 See [source reliability](source-reliability.md), [latency](information-latency.md),
 [bitemporal audit](bitemporal-intelligence.md) and [coverage](source-coverage.md).
+
+## Final snapshot replay (EIE-17)
+
+Final assembly reads one SQLite transaction. A native artifact must have been explicitly published into the requested catalog by the known cutoff, and its native acquisition/extraction/build availability must also be satisfied. Valid-time-specific graph/evidence views must match `valid_at`; omitted valid time normalizes to known time. Source clocks, local reconstruction clocks and service publication clocks remain distinct. Missing/coarse clocks are retained without invented precision.
+
+The snapshot pins exact native revisions, compact owner/storage fingerprints, identity publications, policy/build/market references, coverage evidence and the version matrix. Its deterministic identity excludes operational logs, request correlation IDs, timing and wall-clock generation. Bounded expansion reads its original member owner, never a mutable latest replacement. Optional absent components remain UNKNOWN/unavailable until trusted coverage declares a meaningful empty universe.
+
+Persisted snapshots and cutoff seals are immutable. Future events, claims, extractions, graph edges, market/study/impact results, analogue candidates/results, interactions and reliability/latency frames cannot enter a past cutoff. Publishing later retrospective data creates new lineage and cannot mutate an earlier live view. Same-time source facts remain admissible only under their original owner rules; strict-prior distributions and analogue pools are unchanged. Conflicted native evidence is preserved, not resolved by the final assembler.
+
+Replay tests cover the complete offline scenario, restart, distinct Python hash seeds, admissible publication insertion order and concurrent future ingestion. Compact validation re-collects the sealed view and verifies native byte references. Deep validation additionally delegates to existing upstream auditors, preserving the distinction between fast serving and research audit.

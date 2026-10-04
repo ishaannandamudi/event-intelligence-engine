@@ -43,7 +43,11 @@ EARNINGS = EventType(EventFamily.EARNINGS, "EARNINGS.RELEASE")
 
 
 def history(
-    root: Path, days: tuple[int, ...] = (3, 5, 7, 9)
+    root: Path,
+    days: tuple[int, ...] = (3, 5, 7, 9),
+    *,
+    issuer: str = "issuer_fixture",
+    clock_offset: int = 0,
 ) -> tuple[SQLiteEventStore, DatasetReader, tuple[str, ...]]:
     job, _, processor = fixture()
     spec = replace(
@@ -54,12 +58,12 @@ def history(
     inputs = []
     ids = []
     for d in days:
-        at = d * DAY + 10 * MINUTE
+        at = clock_offset + d * DAY + 10 * MINUTE
         value = item(at, f"earnings-{d}")
         event = replace(
             value.record,
             identity=EventIdentity(
-                EARNINGS, EventScope(ScopeKind.COMPANY, ("issuer_fixture",)), f"earnings-{d}"
+                EARNINGS, EventScope(ScopeKind.COMPANY, (issuer,)), f"earnings-{d}"
             ),
             published_at_ns=at,
         )
@@ -70,12 +74,12 @@ def history(
             )
         )
     # Independent co-occurrence in the same source page/bundle.
-    overlap = item(days[-1] * DAY + 10 * MINUTE, "management-overlap")
+    overlap = item(clock_offset + days[-1] * DAY + 10 * MINUTE, "management-overlap")
     other = replace(
         overlap.record,
         identity=EventIdentity(
             EventType(EventFamily.MANAGEMENT_GOVERNANCE, "MANAGEMENT.CEO_DEPARTURE"),
-            EventScope(ScopeKind.COMPANY, ("issuer_fixture",)),
+            EventScope(ScopeKind.COMPANY, (issuer,)),
             "management-overlap",
         ),
         published_at_ns=overlap.source_available_ns,
@@ -85,7 +89,7 @@ def history(
             overlap, record=other, fragment_hash=sha256(canonical_json_bytes(other)).hexdigest()
         )
     )
-    interval = TimeRange(DAY, 15 * DAY)
+    interval = TimeRange(clock_offset + DAY, clock_offset + 15 * DAY)
     job = BackfillJob(
         replace(
             job.definition,
@@ -108,7 +112,7 @@ def history(
     repository = DatasetRepository(store)
     with FileArchive(root / "archive") as archive:
         BackfillCoordinator(
-            repository, archive, ((source, processor),), clock=ManualClock(20 * DAY)
+            repository, archive, ((source, processor),), clock=ManualClock(clock_offset + 20 * DAY)
         ).run(job)
     return store, DatasetReader(repository, job.build_id), tuple(ids)
 

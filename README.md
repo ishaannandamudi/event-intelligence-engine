@@ -2,11 +2,12 @@
 
 EIE is a standalone, provider-neutral foundation for descriptive event intelligence. Its first priority is answering what was knowable at an exact time. It does not produce trade instructions.
 
-**Status:** EIE-16 bitemporal intelligence, source reliability and information latency, version `1.7.0`.
+**Status:** EIE-0 through EIE-17 are complete; the planned EIE roadmap is finished.
+Final snapshot, service, integration and hardening use engine `2.0.0`.
 Source-backed claims preserve alternatives, categorical field resolution, independent
 corroboration, conservative event aliases and historical correction/merge/split replay.
 Relationship exposure and empirical impact remain separate.
-Claim/evidence, relationship, impact and event-study schemas are `1.0`; SQLite is `2.0`.
+Claim/evidence, relationship, impact and event-study schemas are `1.0`; final snapshot/API are `1.0`; SQLite is `2.1`.
 All prior public schemas remain `1.0`. Zero runtime dependencies.
 See [event studies](docs/event-studies.md), [alignment](docs/market-data-alignment.md),
 [influence/decay](docs/event-influence-decay.md), [counterfactual impact](docs/counterfactual-impact.md)
@@ -427,7 +428,7 @@ The accepted timestamp and EIE knowledge time are distinct when observation or i
 
 ## Scope
 
-EIE-0 through EIE-16 provide canonical/replay contracts, scheduled/official/SEC/corporate
+EIE-0 through EIE-17 provide canonical/replay contracts, scheduled/official/SEC/corporate
 events, numerical surprise, durable acquisition, historical builds, raw studies and
 counterfactual estimates, sourced relationship graphs, propagation candidates,
 structured claim/evidence resolution with conservative event deduplication and
@@ -667,4 +668,44 @@ Engine `1.7.0`, source-reliability schema `1.0`, SQLite `2.0`; prior schemas unc
 See [bitemporal intelligence](docs/bitemporal-intelligence.md),
 [reliability](docs/source-reliability.md), [latency](docs/information-latency.md),
 [coverage](docs/source-coverage.md) and [A–AM completion](docs/EIE-16-completion.md).
-EIE-17 final service/integration/hardening and trading execution remain deferred.
+EIE-17 supplies the final service/integration boundary below. Trading execution is outside EIE.
+
+
+## Final snapshot and service (EIE-17)
+
+The final immutable snapshot requires an explicit cutoff and preserves typed event,
+expectation/surprise, verified evidence/extraction, graph, intelligence, study/impact,
+analogue/reaction, interaction and reliability/latency components. It uses bounded
+native references and event summaries, with explicit state and completeness per
+component. It does not flatten them into a score. Symbol requests bind to stable
+historical issuer/security/listing identities. Provenance includes versions and
+policy/build/market/reference fingerprints. Missing coverage is UNKNOWN.
+
+```sh
+PYTHONPATH=src:. python examples/final_snapshot.py
+PYTHONPATH=src:. python benchmarks/final_snapshot.py --profile /tmp/eie-final.pstats
+PYTHONPATH=src python -m eie --database /tmp/eie.sqlite version
+PYTHONPATH=src python -m eie --database /tmp/eie.sqlite health
+PYTHONPATH=src python -m eie --database /tmp/eie.sqlite ready
+```
+
+The offline example spans all EIE layers using synthetic issuers, financial claims,
+relationship data and market bars. Its official/SEC/corporate fixtures are synthetic
+extracts. Expectations use the earlier demonstration's explicit synthetic clocks;
+service publication retains their actual later registration clock. It verifies
+native references and byte-identical restart. This is validation infrastructure,
+not empirical information coverage or a market calibration dataset.
+
+Typed consumers use `EventIntelligenceProvider.snapshot`, selected component methods,
+bounded batches and membership-checked expansion. Optional local HTTP exposes
+version, health/readiness, snapshots, components, metrics and expansion. No import
+starts acquisition or a server. CLI commands also include snapshot/snapshots,
+validate, backup, restore and explicit serve. See [API](docs/service-api.md),
+[integration](docs/integration.md), [operations](docs/operations.md),
+[compatibility](docs/compatibility.md), [security](docs/security.md),
+[performance](docs/final-performance.md) and [final report](docs/EIE-17-completion.md).
+
+Evaluation keeps operational correctness, information quality and market-impact
+usefulness separate. EIE provides event intelligence infrastructure. It does not
+prove a profitable strategy. A future AFRE can consume this contract; forecasting,
+portfolio construction and trading execution are outside EIE.

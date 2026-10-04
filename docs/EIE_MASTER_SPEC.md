@@ -1312,7 +1312,7 @@ provider health and foreground operational controls. Current SEC submissions
 and BLS iCalendar are explicit opt-in sources. All quantitative schemas remain
 `1.0`; runtime/ingestion and persistent-store schemas start at `1.0`.
 See [EIE-6 completion](EIE-6-completion.md), [live ingestion](live-ingestion.md)
-and [persistence](persistence.md). EIE-7 through EIE-16 are implemented below; EIE-17 remains deferred.
+and [persistence](persistence.md). EIE-7 through EIE-17 are implemented below.
 
 ---
 
@@ -1794,4 +1794,33 @@ owners. No master score, automatic precedence change, sibling dependency, new ru
 dependency, source-driven action or trading logic is introduced. See
 [completion](EIE-16-completion.md), [bitemporal audit](bitemporal-intelligence.md),
 [reliability](source-reliability.md), [latency](information-latency.md) and
-[coverage](source-coverage.md). EIE-17 remains proposed only.
+[coverage](source-coverage.md). The final EIE-17 boundary is implemented below.
+
+## EIE-17 implementation boundary — planned roadmap complete
+
+EIE-0 through EIE-17 are complete. The planned EIE roadmap is finished.
+Engine `2.0.0`, final snapshot/API schema `1.0`, additive SQLite store `2.1`
+(migration 12); all previous public component schemas remain `1.0`.
+
+The immutable `EIESnapshot` and provider-neutral service assemble retained native
+artifacts through explicit known/valid cutoffs, stable historical identity,
+bounded typed references, component states, separate completeness and pinned
+provenance. Catalog publication clocks and immutable cutoff seals preserve live
+availability alongside historical source knowledge. Optional components may be
+partial; required unavailable/incomplete components fail explicitly.
+
+Typed Python queries, ordered isolated batches, bounded expansion, explicit CLI
+commands and an optional loopback HTTP adapter share the final boundary.
+Health/readiness, metadata-only telemetry, compact/deep validation, additive
+migration refusal, consistent backup/restore and future-data/restart/order/hash-seed
+tests harden it without changing upstream intelligence algorithms.
+
+Operational correctness, information quality and market-impact usefulness remain
+separate evaluations. EIE provides event intelligence infrastructure. It does not
+prove a profitable trading strategy. Downstream consumers use typed snapshots and
+native references; forecasting and trading remain downstream responsibilities.
+
+See [final completion](EIE-17-completion.md), [service API](service-api.md),
+[integration](integration.md), [compatibility](compatibility.md),
+[security](security.md), [operations](operations.md) and
+[measured performance](final-performance.md).

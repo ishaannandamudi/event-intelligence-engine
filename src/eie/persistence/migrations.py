@@ -4,8 +4,21 @@ import sqlite3
 
 from eie.core.errors import PersistenceError
 
-STORE_SCHEMA_VERSION = "2.0"
-MIGRATION_VERSIONS = ("1.0", "1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "1.9", "2.0")
+STORE_SCHEMA_VERSION = "2.1"
+MIGRATION_VERSIONS = (
+    "1.0",
+    "1.1",
+    "1.2",
+    "1.3",
+    "1.4",
+    "1.5",
+    "1.6",
+    "1.7",
+    "1.8",
+    "1.9",
+    "2.0",
+    "2.1",
+)
 MIGRATIONS: tuple[tuple[str, ...], ...] = (
     (
         "CREATE TABLE schema_migrations(version INTEGER PRIMARY KEY, schema_version TEXT NOT NULL)",
@@ -929,6 +942,75 @@ MIGRATIONS += (
             "reliability_requests",
             "reliability_assessments",
             "reliability_seals",
+        )
+        for action in ("UPDATE", "DELETE")
+    ),
+)
+
+
+# EIE-17 adds only final integration manifests; all prior DDL is unchanged.
+MIGRATIONS += (
+    (
+        (
+            "CREATE TABLE service_expectations(id TEXT PRIMARY KEY, fingerprint TEXT "
+            "NOT NULL, payload BLOB NOT NULL)"
+        ),
+        (
+            "CREATE TRIGGER immutable_service_expectations_update BEFORE UPDATE ON "
+            "service_expectations BEGIN SELECT RAISE(ABORT, 'immutable service "
+            "expectation'); END"
+        ),
+        (
+            "CREATE TRIGGER immutable_service_expectations_delete BEFORE DELETE ON "
+            "service_expectations BEGIN SELECT RAISE(ABORT, 'immutable service "
+            "expectation'); END"
+        ),
+        (
+            "CREATE TABLE service_publications(id TEXT PRIMARY KEY,catalog TEXT NOT NULL,co"
+            "mponent TEXT NOT NULL,kind TEXT NOT NULL,owner TEXT NOT NULL,group_key TEXT NO"
+            "T NULL,known INTEGER NOT NULL,available INTEGER NOT NULL,ordinal INTEGER NOT N"
+            "ULL,valid INTEGER,fingerprint TEXT NOT NULL,payload BLOB NOT NULL)"
+        ),
+        (
+            "CREATE INDEX service_catalog ON service_publications(catalog,component,availab"
+            "le,group_key,known)"
+        ),
+        "CREATE INDEX service_owner ON service_publications(kind,owner,available)",
+        (
+            "CREATE TABLE service_members(publication TEXT NOT NULL REFERENCES service_publ"
+            "ications(id),kind TEXT NOT NULL,identifier TEXT NOT NULL,PRIMARY KEY(publicati"
+            "on,kind,identifier))"
+        ),
+        "CREATE INDEX service_scope ON service_members(kind,identifier,publication)",
+        (
+            "CREATE TABLE service_coverage(id TEXT PRIMARY KEY,catalog TEXT NOT NULL,compon"
+            "ent TEXT NOT NULL,kind TEXT NOT NULL,identifier TEXT NOT NULL,available INTEGE"
+            "R NOT NULL,fingerprint TEXT NOT NULL,payload BLOB NOT NULL)"
+        ),
+        (
+            "CREATE INDEX service_coverage_prior ON service_coverage(catalog,component,kind"
+            ",identifier,available)"
+        ),
+        (
+            "CREATE TABLE service_snapshots(id TEXT PRIMARY KEY,request TEXT NOT NULL UNIQU"
+            "E,catalog TEXT NOT NULL,known INTEGER NOT NULL,valid INTEGER NOT NULL,fingerpr"
+            "int TEXT NOT NULL,bytes INTEGER NOT NULL,payload BLOB NOT NULL)"
+        ),
+        "CREATE INDEX service_snapshot_history ON service_snapshots(catalog,known,valid)",
+        (
+            "CREATE TABLE service_seals(catalog TEXT NOT NULL,known INTEGER NOT NULL,PRIMAR"
+            "Y KEY(catalog,known))"
+        ),
+    )
+    + tuple(
+        f"CREATE TRIGGER immutable_{table}_{action.lower()} BEFORE {action} ON {table} "
+        "BEGIN SELECT RAISE(ABORT,'immutable final service artifact'); END"
+        for table in (
+            "service_publications",
+            "service_members",
+            "service_coverage",
+            "service_snapshots",
+            "service_seals",
         )
         for action in ("UPDATE", "DELETE")
     ),

@@ -314,7 +314,7 @@ def test_migration_17_to_18_preserves_prior_bytes_and_rolls_back(tmp_path, monke
     connection.close()
     monkeypatch.setattr(migrations, "MIGRATIONS", original)
     with SQLiteEventStore(path) as store:
-        assert store.schema_version == "2.0"
+        assert store.schema_version == "2.1"
         assert store._rows("SELECT payload FROM sessions WHERE namespace='old'") == [
             (b"unchanged",)
         ]
